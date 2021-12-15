@@ -43,7 +43,7 @@ class Storage(models.Model):
 		verbose_name_plural = 'ストレージ'
 
 
-class PcSpec(models.Model):
+class PCSpec(models.Model):
 	memory_choice = (
 		('1', '8'),
 		('2', '16'),
