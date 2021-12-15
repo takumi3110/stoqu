@@ -43,7 +43,8 @@ INSTALLED_APPS = [
 	'django_bootstrap5',
 	'ldap',
 	'user',
-	'storage'
+	'storage',
+	'device',
 ]
 
 MIDDLEWARE = [
