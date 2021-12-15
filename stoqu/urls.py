@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/device/', include(device_router.urls)),
     path('api/v1/stock/', include(stock_router.urls)),
+    path('', include('stock.urls'))
 ]
 
 urlpatterns += staticfiles_urlpatterns()
