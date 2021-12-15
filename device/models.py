@@ -180,7 +180,7 @@ class Item(models.Model):
 	)
 
 	spec = models.ForeignKey(
-		PcSpec,
+		PCSpec,
 		on_delete=models.CASCADE,
 		verbose_name='スペック'
 	)
