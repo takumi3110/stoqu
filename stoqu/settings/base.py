@@ -41,6 +41,8 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 	'django.contrib.humanize',
 	'django_bootstrap5',
+	'django_filters',
+	'rest_framework',
 	'ldap',
 	'user',
 	'storage',
@@ -137,6 +139,15 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.User'
+
+LOGIN_URL = 'admin/login'
+
+LOGOUT_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+	'django.contrib.auth.backends.ModelBackend',
+	'ldap.backend.Backend'
+]
 
 LDAP_HOST = LDAP_HOST
 LDAP_PORT = LDAP_PORT
