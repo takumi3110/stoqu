@@ -1,0 +1,4 @@
+.idea
+venv
+
+stoqu/settings/hide_settings.py
