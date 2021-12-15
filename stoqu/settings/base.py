@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 	'rest_framework',
 	'ldap',
 	'user',
-	'storage',
+	'stock',
 	'device',
 ]
 
