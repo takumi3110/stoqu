@@ -10,4 +10,4 @@ app_name = 'stock'
 router = routers.DefaultRouter()
 router.register(r'option', views.OptionViewSet)
 router.register(r'base', views.BaseViewSet)
-router.register(r'storage', views.StorageSerializer)
+router.register(r'storage', views.StorageViewSet)
