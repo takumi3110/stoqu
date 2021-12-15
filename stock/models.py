@@ -36,10 +36,61 @@ class Option(models.Model):
 		verbose_name_plural = 'オプション'
 
 
+class Base(models.Model):
+	name = models.CharField(
+		verbose_name='拠点名',
+		max_length=50
+	)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = '拠点'
+		verbose_name_plural = '拠点'
+
+
 class Storage(models.Model):
 	order_number = models.CharField(
 		verbose_name='発注番号',
 		max_length=100
 	)
 
+	item = models.ForeignKey(
+		Item,
+		on_delete=models.CASCADE,
+		verbose_name='在庫PC'
+	)
 
+	price = models.PositiveIntegerField(
+		verbose_name='金額'
+	)
+
+	quantity = models.PositiveSmallIntegerField(
+		verbose_name='在庫数'
+	)
+
+	option = models.ManyToManyField(
+		Option,
+		verbose_name='オプション',
+		null=True
+	)
+
+	base = models.ForeignKey(
+		Base,
+		on_delete=models.CASCADE,
+		verbose_name='在庫拠点',
+	)
+
+	remarks = models.TextField(
+		verbose_name='備考',
+		null=True,
+		blank=True
+	)
+
+	def __str__(self):
+		return self.item
+
+	class Meta:
+		verbose_name = '貯蔵品'
+		verbose_name_plural = '貯蔵品'
