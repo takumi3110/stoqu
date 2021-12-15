@@ -1,4 +1,5 @@
 .idea
 venv
+*migrations
 
 stoqu/settings/hide_settings.py
