@@ -14,7 +14,10 @@ class CPU(models.Model):
 	)
 
 	gen = models.PositiveSmallIntegerField(
-		verbose_name='世代'
+		verbose_name='世代',
+		validators=[
+			MaxValueValidator(99)
+		]
 	)
 
 	def __str__(self):
@@ -170,6 +173,10 @@ class PC(models.Model):
 
 	def __str__(self):
 		return f'{self.maker} {self.name}'
+
+	class Meta:
+		verbose_name = 'PC'
+		verbose_name_plural = 'PC'
 
 
 class Item(models.Model):
