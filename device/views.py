@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 
 from .models import CPU, Storage, PCSpec, PC, Item
 from .serializer import CPUSerializer, StorageSerializer, PCSpecSerializer, PCSerializer, ItemSerializer
