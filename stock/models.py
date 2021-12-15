@@ -73,7 +73,7 @@ class Storage(models.Model):
 	option = models.ManyToManyField(
 		Option,
 		verbose_name='オプション',
-		null=True
+		blank=True
 	)
 
 	base = models.ForeignKey(
