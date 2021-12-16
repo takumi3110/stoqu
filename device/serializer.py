@@ -17,6 +17,9 @@ class StorageSerializer(serializers.ModelSerializer):
 
 
 class PCSpecSerializer(serializers.ModelSerializer):
+	cpu = CPUSerializer()
+	storage = StorageSerializer()
+
 	class Meta:
 		model = PCSpec
 		fields = ('cpu', 'memory', 'storage', 'size', 'camera', 'fingerprint', 'numpad', 'lan', 'usb', 'hdmi', 'vga')

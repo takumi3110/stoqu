@@ -20,7 +20,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
 class StorageSerializer(serializers.ModelSerializer):
 	item = ItemSerializer()
-	option = OptionSerializer()
+	# option = OptionSerializer()
 	base = BaseSerializer()
 
 	class Meta:
