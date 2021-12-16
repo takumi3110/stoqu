@@ -82,6 +82,12 @@ class Storage(models.Model):
 		verbose_name='在庫拠点',
 	)
 
+	delivery_date = models.DateField(
+		verbose_name='納品日',
+		null=True,
+		blank=True
+	)
+
 	remarks = models.TextField(
 		verbose_name='備考',
 		null=True,

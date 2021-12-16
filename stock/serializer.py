@@ -20,4 +20,4 @@ class BaseSerializer(serializers.ModelSerializer):
 class StorageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Storage
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'remarks')
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_date', 'remarks')

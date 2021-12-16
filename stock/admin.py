@@ -14,8 +14,8 @@ class OptionAdmin(admin.ModelAdmin):
 
 @admin.register(Storage)
 class StorageAdmin(admin.ModelAdmin):
-	list_display = ('base', 'order_number', 'item', 'price', 'quantity')
-	list_display_links = ('base', 'order_number', 'item', 'price', 'quantity')
+	list_display = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_date')
+	list_display_links = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_date')
 	list_filter = ('order_number', 'item', 'base')
 	search_fields = ('order_number', 'item', 'base')
 	actions_on_bottom = True
