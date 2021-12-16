@@ -95,7 +95,7 @@ class Storage(models.Model):
 	)
 
 	def __str__(self):
-		return self.item
+		return f'{self.item.pc.maker}{self.item.pc.name}'
 
 	class Meta:
 		verbose_name = '貯蔵品'
