@@ -134,7 +134,7 @@ class PCSpec(models.Model):
 	)
 
 	def __str__(self):
-		return f'{self.cpu} {self.storage} {self.memory}'
+		return f'{self.cpu} {self.storage} {self.get_memory_display()}GB'
 
 	class Meta:
 		verbose_name = 'スペック(PC)'
@@ -199,7 +199,7 @@ class Item(models.Model):
 	)
 
 	def __str__(self):
-		return self.pc
+		return f'{self.pc.maker} {self.pc.name}'
 
 	class Meta:
 		verbose_name = 'Item'
