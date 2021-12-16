@@ -48,11 +48,11 @@
                     <tr id="table{{ storage.pk }}">
                         <td id="base">{{ storage.base }}</td>
                         <td>{{ storage.order_number }}</td>
-                        <td>{{ storage.category }}</td>
+                        <td>{{ storage.item.pc.category }}</td>
                         <td>{{ storage.item.pc.maker }}</td>
                         <td>{{ storage.item.pc.name }}</td>
                         <td>{{ storage.item.spec.cpu }}</td>
-                        <td>{{ storage.item.spec.memory }}</td>
+                        <td>{{ storage.item.spec.get_memory_display }}GB</td>
                         <td>{{ storage.item.spec.storage }}</td>
                         <td>{{ storage.quantity }}</td>
                         <td>{{ storage.price }}</td>
