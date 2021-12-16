@@ -29,6 +29,9 @@ class PCSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
+	pc = PCSerializer()
+	spec = PCSpecSerializer()
+
 	class Meta:
 		model = Item
 		fields = ('pc', 'spec', 'remarks')
