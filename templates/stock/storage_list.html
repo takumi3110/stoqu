@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load static %}
+{% load humanize %}
 
 {% block content %}
 
@@ -13,7 +15,7 @@
         <button type="button" class="btn btn-info">
             オプション登録
         </button>
-        <div class="row mt-3">
+        <div class="row mt-5">
             <div class="form-group">
                 <label>
                     <select name="base" class="custom-select custom-select-sm">
@@ -23,11 +25,16 @@
                         {% endfor %}
                     </select>
                 </label>
+                <button type="button" class="btn btn-sm btn-primary get-data">
+                    <i class="fas fa-undo"></i>
+                    更新
+                </button>
             </div>
+
         </div>
         <div class="row">
             <div class="storage-table">
-                <table class="table table-bordered small">
+                <table class="table table-bordered small mt-3">
                     <thead class="table-light">
                         <tr>
                             <th>在庫拠点</th>
@@ -38,6 +45,7 @@
                             <th>CPU</th>
                             <th>メモリ</th>
                             <th>ストレージ</th>
+                            <th>テンキー</th>
                             <th>在庫数</th>
                             <th>金額</th>
                             <th>詳細</th>
@@ -46,16 +54,17 @@
                     <tbody>
                     {% for storage in storage_list %}
                     <tr id="table{{ storage.pk }}">
-                        <td id="base">{{ storage.base }}</td>
+                        <td id="base{{ storage.pk }}">{{ storage.base }}</td>
                         <td>{{ storage.order_number }}</td>
-                        <td>{{ storage.item.pc.category }}</td>
+                        <td>{{ storage.item.pc.get_category_display }}</td>
                         <td>{{ storage.item.pc.maker }}</td>
                         <td>{{ storage.item.pc.name }}</td>
                         <td>{{ storage.item.spec.cpu }}</td>
-                        <td>{{ storage.item.spec.get_memory_display }}GB</td>
+                        <td>{{ storage.item.spec.memory }}GB</td>
                         <td>{{ storage.item.spec.storage }}</td>
+                        <td>{{ storage.item.spec.numpad }}</td>
                         <td>{{ storage.quantity }}</td>
-                        <td>{{ storage.price }}</td>
+                        <td>{{ storage.price | intcomma }}</td>
                         <td>
                             <a href="{% url 'stock:storage_detail'  storage.pk %}">詳細</a>
                         </td>
@@ -81,11 +90,17 @@
 {% block javascript %}
 
     <script type="text/javascript">
+        $(function() {
+            $('.get-data').click(function() {
+                window.location.href = "{% url 'stock:get_data' %}";
+            });
+        });
+
          $(function() {
             $('select').change(function() {
                 let val = $(this).val();
                 {% for storage in storage_list %}
-                    let base_{{ storage.pk }} = document.getElementById('base');
+                    let base_{{ storage.pk }} = document.getElementById('base{{ storage.pk }}');
                     let base_val_{{ storage.pk }} = base_{{ storage.pk }}.textContent
                     if (val === base_val_{{ storage.pk }}) {
                         $('#table{{ storage.pk }}').show();
