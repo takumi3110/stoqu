@@ -7,23 +7,14 @@ import requests
 import json
 
 
-def search_file(m):
-	"""
-
-	:param m:
-	:return file:
-	"""
-	file_name = os.environ['USERPROFILE'] + r'\Downloads\【貯蔵品】PC在庫リスト.xlsx'
-	return file_name
-
-
 def post_storage_data():
 	"""
 	エクセルファイルからデータを取得
 	:param :
 	:return:
 	"""
-	file = os.environ['USERPROFILE'] + r'\Downloads\【貯蔵品】PC在庫リスト.xlsx'
+	# file = os.environ['USERPROFILE'] + r'\Documents\【貯蔵品】PC在庫リスト.xlsx'
+	file = r'D:\Users\19020081\Documents\【貯蔵品】PC在庫リスト.xlsx'
 	device_url = 'http://127.0.0.1:8000/api/v1/device/item/'
 	storage_url = 'http://127.0.0.1:8000/api/v1/stock/storage/'
 	wb = px.load_workbook(file)
@@ -66,7 +57,6 @@ def post_storage_data():
 				'name': name,
 				'model_number': model_number
 			}
-
 			post_device = {
 				'pc': post_pc,
 				'spec': {
@@ -91,6 +81,9 @@ def post_storage_data():
 				},
 				'remarks': ''
 			}
+			# post_device_api(post_device, device_results, device_url, headers)
+			json_device = json.dumps(post_device)
+			device_res = requests.post(device_url, data=json_device)
 			for storage in storage_results:
 				post_storage = {
 					'order_number': order_number,
@@ -105,7 +98,7 @@ def post_storage_data():
 					'remarks': ''
 				}
 				if storage['item']['pc'] != post_pc:
-					post_device_api(post_device, device_results, device_url, headers)
+
 					post_storage['quantity'] = 1
 					storage_res = requests.post(storage_url, data=json.dumps(post_storage), headers=headers)
 					print(sotrage_res.status_code)
