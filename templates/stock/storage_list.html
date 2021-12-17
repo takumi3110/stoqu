@@ -73,7 +73,7 @@
             </div>
         </div>
     </div>
-
+<div class="result"></div>
 {% endblock %}
 
 
@@ -81,7 +81,7 @@
 {% block javascript %}
 
     <script type="text/javascript">
-        $(function() {
+         $(function() {
             $('select').change(function() {
                 let val = $(this).val();
                 {% for storage in storage_list %}
