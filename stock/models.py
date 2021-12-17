@@ -63,11 +63,13 @@ class Storage(models.Model):
 	)
 
 	price = models.PositiveIntegerField(
-		verbose_name='金額'
+		verbose_name='合計金額'
 	)
 
 	quantity = models.PositiveSmallIntegerField(
-		verbose_name='在庫数'
+		verbose_name='在庫数',
+		null=True,
+		blank=True
 	)
 
 	option = models.ManyToManyField(

@@ -151,10 +151,15 @@ class PCSpec(models.Model):
 				self.memory = 16
 			else:
 				self.memory = 8
+		if self.category != '1':
+			self.camera = False
+			self.fingerprint = False
+			self.numpad = False
+			self.lan = True
 		super(PCSpec, self).save(*args, **kwargs)
 
 	def __str__(self):
-		return f'{self.cpu} {self.storage} {self.get_memory_display()}GB'
+		return f'{self.cpu} {self.storage} {self.memory}GB'
 
 	class Meta:
 		verbose_name = 'スペック(PC)'
