@@ -190,6 +190,12 @@ class PC(models.Model):
 		blank=True
 	)
 
+	img = models.ImageField(
+		upload_to='images/',
+		null=True,
+		blank=True
+	)
+
 	def __str__(self):
 		return f'{self.maker} {self.name}'
 
