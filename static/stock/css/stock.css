@@ -3,4 +3,29 @@
   box-shadow: gray;
 }
 
+.detail-img {
+  width: 600px;
+  height: 300px;
+}
+
+.detail-item {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.detail-table .spec-header {
+  font-size: 25px;
+  height: 70px;
+}
+.detail-table .td-spec {
+  font-weight: bold;
+  height: 50px;
+}
+.detail-table .down-allow {
+  text-align: right;
+}
+.detail-table .down-allow:hover {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=stock.css.map */
