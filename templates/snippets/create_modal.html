@@ -17,11 +17,25 @@
             </div>
         {% endfor %}
     </div>
+    <div class="row ms-2">
+        {% if request.resolver_match.url_name == 'create_item' %}
+            <a href="#" id="createPc" data-bs-target="#modal" data-bs-dismiss="modal" data-bs-toggle="modal">
+                PCが見つからないとき
+            </a>
+            <a href="#" id="createPCSpec" data-bs-target="#modal" data-bs-dismiss="modal" data-bs-toggle="modal">
+                スペックがないとき
+            </a>
+        {% else %}
+            <a href="#" id="createItem" data-bs-target="#modal" data-bs-dismiss="modal" data-bs-toggle="modal">
+                戻る
+            </a>
+        {% endif %}
+    </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" aria-label="Close">
             キャンセル
         </button>
-        <button type="submit" class="btn btn-success float-end mb-2">登録する</button>
+        <button type="submit" class="btn btn-success">登録する</button>
     </div>
 </form>
 <!--
