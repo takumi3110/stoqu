@@ -17,5 +17,6 @@ urlpatterns = [
 	path('detail/<int:pk>', views.StorageDetailView.as_view(), name='storage_detail'),
 	path('get_data/', views.create_storage_data, name='get_data'),
 	path('create/', views.StorageCreateView.as_view(), name='storage_create'),
-	path('update/<int:pk>', views.StorageUpdateView.as_view(), name='storage_update')
+	path('update/<int:pk>', views.StorageUpdateView.as_view(), name='storage_update'),
+	path('optionCreate/', views.OptionCreateView.as_view(), name='option_create')
 ]

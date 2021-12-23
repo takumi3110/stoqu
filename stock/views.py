@@ -13,7 +13,7 @@ from .models import Option, Base, Storage
 from device.models import CPU, PC, PCSpec, Item
 # from device.models import Storage as DeviceStorage
 from .serializer import OptionSerializer, BaseSerializer, StorageSerializer
-from .forms import StorageCreateBSModalForm, StorageUpdateBSModalForm
+from .forms import StorageCreateBSModalForm, StorageUpdateBSModalForm, OptionCreateBSModalForm
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -62,7 +62,19 @@ class StorageUpdateView(LoginRequiredMixin, BSModalUpdateView):
 	success_url = reverse_lazy('stock:storage_list')
 
 
+class OptionCreateView(LoginRequiredMixin, BSModalCreateView):
+	model = Option
+	template_name = 'stock/create_modal.html'
+	form_class = OptionCreateBSModalForm
+	success_url = reverse_lazy('stock:storage_list')
+
+
 def create_storage_data(request):
+	"""
+	データ取り込み用
+	:param request:
+	:return:
+	"""
 	file = r'D:\Users\19020081\Documents\【貯蔵品】PC在庫リスト.xlsx'
 	wb = px.load_workbook(file)
 	ws = wb.worksheets[0]
