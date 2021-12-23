@@ -38,14 +38,14 @@ class PCCreateView(LoginRequiredMixin, BSModalCreateView):
 	model = PC
 	template_name = 'snippets/create_modal.html'
 	form_class = PCCreateBSModalForm
-	success_url = reverse_lazy('device:create_item')
+	success_url = reverse_lazy('stock:storage_list')
 
 
 class PCSpecCreateView(LoginRequiredMixin, BSModalCreateView):
 	model = PCSpec
 	template_name = 'snippets/create_modal.html'
 	form_class = PCSpecCreateBSModalForm
-	success_url = reverse_lazy('device:create_item')
+	success_url = reverse_lazy('stock:storage_list')
 
 
 class ItemCreateView(LoginRequiredMixin, BSModalCreateView):
