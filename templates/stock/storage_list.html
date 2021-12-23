@@ -6,7 +6,7 @@
 {% block content %}
 
     <div class="container">
-        <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal fade" tabindex="-1" role="dialog" id="modal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content"></div>
             </div>
@@ -107,7 +107,7 @@
             });
         });
 
-         $(function() {
+        $(function() {
             $('select').change(function() {
                 let val = $(this).val();
                 {% for storage in storage_list %}
@@ -123,6 +123,21 @@
                 {% endfor %}
             });
         });
+
+        $(function() {
+            $('#modal').on('show.bs.modal', function() {
+                $("#createPc").each(function() {
+                    $(this).modalForm({formURL: "{% url 'device:create_pc' %}"});
+                });
+                $("#createPCSpec").each(function() {
+                    $(this).modalForm({formURL: "{% url 'device:create_pcspec' %}"});
+                });
+                $('#createItem').each(function() {
+                 $(this).modalForm({formURL: "{% url 'device:create_item' %}"});
+             });
+            });
+        });
+
 
         $(function() {
              $("#createStorage").each(function() {
