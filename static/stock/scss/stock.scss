@@ -1,0 +1,36 @@
+.get-data {
+  &:hover {
+    cursor: pointer;
+    box-shadow: gray;
+  }
+}
+
+.detail-img {
+  width: 600px;
+  height: 300px;
+}
+
+.detail-item {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.detail-table {
+  & .spec-header {
+    font-size: 25px;
+    height: 70px;
+  }
+  & .td-spec {
+    font-weight: bold;
+    height: 50px;
+  }
+  & .down-allow {
+    text-align: right;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+}
+
+

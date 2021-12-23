@@ -1,6 +1,17 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+type_choice = (
+	('1', 'SSD'),
+	('2', 'HDD')
+)
+
+category_choice = (
+	('1', 'ノート'),
+	('2', 'デスクトップ'),
+	('3', 'ミニPC')
+)
+
 
 class CPU(models.Model):
 	maker = models.CharField(
@@ -14,11 +25,14 @@ class CPU(models.Model):
 	)
 
 	gen = models.PositiveSmallIntegerField(
-		verbose_name='世代'
+		verbose_name='世代',
+		validators=[
+			MaxValueValidator(99)
+		]
 	)
 
 	def __str__(self):
-		return f'{self.maker} {self.name} 第{self.gen}世代'
+		return f'{self.maker} {self.name}'
 
 	class Meta:
 		verbose_name = 'CPU'
@@ -28,7 +42,9 @@ class CPU(models.Model):
 class Storage(models.Model):
 	type = models.CharField(
 		verbose_name='タイプ',
-		max_length=5
+		max_length=5,
+		choices=type_choice,
+		default='1'
 	)
 
 	size = models.PositiveSmallIntegerField(
@@ -36,7 +52,7 @@ class Storage(models.Model):
 	)
 
 	def __str__(self):
-		return f'{self.type} {self.size}GB'
+		return f'{self.get_type_display()} {self.size}GB'
 
 	class Meta:
 		verbose_name = 'ストレージ'
@@ -44,11 +60,10 @@ class Storage(models.Model):
 
 
 class PCSpec(models.Model):
-	memory_choice = (
-		('1', '8'),
-		('2', '16'),
-		('3', '24'),
-		('4', '32')
+	category = models.CharField(
+		verbose_name='PCカテゴリー',
+		max_length=2,
+		choices=category_choice,
 	)
 
 	cpu = models.ForeignKey(
@@ -57,10 +72,10 @@ class PCSpec(models.Model):
 		verbose_name='CPU',
 	)
 
-	memory = models.CharField(
+	memory = models.PositiveSmallIntegerField(
 		verbose_name='メモリー(GB)',
-		max_length=5,
-		choices=memory_choice
+		null=True,
+		blank=True
 	)
 
 	storage = models.ForeignKey(
@@ -130,8 +145,21 @@ class PCSpec(models.Model):
 		]
 	)
 
+	def save(self, *args, **kwargs):
+		if self.memory is None:
+			if self.category == 2:
+				self.memory = 16
+			else:
+				self.memory = 8
+		if self.category != '1':
+			self.camera = False
+			self.fingerprint = False
+			self.numpad = False
+			self.lan = True
+		super(PCSpec, self).save(*args, **kwargs)
+
 	def __str__(self):
-		return f'{self.cpu} {self.storage} {self.memory}'
+		return f'{self.cpu} {self.storage} {self.memory}GB'
 
 	class Meta:
 		verbose_name = 'スペック(PC)'
@@ -139,12 +167,6 @@ class PCSpec(models.Model):
 
 
 class PC(models.Model):
-	category_choice = (
-		('1', 'ノート'),
-		('2', 'デスクトップ'),
-		('3', 'ミニPC')
-	)
-
 	category = models.CharField(
 		verbose_name='カテゴリー',
 		max_length=5,
@@ -168,8 +190,18 @@ class PC(models.Model):
 		blank=True
 	)
 
+	img = models.ImageField(
+		upload_to='images/',
+		null=True,
+		blank=True
+	)
+
 	def __str__(self):
 		return f'{self.maker} {self.name}'
+
+	class Meta:
+		verbose_name = 'PC'
+		verbose_name_plural = 'PC'
 
 
 class Item(models.Model):
@@ -192,7 +224,7 @@ class Item(models.Model):
 	)
 
 	def __str__(self):
-		return self.pc
+		return f'{self.pc.maker} {self.pc.name}'
 
 	class Meta:
 		verbose_name = 'Item'

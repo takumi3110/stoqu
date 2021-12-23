@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row mb-3">
+            <h2 class="title-text">在庫リスト</h2>
+        </div>
+         <button type="button" class="btn btn-info">
+            在庫登録
+        </button>
+        <button type="button" class="btn btn-info">
+            オプション登録
+        </button>
+        <div class="row mt-5">
+            <div class="form-group">
+                <label>
+                    <select name="base" class="custom-select custom-select-sm">
+                        <option value="all">すべて</option>
+                        {% for base in base_list %}
+                            <option value="{{ base.name }}">{{ base.name }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <button type="button" class="btn btn-sm btn-primary get-data">
+                    <i class="fas fa-undo"></i>
+                    更新
+                </button>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="storage-table">
+                <table class="table table-bordered small mt-3">
+                    <thead class="table-light">
+                        <tr>
+                            <th>在庫拠点</th>
+                            <th>発注番号</th>
+                            <th>カテゴリー</th>
+                            <th>メーカー</th>
+                            <th>モデル名</th>
+                            <th>CPU</th>
+                            <th>メモリ</th>
+                            <th>ストレージ</th>
+                            <th>テンキー</th>
+                            <th>在庫数</th>
+                            <th>金額</th>
+                            <th>詳細</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for storage in storage_list %}
+                    <tr id="table{{ storage.pk }}">
+                        <td id="base{{ storage.pk }}">{{ storage.base }}</td>
+                        <td>{{ storage.order_number }}</td>
+                        <td>{{ storage.item.pc.get_category_display }}</td>
+                        <td>{{ storage.item.pc.maker }}</td>
+                        <td>{{ storage.item.pc.name }}</td>
+                        <td>{{ storage.item.spec.cpu }}</td>
+                        <td>{{ storage.item.spec.memory }}GB</td>
+                        <td>{{ storage.item.spec.storage }}</td>
+                        <td>{{ storage.item.spec.numpad }}</td>
+                        <td>{{ storage.quantity }}</td>
+                        <td>{{ storage.price | intcomma }}</td>
+                        <td>
+                            <a href="{% url 'stock:storage_detail'  storage.pk %}">詳細</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="11">在庫PCないです</td>
+                        </tr>
+                    {% endfor %}
+                        <tr id="nonStorage" style="display: none;">
+                            <td colspan="11">在庫ないです</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<div class="result"></div>
+{% endblock %}
+
+
+
+{% block javascript %}
+
+    <script type="text/javascript">
+        $(function() {
+            $('.get-data').click(function() {
+                window.location.href = "{% url 'stock:get_data' %}";
+            });
+        });
+
+         $(function() {
+            $('select').change(function() {
+                let val = $(this).val();
+                {% for storage in storage_list %}
+                    let base_{{ storage.pk }} = document.getElementById('base{{ storage.pk }}');
+                    let base_val_{{ storage.pk }} = base_{{ storage.pk }}.textContent
+                    if (val === base_val_{{ storage.pk }}) {
+                        $('#table{{ storage.pk }}').show();
+                    } else if (val === 'all') {
+                        $('#table{{ storage.pk }}').show();
+                    } else {
+                        $('#table{{ storage.pk }}').hide();
+                    }
+                {% endfor %}
+            });
+        });
+    </script>
+
+{% endblock javascript %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load humanize %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <img src="{{ storage.item.pc.img.url }}" alt="{{ storage.item.pc.name }}" class="detail-img ms-5">
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <h4 class="detail-item">{{ storage.item.pc.maker }}</h4>
+                    <h4 class="detail-item">{{ storage.item.pc.name }}</h4>
+                </div>
+                <div class="row mt-3">
+                    <p>在庫拠点：{{ storage.base.name }}</p>
+                    <p>在庫数：{{ storage.quantity }}</p>
+                    <p>オプション</p>
+                </div>
+                <div class="row mt-3">
+                    <p>合計金額：{{ storage.price | intcomma }}円</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-9 offset-1">
+                <table class="table detail-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="spec-header" colspan="2">スペック</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="td-spec">CPU</td>
+                        <td>{{ storage.item.spec.cpu }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">メモリー</td>
+                        <td>{{ storage.item.spec.memory }}GB</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">ストレージタイプ</td>
+                        <td>{{ storage.item.spec.storage.get_type_display }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">ストレージ容量</td>
+                        <td>{{ storage.item.spec.storage.size }}GB</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">サイズ</td>
+                        <td>{{ storage.item.spec.size }}インチ</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">webカメラ</td>
+                        <td>{{ storage.item.spec.camera }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">指紋認証</td>
+                        <td>{{ storage.item.spec.fingerprint }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">テンキー</td>
+                        <td>{{ storage.item.spec.numpad }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">有線LANポート</td>
+                        <td>{{ storage.item.spec.lan }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">USBポート</td>
+                        <td>{{ storage.item.spec.usb }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">HDMI</td>
+                        <td>{{ storage.item.spec.hdmi }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-spec">VGA</td>
+                        <td>{{ storage.item.spec.vga }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+    </script>
+
+{% endblock javascript %}
