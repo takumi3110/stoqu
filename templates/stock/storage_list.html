@@ -131,6 +131,9 @@
              $("#createOption").each(function() {
                  $(this).modalForm({formURL: "{% url 'stock:option_create' %}"});
              });
+             $('#createItem').each(function() {
+                 $(this).modalForm({formURL: "{% url 'device:create_item' %}"});
+             });
              {% for storage in storage_list %}
                  $("#updateStorage{{ storage.pk }}").each(function() {
                      $(this).modalForm({formURL: "{% url 'stock:storage_update' storage.pk %}"});
