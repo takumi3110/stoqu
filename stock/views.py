@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
+from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 
 from rest_framework import viewsets
 import openpyxl as px
@@ -10,8 +11,9 @@ import datetime
 import device.models
 from .models import Option, Base, Storage
 from device.models import CPU, PC, PCSpec, Item
-from device.models import Storage as device_storage
+# from device.models import Storage as DeviceStorage
 from .serializer import OptionSerializer, BaseSerializer, StorageSerializer
+from .forms import StorageCreateBSModalForm, StorageUpdateBSModalForm
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -44,6 +46,20 @@ class StorageListView(LoginRequiredMixin, ListView):
 class StorageDetailView(LoginRequiredMixin, DetailView):
 	model = Storage
 	template_name = 'stock/storage_detail.html'
+
+
+class StorageCreateView(LoginRequiredMixin, BSModalCreateView):
+	model = Storage
+	template_name = 'stock/create_modal.html'
+	form_class = StorageCreateBSModalForm
+	success_url = reverse_lazy('stock:storage_list')
+
+
+class StorageUpdateView(LoginRequiredMixin, BSModalUpdateView):
+	model = Storage
+	template_name = 'stock/update_modal.html'
+	form_class = StorageUpdateBSModalForm
+	success_url = reverse_lazy('stock:storage_list')
 
 
 def create_storage_data(request):
@@ -135,4 +151,3 @@ def get_category_and_numpad_and_size(value):
 		category_and_numpad_and_size['category'] = '3'
 		category_and_numpad_and_size['numpad'] = False
 	return category_and_numpad_and_size
-
