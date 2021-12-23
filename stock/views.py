@@ -50,21 +50,21 @@ class StorageDetailView(LoginRequiredMixin, DetailView):
 
 class StorageCreateView(LoginRequiredMixin, BSModalCreateView):
 	model = Storage
-	template_name = 'stock/create_modal.html'
+	template_name = 'snippets/create_modal.html'
 	form_class = StorageBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
 
 
 class StorageUpdateView(LoginRequiredMixin, BSModalUpdateView):
 	model = Storage
-	template_name = 'stock/update_modal.html'
+	template_name = 'snippets/update_modal.html'
 	form_class = StorageBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
 
 
 class OptionCreateView(LoginRequiredMixin, BSModalCreateView):
 	model = Option
-	template_name = 'stock/create_modal.html'
+	template_name = 'stock/../templates/snippets/create_modal.html'
 	form_class = OptionCreateBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
 
