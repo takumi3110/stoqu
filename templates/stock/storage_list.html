@@ -17,10 +17,10 @@
          <button type="button" class="btn btn-info" id="createStorage" data-bs-toggle="modal">
             在庫登録
         </button>
-        <button type="button" class="btn btn-info create-item" data-bs-toggle="modal">
+        <button type="button" class="btn btn-info" id="createItem" data-bs-toggle="modal">
             PC登録
         </button>
-        <button type="button" class="btn btn-info create-option" data-bs-toggle="modal">
+        <button type="button" class="btn btn-info" id="createOption" data-bs-toggle="modal">
             オプション登録
         </button>
         <div class="row mt-5">
@@ -127,6 +127,9 @@
         $(function() {
              $("#createStorage").each(function() {
                  $(this).modalForm({formURL: "{% url 'stock:storage_create' %}"});
+             });
+             $("#createOption").each(function() {
+                 $(this).modalForm({formURL: "{% url 'stock:option_create' %}"});
              });
              {% for storage in storage_list %}
                  $("#updateStorage{{ storage.pk }}").each(function() {
