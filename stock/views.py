@@ -13,7 +13,7 @@ from .models import Option, Base, Storage
 from device.models import CPU, PC, PCSpec, Item
 # from device.models import Storage as DeviceStorage
 from .serializer import OptionSerializer, BaseSerializer, StorageSerializer
-from .forms import StorageCreateBSModalForm, StorageUpdateBSModalForm, OptionCreateBSModalForm
+from .forms import StorageBSModalForm, OptionCreateBSModalForm
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -51,14 +51,14 @@ class StorageDetailView(LoginRequiredMixin, DetailView):
 class StorageCreateView(LoginRequiredMixin, BSModalCreateView):
 	model = Storage
 	template_name = 'stock/create_modal.html'
-	form_class = StorageCreateBSModalForm
+	form_class = StorageBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
 
 
 class StorageUpdateView(LoginRequiredMixin, BSModalUpdateView):
 	model = Storage
 	template_name = 'stock/update_modal.html'
-	form_class = StorageUpdateBSModalForm
+	form_class = StorageBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
 
 
