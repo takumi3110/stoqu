@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Option, Base, Storage
+from .models import Option, Base, StorageItem
 
 
 @admin.register(Option)
@@ -12,8 +12,8 @@ class OptionAdmin(admin.ModelAdmin):
 	actions_on_bottom = True
 
 
-@admin.register(Storage)
-class StorageAdmin(admin.ModelAdmin):
+@admin.register(StorageItem)
+class StorageItemAdmin(admin.ModelAdmin):
 	list_display = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_date')
 	list_display_links = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_date')
 	list_filter = ('order_number', 'item', 'base')

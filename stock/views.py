@@ -9,11 +9,11 @@ import openpyxl as px
 import datetime
 
 import device.models
-from .models import Option, Base, Storage
-from device.models import CPU, PC, PCSpec, Item
+from .models import Option, Base, StorageItem
+from device.models import CPU, PCDetail, PC
 # from device.models import Storage as DeviceStorage
-from .serializer import OptionSerializer, BaseSerializer, StorageSerializer
-from .forms import StorageBSModalForm, OptionCreateBSModalForm
+from .serializer import OptionSerializer, BaseSerializer, StorageItemSerializer
+from .forms import StorageItemBSModalForm, OptionCreateBSModalForm
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -26,13 +26,13 @@ class BaseViewSet(viewsets.ModelViewSet):
 	serializer_class = BaseSerializer
 
 
-class StorageViewSet(viewsets.ModelViewSet):
-	queryset = Storage.objects.all()
-	serializer_class = StorageSerializer
+class StorageItemViewSet(viewsets.ModelViewSet):
+	queryset = StorageItem.objects.all()
+	serializer_class = StorageItemSerializer
 
 
-class StorageListView(LoginRequiredMixin, ListView):
-	model = Storage
+class StorageItemListView(LoginRequiredMixin, ListView):
+	model = StorageItem
 	template_name = 'stock/storage_list.html'
 	paginate_by = 20
 
@@ -43,22 +43,22 @@ class StorageListView(LoginRequiredMixin, ListView):
 		return context
 
 
-class StorageDetailView(LoginRequiredMixin, DetailView):
-	model = Storage
+class StorageItemDetailView(LoginRequiredMixin, DetailView):
+	model = StorageItem
 	template_name = 'stock/storage_detail.html'
 
 
-class StorageCreateView(LoginRequiredMixin, BSModalCreateView):
-	model = Storage
+class StorageItemCreateView(LoginRequiredMixin, BSModalCreateView):
+	model = StorageItem
 	template_name = 'snippets/create_modal.html'
-	form_class = StorageBSModalForm
+	form_class = StorageItemBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
 
 
-class StorageUpdateView(LoginRequiredMixin, BSModalUpdateView):
-	model = Storage
+class StorageItemUpdateView(LoginRequiredMixin, BSModalUpdateView):
+	model = StorageItem
 	template_name = 'snippets/update_modal.html'
-	form_class = StorageBSModalForm
+	form_class = StorageItemBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
 
 
@@ -108,27 +108,24 @@ def create_storage_data(request):
 			else:
 				name += split_name[n]
 		if active == '空':
-			pc = PC.objects.get_or_create(
+			pc_detail = PCDetail.objects.get_or_create(
 				category=category,
 				maker=maker,
 				name=name,
 				model_number=model_number
 			)
-			spec = PCSpec.objects.get(
-				category=category,
-				size=size
-			)
-			item = Item.objects.get_or_create(
-				pc=pc[0],
-				spec=spec
+			pc = PC.objects.get_or_create(
+				pc=pc_detail[0],
+				size=size,
+				numpad=numpad,
 			)
 			get_base = Base.objects.get_or_create(
 				name=base
 			)
 
-			stock_storage, create_storage = Storage.objects.get_or_create(
+			stock_storage, create_storage = StorageItem.objects.get_or_create(
 				order_number=order_number,
-				item=item[0],
+				item=pc[0],
 				price=price,
 				base=get_base[0],
 				delivery_date=delivery_date,

@@ -1,6 +1,6 @@
 from django.db import models
 
-from device.models import Item
+from device.models import PC
 
 
 class Option(models.Model):
@@ -50,14 +50,14 @@ class Base(models.Model):
 		verbose_name_plural = '拠点'
 
 
-class Storage(models.Model):
+class StorageItem(models.Model):
 	order_number = models.CharField(
 		verbose_name='発注番号',
 		max_length=100
 	)
 
 	item = models.ForeignKey(
-		Item,
+		PC,
 		on_delete=models.CASCADE,
 		verbose_name='在庫PC'
 	)
