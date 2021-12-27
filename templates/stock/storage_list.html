@@ -2,6 +2,8 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% load humanize %}
+{% load extras %}
+
 
 {% block content %}
 
@@ -62,17 +64,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for storage in storage_list %}
+                    {% for storage in storageitem_list %}
                         <tr id="table{{ storage.pk }}">
                             <td id="base{{ storage.pk }}">{{ storage.base }}</td>
                             <td>{{ storage.order_number }}</td>
                             <td>{{ storage.item.pc.get_category_display }}</td>
                             <td>{{ storage.item.pc.maker }}</td>
                             <td>{{ storage.item.pc.name }}</td>
-                            <td>{{ storage.item.spec.cpu }}</td>
-                            <td>{{ storage.item.spec.memory }}GB</td>
-                            <td>{{ storage.item.spec.storage }}</td>
-                            <td>{{ storage.item.spec.numpad }}</td>
+                            <td>{{ storage.item.cpu }}</td>
+                            <td>{{ storage.item.memory }}GB</td>
+                            <td>{{ storage.item.storage }}</td>
+                            <td>
+                                {% if storage.item.numpad %}
+                                    <input class="form-check-input" type="checkbox" id="numpad" aria-label="{{ storage.item.pc.name }}" checked disabled>
+                                {% else %}
+                                    {{ storage.item.numpad | boolean_check }}
+                                {% endif %}
+                            </td>
                             <td>{{ storage.quantity }}</td>
                             <td>{{ storage.price | intcomma }}</td>
                             <td>
@@ -110,7 +118,7 @@
         $(function() {
             $('select').change(function() {
                 let val = $(this).val();
-                {% for storage in storage_list %}
+                {% for storage in storageitem_list %}
                     let base_{{ storage.pk }} = document.getElementById('base{{ storage.pk }}');
                     let base_val_{{ storage.pk }} = base_{{ storage.pk }}.textContent
                     if (val === base_val_{{ storage.pk }}) {
@@ -129,12 +137,9 @@
                 $("#createPc").each(function() {
                     $(this).modalForm({formURL: "{% url 'device:create_pc' %}"});
                 });
-                $("#createPCSpec").each(function() {
-                    $(this).modalForm({formURL: "{% url 'device:create_pcspec' %}"});
-                });
                 $('#createItem').each(function() {
-                 $(this).modalForm({formURL: "{% url 'device:create_item' %}"});
-             });
+                 $(this).modalForm({formURL: "{% url 'device:create_pcdetail' %}"});
+                });
             });
         });
 
@@ -147,9 +152,9 @@
                  $(this).modalForm({formURL: "{% url 'stock:option_create' %}"});
              });
              $('#createItem').each(function() {
-                 $(this).modalForm({formURL: "{% url 'device:create_item' %}"});
+                 $(this).modalForm({formURL: "{% url 'device:create_pcdetail' %}"});
              });
-             {% for storage in storage_list %}
+             {% for storage in storageitem_list %}
                  $("#updateStorage{{ storage.pk }}").each(function() {
                      $(this).modalForm({formURL: "{% url 'stock:storage_update' storage.pk %}"});
                  });
