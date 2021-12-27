@@ -1,7 +1,7 @@
 # -*- cording:utf-8 -*-
 from rest_framework import serializers
 
-from .models import CPU, Storage, PCDetail, PC
+from .models import CPU, Storage, PC, PCDetail
 
 
 class CPUSerializer(serializers.ModelSerializer):
@@ -16,17 +16,17 @@ class StorageSerializer(serializers.ModelSerializer):
 		fields = ('type', 'size')
 
 
-class PCDetailSerializer(serializers.ModelSerializer):
+class PCSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = PCDetail
+		model = PC
 		fields = ('category', 'maker', 'name', 'model_number')
 
 
-class PCSerializer(serializers.ModelSerializer):
-	pc = PCDetailSerializer(read_only=True)
+class PCDetailSerializer(serializers.ModelSerializer):
+	pc = PCSerializer(read_only=True)
 	cpu = CPUSerializer(read_only=True)
 	storage = StorageSerializer(read_only=True)
 
 	class Meta:
-		model = PC
+		model = PCDetail
 		fields = ('pc', 'cpu', 'memory', 'storage', 'size', 'camera', 'fingerprint', 'numpad', 'lan', 'usb', 'hdmi', 'vga', 'remarks')

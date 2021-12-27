@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CPU, Storage, PCDetail, PC
+from .models import CPU, Storage, PC, PCDetail
 
 
 @admin.register(CPU)
@@ -21,7 +21,7 @@ class StorageAdmin(admin.ModelAdmin):
 	ordering = ['size']
 
 
-@admin.register(PCDetail)
+@admin.register(PC)
 class PCAdmin(admin.ModelAdmin):
 	list_display = ('category', 'maker', 'name', 'model_number')
 	list_display_links = ('category', 'maker', 'name', 'model_number')
@@ -31,8 +31,8 @@ class PCAdmin(admin.ModelAdmin):
 	ordering = ['category']
 
 
-@admin.register(PC)
-class ItemAdmin(admin.ModelAdmin):
+@admin.register(PCDetail)
+class PCDetailAdmin(admin.ModelAdmin):
 	list_display = ('pc', 'cpu', 'memory', 'storage', 'numpad')
 	list_display_links = ('pc', 'cpu', 'memory', 'storage', 'numpad')
 	list_filter = ('pc', 'cpu', 'memory', 'size', 'numpad')

@@ -32,7 +32,7 @@ class CPU(models.Model):
 	)
 
 	def __str__(self):
-		return f'{self.maker} {self.name}'
+		return f'{self.maker} {self.name} {self.gen}thGEN'
 
 	class Meta:
 		verbose_name = 'CPU'
@@ -59,11 +59,11 @@ class Storage(models.Model):
 		verbose_name_plural = 'ストレージ'
 
 
-class PCDetail(models.Model):
+class PC(models.Model):
 	category = models.CharField(
 		verbose_name='カテゴリー',
 		max_length=5,
-		choices=category_choice
+		choices=category_choice,
 	)
 
 	maker = models.CharField(
@@ -97,9 +97,9 @@ class PCDetail(models.Model):
 		verbose_name_plural = 'PC'
 
 
-class PC(models.Model):
+class PCDetail(models.Model):
 	pc = models.ForeignKey(
-		PCDetail,
+		PC,
 		on_delete=models.CASCADE,
 		verbose_name='PC',
 	)
@@ -119,7 +119,7 @@ class PC(models.Model):
 	storage = models.ForeignKey(
 		Storage,
 		on_delete=models.CASCADE,
-		verbose_name='ストレージ'
+		verbose_name='ストレージ',
 	)
 
 	size = models.PositiveSmallIntegerField(
@@ -200,11 +200,11 @@ class PC(models.Model):
 			self.fingerprint = False
 			self.numpad = False
 			self.lan = True
-		super(PC, self).save(*args, **kwargs)
+		super(PCDetail, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.pc.maker} {self.pc.name}'
 
 	class Meta:
-		verbose_name = 'Item'
-		verbose_name_plural = 'Item'
+		verbose_name = 'PC詳細'
+		verbose_name_plural = 'PC詳細'
