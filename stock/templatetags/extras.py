@@ -6,8 +6,8 @@ register = template.Library()
 
 
 @register.filter
-def none_check(value):
-	if value is None:
-		return '-'
-	else:
+def boolean_check(value):
+	if value:
 		return value
+	else:
+		return 'なし'
