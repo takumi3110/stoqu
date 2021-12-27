@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 
 from .models import CPU, Storage, PCDetail, PC
-from .serializer import CPUSerializer, StorageSerializer, PCSpecSerializer, PCDetailSerializer, PCSerializer
-from .forms import PCDetailCreateBSModalForm, PCSpecCreateBSModalForm, PCCreateBSModalForm
+from .serializer import CPUSerializer, StorageSerializer, PCDetailSerializer, PCSerializer
+from .forms import PCDetailCreateBSModalForm, PCCreateBSModalForm
 
 
 class CPUViewSet(viewsets.ModelViewSet):
