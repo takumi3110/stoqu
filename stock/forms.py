@@ -17,6 +17,18 @@ class StorageItemBSModalForm(BSModalModelForm):
 		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_date', 'remarks')
 
 
+class StorageItemUpdateBSModalForm(BSModalModelForm):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.fields['item'].widget.attrs['readonly'] = 'readonly'
+		for field in self.fields.values():
+			field.widget.attrs['class'] = 'form-control'
+
+	class Meta:
+		model = StorageItem
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_date', 'remarks')
+
+
 class OptionCreateBSModalForm(BSModalModelForm):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
