@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CPU, Storage, PCSpec, PC, Item
+from .models import CPU, Storage, PC, PCDetail
 
 
 @admin.register(CPU)
@@ -21,16 +21,6 @@ class StorageAdmin(admin.ModelAdmin):
 	ordering = ['size']
 
 
-@admin.register(PCSpec)
-class PCSpecAdmin(admin.ModelAdmin):
-	list_display = ('category', 'cpu', 'memory', 'storage', 'size', 'camera', 'fingerprint', 'numpad')
-	list_display_links = ('category', 'cpu', 'memory', 'storage', 'size')
-	list_filter = ('category', 'cpu', 'memory', 'storage', 'size', 'camera', 'fingerprint', 'numpad', 'lan')
-	search_fields = ('category', 'cpu', 'memory', 'storage', 'size')
-	actions_on_bottom = True
-	ordering = ['category']
-
-
 @admin.register(PC)
 class PCAdmin(admin.ModelAdmin):
 	list_display = ('category', 'maker', 'name', 'model_number')
@@ -41,9 +31,10 @@ class PCAdmin(admin.ModelAdmin):
 	ordering = ['category']
 
 
-@admin.register(Item)
-class ItemAdmin(admin.ModelAdmin):
-	list_display = ('pc', 'spec')
-	list_display_links = ('pc', 'spec')
-	search_fields = ('pc', 'spec')
+@admin.register(PCDetail)
+class PCDetailAdmin(admin.ModelAdmin):
+	list_display = ('pc', 'cpu', 'memory', 'storage', 'numpad')
+	list_display_links = ('pc', 'cpu', 'memory', 'storage', 'numpad')
+	list_filter = ('pc', 'cpu', 'memory', 'size', 'numpad')
+	search_fields = ('pc', )
 	actions_on_bottom = True

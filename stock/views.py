@@ -2,16 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
+from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 
 from rest_framework import viewsets
 import openpyxl as px
 import datetime
 
 import device.models
-from .models import Option, Base, Storage
-from device.models import CPU, PC, PCSpec, Item
-from device.models import Storage as device_storage
-from .serializer import OptionSerializer, BaseSerializer, StorageSerializer
+from .models import Option, Base, StorageItem
+from device.models import CPU, PCDetail, PC
+from .serializer import OptionSerializer, BaseSerializer, StorageItemSerializer
+from .forms import StorageItemBSModalForm, StorageItemUpdateBSModalForm, OptionCreateBSModalForm
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -24,13 +25,13 @@ class BaseViewSet(viewsets.ModelViewSet):
 	serializer_class = BaseSerializer
 
 
-class StorageViewSet(viewsets.ModelViewSet):
-	queryset = Storage.objects.all()
-	serializer_class = StorageSerializer
+class StorageItemViewSet(viewsets.ModelViewSet):
+	queryset = StorageItem.objects.all()
+	serializer_class = StorageItemSerializer
 
 
-class StorageListView(LoginRequiredMixin, ListView):
-	model = Storage
+class StorageItemListView(LoginRequiredMixin, ListView):
+	model = StorageItem
 	template_name = 'stock/storage_list.html'
 	paginate_by = 20
 
@@ -41,12 +42,38 @@ class StorageListView(LoginRequiredMixin, ListView):
 		return context
 
 
-class StorageDetailView(LoginRequiredMixin, DetailView):
-	model = Storage
+class StorageItemDetailView(LoginRequiredMixin, DetailView):
+	model = StorageItem
 	template_name = 'stock/storage_detail.html'
 
 
+class StorageItemCreateView(LoginRequiredMixin, BSModalCreateView):
+	model = StorageItem
+	template_name = 'snippets/create_modal.html'
+	form_class = StorageItemBSModalForm
+	success_url = reverse_lazy('stock:storage_list')
+
+
+class StorageItemUpdateView(LoginRequiredMixin, BSModalUpdateView):
+	model = StorageItem
+	template_name = 'snippets/update_modal.html'
+	form_class = StorageItemUpdateBSModalForm
+	success_url = reverse_lazy('stock:storage_list')
+
+
+class OptionCreateView(LoginRequiredMixin, BSModalCreateView):
+	model = Option
+	template_name = 'snippets/create_modal.html'
+	form_class = OptionCreateBSModalForm
+	success_url = reverse_lazy('stock:storage_list')
+
+
 def create_storage_data(request):
+	"""
+	データ取り込み用
+	:param request:
+	:return:
+	"""
 	file = r'D:\Users\19020081\Documents\【貯蔵品】PC在庫リスト.xlsx'
 	wb = px.load_workbook(file)
 	ws = wb.worksheets[0]
@@ -80,27 +107,24 @@ def create_storage_data(request):
 			else:
 				name += split_name[n]
 		if active == '空':
-			pc = PC.objects.get_or_create(
+			pc_detail = PCDetail.objects.get_or_create(
 				category=category,
 				maker=maker,
 				name=name,
 				model_number=model_number
 			)
-			spec = PCSpec.objects.get(
-				category=category,
-				size=size
-			)
-			item = Item.objects.get_or_create(
-				pc=pc[0],
-				spec=spec
+			pc = PC.objects.get_or_create(
+				pc=pc_detail[0],
+				size=size,
+				numpad=numpad,
 			)
 			get_base = Base.objects.get_or_create(
 				name=base
 			)
 
-			stock_storage, create_storage = Storage.objects.get_or_create(
+			stock_storage, create_storage = StorageItem.objects.get_or_create(
 				order_number=order_number,
-				item=item[0],
+				item=pc[0],
 				price=price,
 				base=get_base[0],
 				delivery_date=delivery_date,
@@ -135,4 +159,3 @@ def get_category_and_numpad_and_size(value):
 		category_and_numpad_and_size['category'] = '3'
 		category_and_numpad_and_size['numpad'] = False
 	return category_and_numpad_and_size
-
