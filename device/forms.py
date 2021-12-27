@@ -26,3 +26,15 @@ class PCDetailCreateBSModalForm(BSModalModelForm):
 	class Meta:
 		model = PCDetail
 		fields = ('pc', 'cpu', 'memory', 'storage', 'size', 'camera', 'fingerprint', 'numpad', 'lan', 'usb', 'hdmi', 'vga')
+
+
+class PCDetailUpdateBSModalForm(BSModalModelForm):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.fields['pc'].widget.attrs['disabled'] = 'disabled'
+		for field in self.fields.values():
+			field.widget.attrs['class'] = 'form-control'
+
+	class Meta:
+		model = PCDetail
+		fields = ('pc', 'cpu', 'memory', 'storage', 'size', 'camera', 'fingerprint', 'numpad', 'lan', 'usb', 'hdmi', 'vga')
