@@ -11,9 +11,8 @@ import datetime
 import device.models
 from .models import Option, Base, StorageItem
 from device.models import CPU, PCDetail, PC
-# from device.models import Storage as DeviceStorage
 from .serializer import OptionSerializer, BaseSerializer, StorageItemSerializer
-from .forms import StorageItemBSModalForm, OptionCreateBSModalForm
+from .forms import StorageItemBSModalForm, StorageItemUpdateBSModalForm, OptionCreateBSModalForm
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -58,7 +57,7 @@ class StorageItemCreateView(LoginRequiredMixin, BSModalCreateView):
 class StorageItemUpdateView(LoginRequiredMixin, BSModalUpdateView):
 	model = StorageItem
 	template_name = 'snippets/update_modal.html'
-	form_class = StorageItemBSModalForm
+	form_class = StorageItemUpdateBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
 
 
