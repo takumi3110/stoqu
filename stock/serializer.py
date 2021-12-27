@@ -3,7 +3,7 @@
 from rest_framework import serializers
 
 from .models import Option, Base, Storage
-from device.serializer import ItemSerializer
+from device.serializer import PCSerializer
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
 
 class StorageSerializer(serializers.ModelSerializer):
-	item = ItemSerializer()
+	item = PCSerializer()
 	# option = OptionSerializer()
 	base = BaseSerializer()
 
