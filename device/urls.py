@@ -10,12 +10,10 @@ app_name = 'device'
 router = routers.DefaultRouter()
 router.register(r'cpu', views.CPUViewSet)
 router.register(r'storage', views.StorageViewSet)
-router.register(r'pc_spec', views.PCSpecViewSet)
-router.register(r'pc', views.PCViewSet)
-router.register(r'item', views.ItemViewSet)
+router.register(r'pc', views.PCDetailViewSet)
+router.register(r'item', views.PCViewSet)
 
 urlpatterns = [
-	path('createPC/', views.PCCreateView.as_view(), name='create_pc'),
-	path('createPcspec/', views.PCSpecCreateView.as_view(), name='create_pcspec'),
-	path('createItem/', views.ItemCreateView.as_view(), name='create_item')
+	path('createPC/', views.PCDetailCreateView.as_view(), name='create_pcdetail'),
+	path('createItem/', views.PCCreateView.as_view(), name='create_pc')
 ]

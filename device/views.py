@@ -4,9 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 
-from .models import CPU, Storage, PCSpec, PC, Item
-from .serializer import CPUSerializer, StorageSerializer, PCSpecSerializer, PCSerializer, ItemSerializer
-from .forms import PCCreateBSModalForm, PCSpecCreateBSModalForm, ItemBSModalForm
+from .models import CPU, Storage, PCDetail, PC
+from .serializer import CPUSerializer, StorageSerializer, PCSpecSerializer, PCDetailSerializer, PCSerializer
+from .forms import PCDetailCreateBSModalForm, PCSpecCreateBSModalForm, PCCreateBSModalForm
 
 
 class CPUViewSet(viewsets.ModelViewSet):
@@ -19,9 +19,9 @@ class StorageViewSet(viewsets.ModelViewSet):
 	serializer_class = StorageSerializer
 
 
-class PCSpecViewSet(viewsets.ModelViewSet):
-	queryset = PCSpec.objects.all()
-	serializer_class = PCSpecSerializer
+class PCDetailViewSet(viewsets.ModelViewSet):
+	queryset = PCDetail.objects.all()
+	serializer_class = PCDetailSerializer
 
 
 class PCViewSet(viewsets.ModelViewSet):
@@ -29,27 +29,15 @@ class PCViewSet(viewsets.ModelViewSet):
 	serializer_class = PCSerializer
 
 
-class ItemViewSet(viewsets.ModelViewSet):
-	queryset = Item.objects.all()
-	serializer_class = ItemSerializer
+class PCDetailCreateView(LoginRequiredMixin, BSModalCreateView):
+	model = PCDetail
+	template_name = 'snippets/create_modal.html'
+	form_class = PCDetailCreateBSModalForm
+	success_url = reverse_lazy('stock:storage_list')
 
 
 class PCCreateView(LoginRequiredMixin, BSModalCreateView):
 	model = PC
 	template_name = 'snippets/create_modal.html'
 	form_class = PCCreateBSModalForm
-	success_url = reverse_lazy('stock:storage_list')
-
-
-class PCSpecCreateView(LoginRequiredMixin, BSModalCreateView):
-	model = PCSpec
-	template_name = 'snippets/create_modal.html'
-	form_class = PCSpecCreateBSModalForm
-	success_url = reverse_lazy('stock:storage_list')
-
-
-class ItemCreateView(LoginRequiredMixin, BSModalCreateView):
-	model = Item
-	template_name = 'snippets/create_modal.html'
-	form_class = ItemBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
