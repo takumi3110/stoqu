@@ -1,6 +1,6 @@
 from django.db import models
 
-from device.models import PC
+from device.models import PCDetail
 
 
 class Option(models.Model):
@@ -57,7 +57,7 @@ class StorageItem(models.Model):
 	)
 
 	item = models.ForeignKey(
-		PC,
+		PCDetail,
 		on_delete=models.CASCADE,
 		verbose_name='在庫PC'
 	)
