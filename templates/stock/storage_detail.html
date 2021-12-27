@@ -1,26 +1,27 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 {% load humanize %}
+{% load extras %}
 
 {% block content %}
 
     <div class="container">
         <div class="row mt-5">
-            <div class="col-md-6">
-                <img src="{{ storage.item.pc.img.url }}" alt="{{ storage.item.pc.name }}" class="detail-img ms-5">
+            <div class="col-md-4">
+                <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="detail-img">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5 offset-3">
                 <div class="row">
-                    <h4 class="detail-item">{{ storage.item.pc.maker }}</h4>
-                    <h4 class="detail-item">{{ storage.item.pc.name }}</h4>
+                    <h4 class="detail-item">{{ storageitem.item.pc.maker }}</h4>
+                    <h4 class="detail-item">{{ storageitem.item.pc.name }}</h4>
                 </div>
                 <div class="row mt-3">
-                    <p>在庫拠点：{{ storage.base.name }}</p>
-                    <p>在庫数：{{ storage.quantity }}</p>
+                    <p>在庫拠点：{{ storageitem.base.name }}</p>
+                    <p>在庫数：{{ storageitem.quantity }}</p>
                     <p>オプション</p>
                 </div>
                 <div class="row mt-3">
-                    <p>合計金額：{{ storage.price | intcomma }}円</p>
+                    <p>合計金額：{{ storageitem.price | intcomma }}円</p>
                 </div>
             </div>
         </div>
@@ -36,54 +37,85 @@
                     <tbody>
                     <tr>
                         <td class="td-spec">CPU</td>
-                        <td>{{ storage.item.spec.cpu }}</td>
+                        <td>{{ storageitem.item.cpu }}</td>
                     </tr>
                     <tr>
                         <td class="td-spec">メモリー</td>
-                        <td>{{ storage.item.spec.memory }}GB</td>
+                        <td>{{ storageitem.item.memory }}GB</td>
                     </tr>
                     <tr>
                         <td class="td-spec">ストレージタイプ</td>
-                        <td>{{ storage.item.spec.storage.get_type_display }}</td>
+                        <td>{{ storageitem.item.storageitem.get_type_display }}</td>
                     </tr>
                     <tr>
                         <td class="td-spec">ストレージ容量</td>
-                        <td>{{ storage.item.spec.storage.size }}GB</td>
+                        <td>{{ storageitem.item.storageitem.size }}GB</td>
                     </tr>
                     <tr>
                         <td class="td-spec">サイズ</td>
-                        <td>{{ storage.item.spec.size }}インチ</td>
+                        <td>{{ storageitem.item.size }}インチ</td>
                     </tr>
                     <tr>
                         <td class="td-spec">webカメラ</td>
-                        <td>{{ storage.item.spec.camera }}</td>
+                        <td>
+                            {% if storageitem.item.camera %}
+                                <input type="checkbox" class="form-check-input" id="cameraCheck" aria-label="camera" checked disabled>
+                            {% else %}
+                                {{ storageitem.item.camera | boolean_check }}
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td class="td-spec">指紋認証</td>
-                        <td>{{ storage.item.spec.fingerprint }}</td>
+                        <td>
+                            {% if storageitem.item.fingerprint %}
+                                <input type="checkbox" class="form-check-input" id="fingerprintCheck" aria-label="fingerprint" checked disabled>
+                            {% else %}
+                                {{ storageitem.item.fingerprint | boolean_check }}
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td class="td-spec">テンキー</td>
-                        <td>{{ storage.item.spec.numpad }}</td>
+                        <td>
+                            {% if storageitem.item.numpad %}
+                                <input type="checkbox" class="form-check-input" id="numpadCheck" aria-label="numpad" checked disabled>
+                            {% else %}
+                                {{ storageitem.item.numpad | boolean_check }}
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td class="td-spec">有線LANポート</td>
-                        <td>{{ storage.item.spec.lan }}</td>
+                        <td>
+                            {% if storageitem.item.lan %}
+                                <input type="checkbox" class="form-check-input" id="lanCheck" aria-label="lan" checked disabled>
+                            {% else %}
+                                {{ storageitem.item.numpad | boolean_check }}
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td class="td-spec">USBポート</td>
-                        <td>{{ storage.item.spec.usb }}</td>
+                        <td>{{ storageitem.item.usb }}</td>
                     </tr>
                     <tr>
                         <td class="td-spec">HDMI</td>
-                        <td>{{ storage.item.spec.hdmi }}</td>
+                        <td>{{ storageitem.item.hdmi }}</td>
                     </tr>
                     <tr>
                         <td class="td-spec">VGA</td>
-                        <td>{{ storage.item.spec.vga }}</td>
+                        <td>{{ storageitem.item.vga }}</td>
                     </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-9 offset-1">
+                <a href="{% url 'stock:storage_list' %}">
+                    <i class="fas fa-undo-alt"></i>戻る
+                </a>
             </div>
         </div>
     </div>
