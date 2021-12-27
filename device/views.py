@@ -6,7 +6,7 @@ from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 
 from .models import CPU, Storage, PC, PCDetail
 from .serializer import CPUSerializer, StorageSerializer, PCDetailSerializer, PCSerializer
-from .forms import PCDetailCreateBSModalForm, PCCreateBSModalForm
+from .forms import PCCreateBSModalForm, PCDetailCreateBSModalForm, PCDetailUpdateBSModalForm
 
 
 class CPUViewSet(viewsets.ModelViewSet):
@@ -40,4 +40,11 @@ class PCDetailCreateView(LoginRequiredMixin, BSModalCreateView):
 	model = PCDetail
 	template_name = 'snippets/create_modal.html'
 	form_class = PCDetailCreateBSModalForm
+	success_url = reverse_lazy('stock:storage_list')
+
+
+class PCDetailUpdateView(LoginRequiredMixin, BSModalUpdateView):
+	model = PCDetail
+	template_name = 'snippets/update_modal.html'
+	form_class = PCDetailUpdateBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
