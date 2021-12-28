@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load django_bootstrap5 %}
 {% load humanize %}
 {% load extras %}
@@ -8,7 +9,11 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-4">
-                <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="detail-img">
+                {% if storageitem.item.pc.img.name == '' %}
+                    <img src="/media/images/no_image_logo.png" alt="noimage" class="detail-img">
+                {% else %}
+                    <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="detail-img">
+                {% endif %}
             </div>
             <div class="col-md-5 offset-3">
                 <div class="row">
@@ -18,10 +23,14 @@
                 <div class="row mt-3">
                     <p>在庫拠点：{{ storageitem.base.name }}</p>
                     <p>在庫数：{{ storageitem.quantity }}</p>
+                    <p>本体価格：{{ storageitem.price | intcomma }}</p>
                     <p>オプション</p>
+                    {% for option in storageitem.option.all %}
+                        <p>{{ option.maker }} {{ option.name }} {{ option.price | intcomma}}円</p>
+                    {% endfor %}
                 </div>
                 <div class="row mt-3">
-                    <p>合計金額：{{ storageitem.price | intcomma }}円</p>
+                    <p>合計金額：{{ storageitem.total_price | intcomma }}円</p>
                 </div>
             </div>
         </div>
@@ -91,21 +100,21 @@
                             {% if storageitem.item.lan %}
                                 <input type="checkbox" class="form-check-input" id="lanCheck" aria-label="lan" checked disabled>
                             {% else %}
-                                {{ storageitem.item.numpad | boolean_check }}
+                                {{ storageitem.item.lan | boolean_check }}
                             {% endif %}
                         </td>
                     </tr>
                     <tr>
-                        <td class="td-spec">USBポート</td>
-                        <td>{{ storageitem.item.usb }}</td>
+                        <td class="td-spec">USBポート数</td>
+                        <td>{{ storageitem.item.usb | boolean_check }}</td>
                     </tr>
                     <tr>
                         <td class="td-spec">HDMI</td>
-                        <td>{{ storageitem.item.hdmi }}</td>
+                        <td>{{ storageitem.item.hdmi | boolean_check }}</td>
                     </tr>
                     <tr>
                         <td class="td-spec">VGA</td>
-                        <td>{{ storageitem.item.vga }}</td>
+                        <td>{{ storageitem.item.vga | boolean_check }}</td>
                     </tr>
                     </tbody>
                 </table>

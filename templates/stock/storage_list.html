@@ -49,7 +49,6 @@
                 <table class="table table-bordered small mt-3">
                     <thead class="table-light">
                         <tr>
-                            <th>在庫拠点</th>
                             <th>発注番号</th>
                             <th>カテゴリー</th>
                             <th>メーカー</th>
@@ -60,13 +59,13 @@
                             <th>テンキー</th>
                             <th>在庫数</th>
                             <th>金額</th>
+                            <th>在庫拠点</th>
                             <th>詳細</th>
                         </tr>
                     </thead>
                     <tbody>
                     {% for storage in storageitem_list %}
                         <tr id="table{{ storage.pk }}">
-                            <td id="base{{ storage.pk }}">{{ storage.base }}</td>
                             <td>{{ storage.order_number }}</td>
                             <td>{{ storage.item.pc.get_category_display }}</td>
                             <td>{{ storage.item.pc.maker }}</td>
@@ -82,7 +81,8 @@
                                 {% endif %}
                             </td>
                             <td>{{ storage.quantity }}</td>
-                            <td>{{ storage.price | intcomma }}</td>
+                            <td>{{ storage.total_price | intcomma }}</td>
+                            <td id="base{{ storage.pk }}">{{ storage.base }}</td>
                             <td>
                                 <a href="{% url 'stock:storage_detail'  storage.pk %}">詳細</a>
                                 <a href="#" id="updateStorage{{ storage.pk }}">変更</a>

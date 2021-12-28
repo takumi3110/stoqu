@@ -3,6 +3,8 @@ venv
 *migrations
 diagram
 *__pycache__*
+node_modules
+templates/dummy
 
 stoqu/settings/hide_settings.py
 *.json

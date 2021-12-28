@@ -32,7 +32,7 @@ class CPU(models.Model):
 	)
 
 	def __str__(self):
-		return f'{self.maker} {self.name} {self.gen}thGEN'
+		return f'{self.maker} {self.name} 第{self.gen}世代'
 
 	class Meta:
 		verbose_name = 'CPU'
