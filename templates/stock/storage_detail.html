@@ -23,10 +23,14 @@
                 <div class="row mt-3">
                     <p>在庫拠点：{{ storageitem.base.name }}</p>
                     <p>在庫数：{{ storageitem.quantity }}</p>
+                    <p>本体価格：{{ storageitem.price | intcomma }}</p>
                     <p>オプション</p>
+                    {% for option in storageitem.option.all %}
+                        <p>{{ option.maker }} {{ option.name }} {{ option.price | intcomma}}円</p>
+                    {% endfor %}
                 </div>
                 <div class="row mt-3">
-                    <p>合計金額：{{ storageitem.price | intcomma }}円</p>
+                    <p>合計金額：{{ storageitem.total_price | intcomma }}円</p>
                 </div>
             </div>
         </div>

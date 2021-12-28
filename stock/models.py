@@ -63,7 +63,7 @@ class StorageItem(models.Model):
 	)
 
 	price = models.PositiveIntegerField(
-		verbose_name='合計金額'
+		verbose_name='本体価格'
 	)
 
 	quantity = models.PositiveSmallIntegerField(
@@ -75,6 +75,12 @@ class StorageItem(models.Model):
 	option = models.ManyToManyField(
 		Option,
 		verbose_name='オプション',
+		blank=True
+	)
+
+	total_price = models.PositiveIntegerField(
+		verbose_name='合計金額',
+		null=True,
 		blank=True
 	)
 
@@ -95,6 +101,12 @@ class StorageItem(models.Model):
 		null=True,
 		blank=True
 	)
+
+	def save(self, *args, **kwargs):
+		self.total_price = self.price
+		for option in self.option.all():
+			self.total_price += option.price
+		super(StorageItem, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.item.pc.maker}{self.item.pc.name}'
