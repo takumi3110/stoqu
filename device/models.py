@@ -12,6 +12,7 @@ category_choice = (
 	('3', 'ミニPC')
 )
 
+
 class CPU(models.Model):
 	maker = models.CharField(
 		verbose_name='メーカー',
