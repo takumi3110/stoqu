@@ -30,7 +30,17 @@
       cursor: pointer;
     }
   }
-
 }
 
+.item-table {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.item-card {
+  &:hover {
+    cursor: pointer;
+  }
+}
 
