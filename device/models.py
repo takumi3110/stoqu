@@ -7,11 +7,10 @@ type_choice = (
 )
 
 category_choice = (
-	('1', 'ノート'),
-	('2', 'デスクトップ'),
+	('1', 'ノートPC'),
+	('2', 'デスクトップPC'),
 	('3', 'ミニPC')
 )
-
 
 class CPU(models.Model):
 	maker = models.CharField(
