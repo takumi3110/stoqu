@@ -10,7 +10,7 @@ import datetime
 
 import device.models
 from .models import Option, Base, StorageItem
-from device.models import CPU, PCDetail, PC
+from device.models import CPU, PCDetail, PC, Storage
 from .serializer import OptionSerializer, BaseSerializer, StorageItemSerializer
 from .forms import StorageItemBSModalForm, StorageItemUpdateBSModalForm, OptionCreateBSModalForm
 
@@ -34,6 +34,7 @@ class StorageItemListView(LoginRequiredMixin, ListView):
 	model = StorageItem
 	template_name = 'stock/storage_list.html'
 	paginate_by = 20
+	ordering = 'order_number'
 
 	def get_context_data(self, *, object_list=None, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -79,7 +80,6 @@ def create_storage_data(request):
 	ws = wb.worksheets[0]
 	# max_row = ws.max_row
 	max_row = 442
-	storage_quantity = 1
 	for i in range(3, max_row):
 		b_value = ws['B' + str(i)].value
 		active = ws['C' + str(i)].value
@@ -107,14 +107,16 @@ def create_storage_data(request):
 			else:
 				name += split_name[n]
 		if active == '空':
-			pc_detail = PCDetail.objects.get_or_create(
+			pc = PC.objects.get_or_create(
 				category=category,
 				maker=maker,
 				name=name,
 				model_number=model_number
 			)
-			pc = PC.objects.get_or_create(
-				pc=pc_detail[0],
+			pc_detail = PCDetail.objects.get_or_create(
+				pc=pc[0],
+				cpu_id=1,
+				storage_id=2,
 				size=size,
 				numpad=numpad,
 			)
@@ -124,7 +126,7 @@ def create_storage_data(request):
 
 			stock_storage, create_storage = StorageItem.objects.get_or_create(
 				order_number=order_number,
-				item=pc[0],
+				item=pc_detail[0],
 				price=price,
 				base=get_base[0],
 				delivery_date=delivery_date,
