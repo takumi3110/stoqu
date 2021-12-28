@@ -81,7 +81,7 @@
                                 {% endif %}
                             </td>
                             <td>{{ storage.quantity }}</td>
-                            <td>{{ storage.price | intcomma }}</td>
+                            <td>{{ storage.total_price | intcomma }}</td>
                             <td id="base{{ storage.pk }}">{{ storage.base }}</td>
                             <td>
                                 <a href="{% url 'stock:storage_detail'  storage.pk %}">詳細</a>
