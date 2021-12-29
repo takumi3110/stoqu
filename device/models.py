@@ -42,7 +42,7 @@ class CPU(models.Model):
 class Storage(models.Model):
 	type = models.CharField(
 		verbose_name='タイプ',
-		max_length=5,
+		max_length=6,
 		choices=type_choice,
 		default='1'
 	)
@@ -62,7 +62,7 @@ class Storage(models.Model):
 class PC(models.Model):
 	category = models.CharField(
 		verbose_name='カテゴリー',
-		max_length=5,
+		max_length=6,
 		choices=category_choice,
 	)
 
