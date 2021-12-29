@@ -1,6 +1,7 @@
 from django.db import models
 
 from device.models import PCDetail
+from user.models import User
 
 
 class Option(models.Model):
@@ -114,3 +115,100 @@ class StorageItem(models.Model):
 	class Meta:
 		verbose_name = '貯蔵品'
 		verbose_name_plural = '貯蔵品'
+
+
+class OrderItem(models.Model):
+	storage_item = models.ForeignKey(
+		StorageItem,
+		on_delete=models.CASCADE,
+		verbose_name='貯蔵品'
+	)
+
+	quantity = models.PositiveSmallIntegerField(
+		verbose_name='数量',
+	)
+
+	ordered = models.BooleanField(
+		verbose_name='確保済み',
+		default=False
+	)
+
+	def __str__(self):
+		return f'{self.storage_item.item.pc.maker} {self.storage_item.item.pc.name} × {self.quantity}'
+
+	class Meta:
+		verbose_name = '確保アイテム'
+		verbose_name_plural = '確保アイテム'
+
+
+class StorageCart(models.Model):
+	requester = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者'
+	)
+
+	order_items = models.ManyToManyField(
+		OrderItem,
+		verbose_name='確保アイテム',
+	)
+
+	ordered = models.BooleanField(
+		default=False
+	)
+
+	def __str__(self):
+		return self.user
+
+	class Meta:
+		verbose_name = '貯蔵品カート'
+		verbose_name_plural = '貯蔵品カート'
+
+
+class Approve(models.Model):
+	last_name = models.CharField(
+		verbose_name='姓',
+		max_length=32
+	)
+
+	first_name = models.CharField(
+		verbose_name='名',
+		max_length=32,
+	)
+
+	dept_code = models.PositiveSmallIntegerField(
+		verbose_name='部門コード'
+	)
+
+	dept_name = models.CharField(
+		verbose_name='部門名',
+		max_length=255
+	)
+
+	def __str__(self):
+		return f'{self.last_name}{self.first_name}'
+
+	class Meta:
+		verbose_name = '承認者情報'
+		verbose_name_plural = '承認者情報'
+
+
+class Invoice(models.Model):
+	storage_cart = models.ForeignKey(
+		StorageCart,
+		on_delete=models.CASCADE,
+		verbose_name='カート'
+	)
+
+	approve = models.ForeignKey(
+		Approve,
+		on_delete=models.CASCADE,
+		verbose_name='承認者情報'
+	)
+
+	requester = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者'
+	)
+
