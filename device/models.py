@@ -134,25 +134,21 @@ class PCDetail(models.Model):
 
 	camera = models.BooleanField(
 		verbose_name='webカメラ',
-		null=True,
 		blank=True
 	)
 
 	fingerprint = models.BooleanField(
 		verbose_name='指紋認証',
-		null=True,
 		blank=True
 	)
 
 	numpad = models.BooleanField(
 		verbose_name='テンキー',
-		null=True,
 		blank=True
 	)
 
 	lan = models.BooleanField(
 		verbose_name='有線LANポート',
-		null=True,
 		blank=True
 	)
 
