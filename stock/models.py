@@ -75,7 +75,7 @@ class StorageItem(models.Model):
 
 	option = models.ManyToManyField(
 		Option,
-		verbose_name='オプション',
+		verbose_name='付属品',
 		blank=True
 	)
 
@@ -104,10 +104,11 @@ class StorageItem(models.Model):
 	)
 
 	def save(self, *args, **kwargs):
+		super().save(*args, **kwargs)
 		self.total_price = self.price
 		for option in self.option.all():
 			self.total_price += option.price
-		super(StorageItem, self).save(*args, **kwargs)
+		super().save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.item.pc.maker}{self.item.pc.name}'
@@ -158,7 +159,7 @@ class StorageCart(models.Model):
 	)
 
 	def __str__(self):
-		return self.user
+		return self.requester.screenname
 
 	class Meta:
 		verbose_name = '貯蔵品カート'
