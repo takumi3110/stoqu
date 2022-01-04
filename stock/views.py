@@ -11,7 +11,7 @@ import datetime
 import device.models
 from .models import Option, Base, StorageItem
 from device.models import CPU, PCDetail, PC, Storage
-from .serializer import OptionSerializer, BaseSerializer, StorageItemSerializer
+from .serializer import *
 from .forms import StorageItemBSModalForm, StorageItemUpdateBSModalForm, OptionCreateBSModalForm
 
 
@@ -28,6 +28,26 @@ class BaseViewSet(viewsets.ModelViewSet):
 class StorageItemViewSet(viewsets.ModelViewSet):
 	queryset = StorageItem.objects.all()
 	serializer_class = StorageItemSerializer
+
+
+class StorageCartViewSet(viewsets.ModelViewSet):
+	queryset = StorageCart.objects.all()
+	serializer_class = StorageCartSerializer
+
+
+class OrderItemViewSet(viewsets.ModelViewSet):
+	queryset = OrderItem.objects.all()
+	serializer_class = OrderItemSerializer
+
+
+class ApproveViewSet(viewsets.ModelViewSet):
+	queryset = Approve.objects.all()
+	serializer_class = ApproveSerializer
+
+
+class OrderInfoViewSet(viewsets.ModelViewSet):
+	queryset = OrderInfo.objects.all()
+	serializer_class = OrderInfoSerializer
 
 
 class StorageItemListView(LoginRequiredMixin, ListView):
