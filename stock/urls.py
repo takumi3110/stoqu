@@ -11,6 +11,10 @@ router = routers.DefaultRouter()
 router.register(r'option', views.OptionViewSet)
 router.register(r'base', views.BaseViewSet)
 router.register(r'storage', views.StorageItemViewSet)
+router.register(r'orderItem', views.OrderItemViewSet)
+router.register(r'storageCart', views.StorageCartViewSet)
+router.register(r'approve', views.ApproveViewSet)
+router.register(r'orderInfo', views.OrderInfoViewSet)
 
 urlpatterns = [
 	path('', views.StorageItemListView.as_view(), name='storage_list'),
