@@ -91,7 +91,7 @@ class StorageItem(models.Model):
 		verbose_name='在庫拠点',
 	)
 
-	delivery_date = models.DateField(
+	delivery_at = models.DateField(
 		verbose_name='納品日',
 		null=True,
 		blank=True
@@ -148,7 +148,7 @@ class StorageCart(models.Model):
 		verbose_name='依頼者'
 	)
 
-	order_items = models.ManyToManyField(
+	order_item = models.ManyToManyField(
 		OrderItem,
 		verbose_name='確保アイテム',
 	)
@@ -193,7 +193,18 @@ class Approve(models.Model):
 		verbose_name_plural = '承認者情報'
 
 
-class Invoice(models.Model):
+class OrderInfo(models.Model):
+	number = models.CharField(
+		verbose_name='受注番号',
+		max_length=100
+	)
+
+	ticket = models.PositiveIntegerField(
+		verbose_name='チケット番号',
+		null=True,
+		blank=True
+	)
+
 	storage_cart = models.ForeignKey(
 		StorageCart,
 		on_delete=models.CASCADE,
@@ -212,3 +223,27 @@ class Invoice(models.Model):
 		verbose_name='依頼者'
 	)
 
+	contact_user = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='担当者',
+		null=True,
+		blank=True,
+		related_name='contact_user'
+	)
+
+	ordered_at = models.DateTimeField(
+		verbose_name='依頼日',
+		auto_now=True
+	)
+
+	ordered = models.BooleanField(
+		verbose_name='依頼済み'
+	)
+
+	def __str__(self):
+		return f'{self.number}'
+
+	class Meta:
+		verbose_name = '依頼内容'
+		verbose_name_plural = '依頼内容'
