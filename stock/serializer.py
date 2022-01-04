@@ -3,7 +3,7 @@
 from rest_framework import serializers
 
 from .models import *
-from device.serializer import PCSerializer
+from device.serializer import PCDetailSerializer
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -19,13 +19,13 @@ class BaseSerializer(serializers.ModelSerializer):
 
 
 class StorageItemSerializer(serializers.ModelSerializer):
-	item = PCSerializer()
+	item = PCDetailSerializer()
 	# option = OptionSerializer()
 	base = BaseSerializer()
 
 	class Meta:
 		model = StorageItem
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_date', 'remarks')
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_at', 'remarks')
 
 
 class OrderItemSerializer(serializers.ModelSerializer):

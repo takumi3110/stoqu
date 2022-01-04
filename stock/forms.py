@@ -14,7 +14,7 @@ class StorageItemBSModalForm(BSModalModelForm):
 
 	class Meta:
 		model = StorageItem
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_date', 'remarks')
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_at', 'remarks')
 
 
 class StorageItemUpdateBSModalForm(BSModalModelForm):
@@ -26,7 +26,7 @@ class StorageItemUpdateBSModalForm(BSModalModelForm):
 
 	class Meta:
 		model = StorageItem
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_date', 'remarks')
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_at', 'remarks')
 
 
 class OptionCreateBSModalForm(BSModalModelForm):

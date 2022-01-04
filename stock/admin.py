@@ -14,29 +14,31 @@ class OptionAdmin(admin.ModelAdmin):
 
 @admin.register(StorageItem)
 class StorageItemAdmin(admin.ModelAdmin):
-	list_display = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_date')
-	list_display_links = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_date')
+	list_display = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_at')
+	list_display_links = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_at')
 	list_filter = ('order_number', 'item', 'base')
 	search_fields = ('order_number', 'item', 'base')
 	actions_on_bottom = True
+	filter_horizontal = ['option']
 
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-	list_display = ('storage_item', ' quantity', 'ordered')
-	list_display_links = ('storage_item', ' quantity')
-	list_filter = ('storage_item', ' quantity', 'ordered')
+	list_display = ('storage_item', 'quantity', 'ordered')
+	list_display_links = ('storage_item', 'quantity')
+	list_filter = ('storage_item', 'quantity', 'ordered')
 	search_fields = ('storage_item',)
 	actions_on_bottom = True
 
 
 @admin.register(StorageCart)
 class StorageCartAdmin(admin.ModelAdmin):
-	list_display = ('requester', 'order_item', 'ordered')
-	list_display_links = ('requester', 'order_item')
-	list_filter = ('requester', 'order_item', 'ordered')
-	search_fields = ('requester', 'order_item')
+	list_display = ('requester', 'ordered')
+	list_display_links = ('requester',)
+	list_filter = ('requester', 'ordered')
+	search_fields = ('requester',)
 	actions_on_bottom = True
+	filter_horizontal = ['order_item']
 
 
 @admin.register(Approve)
