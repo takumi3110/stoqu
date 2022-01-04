@@ -30,7 +30,7 @@ def post_storage_data():
 		item_name = ws['H' + str(i)].value
 		model_number = ws['I' + str(i)].value
 		price = int(ws['K' + str(i)].value)
-		remarks = ws['L' + str(i)].value
+		# remarks = ws['L' + str(i)].value
 		# delivery_date
 		delivery_date = date.date().isoformat()
 		# category, numpad
@@ -50,7 +50,7 @@ def post_storage_data():
 		if active == '空':
 			headers = {'content-type': 'application/json'}
 			storage_results = get_api_date(storage_url, headers)
-			device_results = get_api_date(device_url, headers)
+			# device_results = get_api_date(device_url, headers)
 			post_pc = {
 				'category': category,
 				'maker': maker,
@@ -83,7 +83,7 @@ def post_storage_data():
 			}
 			# post_device_api(post_device, device_results, device_url, headers)
 			json_device = json.dumps(post_device)
-			device_res = requests.post(device_url, data=json_device)
+			requests.post(device_url, data=json_device)
 			for storage in storage_results:
 				post_storage = {
 					'order_number': order_number,
@@ -101,7 +101,7 @@ def post_storage_data():
 
 					post_storage['quantity'] = 1
 					storage_res = requests.post(storage_url, data=json.dumps(post_storage), headers=headers)
-					print(sotrage_res.status_code)
+					print(storage_res.status_code)
 				else:
 					post_storage['quantity'] = storage['quantity'] + 1
 					storage_res = requests.post(storage_url, data=json.dumps(post_storage), headers=headers)
