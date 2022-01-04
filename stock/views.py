@@ -54,7 +54,7 @@ class OrderInfoViewSet(viewsets.ModelViewSet):
 class StorageItemListView(LoginRequiredMixin, ListView):
 	model = StorageItem
 	template_name = 'stock/storage_list.html'
-	paginate_by = 20
+	paginate_by = 30
 	ordering = 'order_number'
 
 	def get_context_data(self, *, object_list=None, **kwargs):
@@ -102,7 +102,9 @@ class StorageCartListView(LoginRequiredMixin, ListView):
 	def get_context_data(self, *, object_list=None, **kwargs):
 		context = super(StorageCartListView, self).get_context_data()
 		storage_cart = StorageCart.objects.filter(requester=self.request.user, ordered=False)
-		order_item_list = storage_cart.order_item.all()
+		order_item_list = []
+		for cart in storage_cart:
+			order_item_list.append(cart.order_item.all())
 		context['order_item_list'] = order_item_list
 		return context
 
@@ -153,7 +155,7 @@ def add_item(request, pk):
 		return redirect('stock:cart')
 	if cart_list.exists():
 		storage_cart = cart_list[0]
-		if storage_cart.order_item.filter(order_item__pk=order_item.pk).exists():
+		if storage_cart.order_item.filter(storage_item__pk=order_item.storage_item.pk).exists():
 			order_item.quantity += 1
 			order_item.save()
 		else:
