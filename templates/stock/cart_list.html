@@ -20,10 +20,10 @@
                         {% for storagecart in storagecart_list %}
                             {% for order_item in storagecart.order_item.all %}
                                 <div class="col-6 text-center">
-                                    {% if order_item.storage_item.pc.image.name == '' %}
-                                        <img src="/media/images/no_image_logo.png" alt="noimage" class="detail-img">
+                                    {% if order_item.storage_item.item.pc.img.name == '' %}
+                                        <img src="/media/images/no_image_logo.png" alt="noimage">
                                     {% else %}
-                                        <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="detail-img">
+                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}">
                                     {% endif %}
                                 </div>
                                 <div class="col-6 mb-5">
@@ -39,17 +39,13 @@
                                     <p><span class="font-weight-bold">本体価格：</span>￥{{ order_item.storage_item.price | intcomma}}</p>
                                     <p class="mb-1">
                                         数量：
-                                        <a href="#">
-                                            <button type="button" class="btn btn-secondary">-</button>
-                                        </a>
+                                        <button type="button" class="btn btn-secondary">-</button>
                                         {{ order_item.quantity }}
-                                        <a href="#">
-                                            <button type="button" class="btn btn-secondary">+</button>
-                                        </a>
+                                        <button type="button" class="btn btn-secondary">+</button>
                                     </p>
                                     <p>
-                                        <a href="#">
-                                            <span class="badge badge-danger">削除</span>
+                                        <a href="{% url 'stock:remove_cart' order_item.pk %}">
+                                            削除
                                         </a>
                                     </p>
                                 </div>
