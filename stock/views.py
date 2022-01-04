@@ -208,3 +208,103 @@ def get_obj(resource, request, pk):
 	return obj_data
 
 
+class StorageCartListView(LoginRequiredMixin, ListView):
+	model = StorageCart
+	template_name = 'stock/cart_list.html'
+
+	def get_queryset(self, **kwargs):
+		queryset = super(StorageCartListView, self).get_queryset()
+		qs = queryset.filter(requester=self.request.user, ordered=False)
+		return qs
+
+
+@login_required()
+def add_item(request, pk):
+	"""
+	カートにアイテムを追加する
+	:param request:
+	:param pk:
+	:return:
+	"""
+	obj_data = get_obj('add', request, pk)
+	order_item = obj_data['order_item']
+	cart_list = obj_data['cart_list']
+	storage_quantity = order_item.storage_item.quantity
+	if storage_quantity > 0:
+		order_item.storage_item.quantity -= 1
+		order_item.storage_item.save()
+		for option in order_item.storage_item.option.all():
+			option.quantity -= 1
+			option.save()
+	else:
+		return redirect('stock:cart')
+	if cart_list.exists():
+		storage_cart = cart_list[0]
+		if storage_cart.order_item.filter(order_item__pk=order_item.pk).exists():
+			order_item.quantity += 1
+			order_item.save()
+		else:
+			storage_cart.order_item.add(order_item)
+	else:
+		storage_cart = StorageCart.objects.create(
+			requester=request.user,
+		)
+		storage_cart.order_item.add(order_item)
+	return redirect('stock:cart')
+
+
+@login_required()
+def reduce_cart(request, pk):
+	"""
+	カートからアイテムを減らす
+	:param request:
+	:param pk:
+	:return:
+	"""
+	obj_data = get_obj('reduce', request, pk)
+	order_item = obj_data['order_item']
+	cart_list = obj_data['cart_list']
+	if cart_list.exists():
+		order_item.storage_item.quantity += 1
+		order_item.storage_item.save()
+		for option in order_item.storage_item.option.all():
+			option.quantity += 1
+			option.save()
+		if order_item.quantityu > 1:
+			order_item.quantity -= 1
+			order_item.save()
+		else:
+			order_item.delete()
+	else:
+		pass
+	return redirect('stock:cart')
+
+
+@login_required()
+def remove_cart(request, pk):
+	"""
+	カートからアイテムを削除する
+	:param request:
+	:param pk:
+	:return:
+	"""
+	obj_data = get_obj('remove', request, pk)
+	order_item = obj_data['order_item']
+	cart_list = obj_data['cart_list']
+	if cart_list.exists():
+		quantity = order_item.quantity
+		order_item.storage_item.quantity += quantity
+		order_item.storage_item.save()
+		for option in order_item.storage_item.option.all():
+			option.quantity += quantity
+			option.save()
+		for cart in cart_list:
+			cart_items = cart.order_item.all().count()
+			if cart_items == 1:
+				cart.delete()
+				order_item.delete()
+			else:
+				order_item.delete()
+	else:
+		pass
+	return redirect('stock:cart')
