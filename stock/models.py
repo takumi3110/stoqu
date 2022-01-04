@@ -33,8 +33,8 @@ class Option(models.Model):
 		return f'{self.maker}{self.name}'
 
 	class Meta:
-		verbose_name = 'オプション'
-		verbose_name_plural = 'オプション'
+		verbose_name = '付属品'
+		verbose_name_plural = '付属品'
 
 
 class Base(models.Model):
@@ -152,6 +152,12 @@ class StorageCart(models.Model):
 	order_item = models.ManyToManyField(
 		OrderItem,
 		verbose_name='確保アイテム',
+	)
+
+	price = models.PositiveIntegerField(
+		verbose_name='合計金額',
+		null=True,
+		blank=True
 	)
 
 	ordered = models.BooleanField(
