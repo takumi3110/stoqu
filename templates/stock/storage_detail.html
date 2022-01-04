@@ -35,7 +35,7 @@
                     <p>合計金額：{{ storageitem.total_price | intcomma }}円</p>
                 </div>
                 <div class="row mt-3">
-                    <button type="button" class="btn btn-warning">
+                    <button type="button" class="btn btn-warning" onclick="location.href='{% url "stock:add_item" storageitem.pk %}'">
                         <span>
                             <i class="fas fa-cart-arrow-down"></i>注文する
                         </span>
