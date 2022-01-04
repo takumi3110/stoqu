@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
@@ -181,3 +182,29 @@ def get_category_and_numpad_and_size(value):
 		category_and_numpad_and_size['category'] = '3'
 		category_and_numpad_and_size['numpad'] = False
 	return category_and_numpad_and_size
+
+
+def get_obj(resource, request, pk):
+	"""
+
+	:param resource:
+	:param request:
+	:param pk:
+	:return:
+	"""
+	cart_list = StorageCart.objects.filter(requester=request.user, ordered=False)
+	if resource == 'add':
+		item = get_object_or_404(StorageItem, pk=pk)
+		order_item, created = OrderItem.objects.get_or_create(
+			storage_item=item,
+			ordered=False
+		)
+	else:
+		order_item = get_object_or_404(OrderItem, pk=pk)
+	obj_data = {
+		'cart_list': cart_list,
+		'order_item': order_item
+	}
+	return obj_data
+
+
