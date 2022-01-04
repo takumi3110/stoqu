@@ -1,10 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load humanize %}
+{% load extras %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row page-title">
+            <h2 class="title-text">依頼予定のPC</h2>
+        </div>
+        <div class="row my-5">
+            <div class="card col-8">
+                <div class="card-header">
+                    <h4></h4>
+                </div>
+                <div class="card-body px-4 py-3">
+                    <div class="row">
+                        {% for storagecart in storagecart_list %}
+                            {% for order_item in storagecart.order_item.all %}
+                                <div class="col-6 text-center">
+                                    {% if order_item.storage_item.pc.image.name == '' %}
+                                        <img src="/media/images/no_image_logo.png" alt="noimage" class="detail-img">
+                                    {% else %}
+                                        <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="detail-img">
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 mb-5">
+                                    <h4>{{ order_item.storage_item.item.pc.maker }}</h4>
+                                    <h4>{{ order_item.storage_item.item.pc.name }}</h4>
+                                    <h5>合計金額：￥{{ order_item.storage_item.price | intcomma }}</h5>
+                                    <p class="font-wight-bold">付属品</p>
+                                    {% for option in order_item.storage_item.option.all %}
+                                        <p>{{ option.name }}：￥{{ option.price | intcomma }}</p>
+                                    {% empty %}
+                                        <p>なし</p>
+                                    {% endfor %}
+                                    <p><span class="font-weight-bold">本体価格：</span>￥{{ order_item.storage_item.price | intcomma}}</p>
+                                    <p class="mb-1">
+                                        数量：
+                                        <a href="#">
+                                            <button type="button" class="btn btn-secondary">-</button>
+                                        </a>
+                                        {{ order_item.quantity }}
+                                        <a href="#">
+                                            <button type="button" class="btn btn-secondary">+</button>
+                                        </a>
+                                    </p>
+                                    <p>
+                                        <a href="#">
+                                            <span class="badge badge-danger">削除</span>
+                                        </a>
+                                    </p>
+                                </div>
+                            {% empty %}
+                                <p class="mb-3">アイテムが選択されていません</p>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center px-2 py-3">
+                        <p>
+                            小計：({{ request.user }}個のアイテム)(税込み)
+                        </p>
+                        <p>
+                            :
+                            <span class="font-weight-bold" style="text-align: left">
+                                ￥{{ request.user }}
+                            </span>
+                        </p>
+                        <div class="mb-3">
+                            <a href="#">次に進む</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}
+
