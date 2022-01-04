@@ -127,6 +127,7 @@ class OrderItem(models.Model):
 
 	quantity = models.PositiveSmallIntegerField(
 		verbose_name='数量',
+		default=1
 	)
 
 	ordered = models.BooleanField(
