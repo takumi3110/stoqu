@@ -12,9 +12,6 @@
         </div>
         <div class="row my-5">
             <div class="card col-8">
-                <div class="card-header">
-                    <h4></h4>
-                </div>
                 <div class="card-body px-4 py-3">
                     <div class="row">
                         {% for storagecart in storagecart_list %}
@@ -29,7 +26,7 @@
                                 <div class="col-6 mb-5">
                                     <h4>{{ order_item.storage_item.item.pc.maker }}</h4>
                                     <h4>{{ order_item.storage_item.item.pc.name }}</h4>
-                                    <h5>合計金額：￥{{ order_item.storage_item.price | intcomma }}</h5>
+                                    <h5>合計金額：￥{{ order_item.pk | total_price | intcomma }}</h5>
                                     <p class="font-wight-bold">付属品</p>
                                     {% for option in order_item.storage_item.option.all %}
                                         <p>{{ option.name }}：￥{{ option.price | intcomma }}</p>
@@ -39,9 +36,11 @@
                                     <p><span class="font-weight-bold">本体価格：</span>￥{{ order_item.storage_item.price | intcomma}}</p>
                                     <p class="mb-1">
                                         数量：
-                                        <button type="button" class="btn btn-secondary">-</button>
+                                        <button type="button" class="btn btn-secondary"
+                                                onclick="location.href='{% url "stock:reduce_cart" order_item.pk %}'">-</button>
                                         {{ order_item.quantity }}
-                                        <button type="button" class="btn btn-secondary">+</button>
+                                        <button type="button" class="btn btn-secondary"
+                                                onclick="location.href='{% url "stock:add_item" order_item.pk %}'">+</button>
                                     </p>
                                     <p>
                                         <a href="{% url 'stock:remove_cart' order_item.pk %}">
@@ -60,12 +59,12 @@
                 <div class="card">
                     <div class="card-body text-center px-2 py-3">
                         <p>
-                            小計：({{ request.user }}個のアイテム)(税込み)
+                            小計(税込み)：({{ request.user | storage_count }}個のアイテム)
                         </p>
                         <p>
                             :
                             <span class="font-weight-bold" style="text-align: left">
-                                ￥{{ request.user }}
+                                ￥{{ request.user | storage_subtotal | intcomma}}
                             </span>
                         </p>
                         <div class="mb-3">
