@@ -118,14 +118,7 @@ def get_obj(resource, request, pk):
 	:return:
 	"""
 	cart_list = StorageCart.objects.filter(requester=request.user, ordered=False)
-	if resource == 'add':
-		item = get_object_or_404(StorageItem, pk=pk)
-		order_item, created = OrderItem.objects.get_or_create(
-			storage_item=item,
-			ordered=False
-		)
-	else:
-		order_item = get_object_or_404(OrderItem, pk=pk)
+	order_item = get_object_or_404(OrderItem, pk=pk)
 	obj_data = {
 		'cart_list': cart_list,
 		'order_item': order_item
@@ -185,7 +178,7 @@ def reduce_cart(request, pk):
 		for option in order_item.storage_item.option.all():
 			option.quantity += 1
 			option.save()
-		if order_item.quantityu > 1:
+		if order_item.quantity > 1:
 			order_item.quantity -= 1
 			order_item.save()
 		else:
