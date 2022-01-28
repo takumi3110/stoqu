@@ -28,12 +28,82 @@
   cursor: pointer;
 }
 
+.card-img-cart {
+  width: 350px;
+  height: 270px;
+}
+
 .item-table:hover {
   cursor: pointer;
 }
 
 .item-card:hover {
   cursor: pointer;
+}
+
+.storage-item {
+  overflow: hidden;
+}
+.storage-item:hover {
+  cursor: pointer;
+}
+.storage-item .card:active {
+  transform: scale(0.9);
+}
+
+.navigation {
+  background-color: darkgray;
+  color: dimgray;
+  height: 100px;
+  text-align: center;
+}
+.navigation .navigation-item {
+  border-bottom: dimgray solid;
+}
+
+.menu-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.approve-item {
+  border-radius: 10px;
+}
+.approve-item .schedule {
+  color: forestgreen;
+  font-size: 25px;
+  font-weight: bold;
+}
+.approve-item .item-img {
+  width: 120px;
+  height: 120px;
+}
+.approve-item .item-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+.approve-item .item-price {
+  color: orangered;
+  font-weight: bold;
+}
+
+.approve-menu {
+  border-bottom: thin solid #dfdfdf;
+}
+
+.card-body .bottom-border {
+  border-bottom: thin solid #dfdfdf;
+}
+.card-body .bottom-border:last-child {
+  border-bottom: none;
+}
+
+.confirm-text {
+  font-size: 20px;
+  font-weight: bold;
+}
+.confirm-text.total-price {
+  color: orangered;
 }
 
 /*# sourceMappingURL=stock.css.map */
