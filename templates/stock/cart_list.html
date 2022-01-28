@@ -40,7 +40,7 @@
                                                 onclick="location.href='{% url "stock:reduce_cart" order_item.pk %}'">-</button>
                                         {{ order_item.quantity }}
                                         <button type="button" class="btn btn-secondary"
-                                                onclick="location.href='{% url "stock:add_item" order_item.pk %}'">+</button>
+                                                onclick="location.href='{% url "stock:add_item" order_item.storage_item.pk %}'">+</button>
                                     </p>
                                     <p>
                                         <a href="{% url 'stock:remove_cart' order_item.pk %}">
