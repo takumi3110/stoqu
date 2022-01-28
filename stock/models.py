@@ -1,4 +1,7 @@
 from django.db import models
+from django.utils import timezone
+
+import datetime
 
 from device.models import PCDetail
 from user.models import User
@@ -165,6 +168,22 @@ class OrderItem(models.Model):
 		null=True,
 		blank=True
 	)
+
+	due_at = models.DateField(
+		verbose_name='納品予定日',
+		null=True,
+		blank=True
+	)
+
+	def save(self, *args, **kwargs):
+		kitting_plan = self.kitting_plan
+		if kitting_plan is not None:
+			if kitting_plan.name == '標準':
+				date = datetime.date.today() + datetime.timedelta(weeks=1)
+			else:
+				date = datetime.date.today() + datetime.timedelta(days=3)
+			self.due_at = date
+		super(OrderItem, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.storage_item.item.pc.maker} {self.storage_item.item.pc.name} × {self.quantity}'
