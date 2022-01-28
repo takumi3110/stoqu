@@ -118,7 +118,14 @@ def get_obj(resource, request, pk):
 	:return:
 	"""
 	cart_list = StorageCart.objects.filter(requester=request.user, ordered=False)
-	order_item = get_object_or_404(OrderItem, pk=pk)
+	if resource == 'add':
+		item = get_object_or_404(StorageItem, pk=pk)
+		order_item, created = OrderItem.objects.get_or_create(
+			storage_item=item,
+			ordered=False
+		)
+	else:
+		order_item = get_object_or_404(OrderItem, pk=pk)
 	obj_data = {
 		'cart_list': cart_list,
 		'order_item': order_item
