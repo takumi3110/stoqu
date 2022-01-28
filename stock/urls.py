@@ -1,5 +1,3 @@
-# -*- cording:utf-8 -*-
-
 from django.urls import path
 from rest_framework import routers
 
@@ -27,4 +25,5 @@ urlpatterns = [
 	path('add_item/<int:pk>', views.add_item, name='add_item'),
 	path('reduce_item/<int:pk>', views.reduce_cart, name='reduce_cart'),
 	path('remove_item/<int:pk>', views.remove_cart, name='remove_cart'),
+	path('approve/', views.ApproveView.as_view(), name='approve')
 ]
