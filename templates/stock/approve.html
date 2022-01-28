@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load humanize %}
+{% load extras %}
+
+{% block content %}
+	<!--
+	<div class="navigation">
+		<span class="navigation-item">1.Cart</span>
+		<span class="navigation-item">2.Approve</span>
+		<span class="navigation-item">3.Order</span>
+	</div>
+	-->
+
+	<div class="container my-5">
+		<div class="row page-title">
+			<h2 class="title-text">依頼内容確認・変更画面</h2>
+		</div>
+		<div class="row mt-5">
+			<div class="col-9">
+				<div class="row approve-menu">
+					<div class="col-3">
+						<span class="menu-title">1 依頼者情報</span>
+					</div>
+					<div class="col-8">
+						<p>{{ request.user.screenname }}</p>
+						<p>{{ request.user.department }}</p>
+					</div>
+				</div>
+				<div class="row approve-menu mt-2">
+					<div class="col-3">
+						<span class="menu-title">2 承認者情報</span>
+					</div>
+					{% if approve is not None%}
+						<div class="col-8">
+							<p>{{ approve }}</p>
+							<p>部門コード：{{ approve.dept_code }}</p>
+							<p>部門名：{{ approve.dept_name }}</p>
+						</div>
+						<div class="col-1">
+							<a href="#">変更</a>
+						</div>
+					{% else %}
+					{% endif %}
+				</div>
+				<div class="row mt-2">
+					<div class="col-4">
+						<span class="menu-title">3 商品の確認</span>
+					</div>
+				</div>
+				<div class="row">
+					{% for order_item in cart.order_item.all %}
+						<div class="card mt-3 approve-item">
+							<div class="card-body">
+								<div class="row">
+									<p class="schedule">お届け予定日：</p>
+									<div class="col-2">
+										<img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ order_item.storage_item }}"
+										     class="item-img">
+									</div>
+									<div class="col-5">
+										<p class="item-name mb-1">{{ order_item.storage_item }}</p>
+										<p class="item-price mb-1">￥{{ order_item.pk | total_price | intcomma}}</p>
+										<p class="mb-1">
+	                                        数量：
+	                                        <button type="button" class="btn btn-secondary"
+	                                                onclick="location.href='{% url "stock:reduce_cart" order_item.pk %}'">-</button>
+	                                        {{ order_item.quantity }}
+	                                        <button type="button" class="btn btn-secondary"
+	                                                onclick="location.href='{% url "stock:add_item" order_item.storage_item.pk %}'">+</button>
+	                                    </p>
+									</div>
+									<div class="col-5">
+										<p class="item-name">キッティングオプション</p>
+										<div class="form-check">
+											<label for="normalKitting{{ order_item.pk }}">通常キッティング　￥4,0000</label>
+											<input type="radio" class="form-check-input" name="kittingSelect{{ order_item.pk }}"
+											       id="normalKitting{{ order_item.pk }}" checked>
+										</div>
+										<div class="form-check">
+											<label for="specialKitting{{ order_item.pk }}">お急ぎ便　￥8,000</label>
+											<input type="radio" class="form-check-input" name="kittingSelect{{ order_item.pk }}" id="specialKitting{{ order_item.pk }}">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="col-3">
+				<div class="card">
+					<div class="card-body">
+						<div class="row bottom-border">
+							<button type="button" class="btn btn-warning my-3">
+								注文を確定
+							</button>
+						</div>
+						<div class="row bottom-border mb-3">
+							<p class="confirm-text">注文内容</p>
+							<p class="mb-1">
+								商品の小計：
+								<span class="confirm-price float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
+							</p>
+							<p class="mb-1">
+								キッティング費用：
+								<span class="confirm-price float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
+							</p>
+						</div>
+						<div class="row bottom-border mb-3">
+							<p class="confirm-text total-price">
+								ご請求額：
+								<span class="float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
+							</p>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock content %}
