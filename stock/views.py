@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 
@@ -9,11 +9,10 @@ from rest_framework import viewsets
 import openpyxl as px
 import datetime
 
-import device.models
-from .models import Option, Base, StorageItem
-from device.models import CPU, PCDetail, PC, Storage
+from .models import *
+from device.models import *
 from .serializer import *
-from .forms import StorageItemBSModalForm, StorageItemUpdateBSModalForm, OptionCreateBSModalForm
+from .forms import *
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -223,6 +222,26 @@ def remove_cart(request, pk):
 	else:
 		pass
 	return redirect('stock:cart')
+
+
+class ApproveView(LoginRequiredMixin, TemplateView):
+
+	def get(self, request, *args, **kwargs):
+		cart = StorageCart.objects.get(requester=request.user, ordered=False)
+		approve_list = Approve.objects.filter(requester=request.user).last()
+		context = {
+			'cart': cart
+		}
+		if approve_list is not None:
+			context['approve'] = approve_list[0]
+		else:
+			context['approve'] = None
+		return render(request, 'stock/approve.html', context)
+
+
+class ApproveCreateView(LoginRequiredMixin, CreateView):
+	model = Approve
+	template_name = 'stock/approve_create.html'
 
 
 def create_storage_data(request):
