@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Option, Base, StorageItem, OrderItem, StorageCart, Approve, OrderInfo
+from .models import *
 
 
 @admin.register(Option)
@@ -16,7 +16,7 @@ class OptionAdmin(admin.ModelAdmin):
 class StorageItemAdmin(admin.ModelAdmin):
 	list_display = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_at')
 	list_display_links = ('base', 'order_number', 'item', 'price', 'quantity', 'delivery_at')
-	list_filter = ('order_number', 'item', 'base')
+	list_filter = ('order_number', 'base')
 	search_fields = ('order_number', 'item', 'base')
 	actions_on_bottom = True
 	filter_horizontal = ['option']
@@ -24,9 +24,9 @@ class StorageItemAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-	list_display = ('storage_item', 'quantity', 'ordered')
-	list_display_links = ('storage_item', 'quantity')
-	list_filter = ('storage_item', 'quantity', 'ordered')
+	list_display = ('storage_item', 'quantity', 'ordered', 'kitting_plan')
+	list_display_links = ('storage_item', 'quantity', 'kitting_plan')
+	list_filter = ('ordered', 'kitting_plan')
 	search_fields = ('storage_item',)
 	actions_on_bottom = True
 
@@ -55,8 +55,9 @@ class OrderInfoAdmin(admin.ModelAdmin):
 	list_display = ('number', 'ticket', 'approve', 'requester', 'contact_user', 'ordered_at', 'ordered')
 	list_display_links = ('number', 'ticket', 'approve', 'requester', 'contact_user', 'ordered_at')
 	list_filter = ('approve', 'requester', 'contact_user', 'ordered')
-	search_fields = ('number', 'ticket', 'approve', 'requester', 'contact_user')
+	search_fields = ('number', 'ticket', 'approve', 'requester')
 	actions_on_bottom = True
 
 
 admin.site.register(Base)
+admin.site.register(KittingPlan)

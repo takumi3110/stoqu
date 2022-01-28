@@ -31,7 +31,7 @@ class StorageItemSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = OrderItem
-		fields = ('storage_item', 'quantity', 'ordered')
+		fields = ('storage_item', 'quantity', 'ordered', 'kitting_plan')
 
 
 class StorageCartSerializer(serializers.ModelSerializer):

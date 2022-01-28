@@ -111,11 +111,35 @@ class StorageItem(models.Model):
 		super().save(*args, **kwargs)
 
 	def __str__(self):
-		return f'{self.item.pc.maker}{self.item.pc.name}'
+		return f'{self.item.pc.maker} {self.item.pc.name}'
 
 	class Meta:
 		verbose_name = '貯蔵品'
 		verbose_name_plural = '貯蔵品'
+
+
+class KittingPlan(models.Model):
+	kitting_choice = (
+		('通常', '通常'),
+		('お急ぎ便', 'お急ぎ便')
+	)
+	name = models.CharField(
+		verbose_name='プラン',
+		max_length=10,
+		choices=kitting_choice,
+		default='標準'
+	)
+
+	price = models.PositiveSmallIntegerField(
+		verbose_name='金額',
+	)
+
+	def __str__(self):
+		return f'{self.name} {self.price}'
+
+	class Meta:
+		verbose_name = 'キッティング価格'
+		verbose_name_plural = 'キッティング価格'
 
 
 class OrderItem(models.Model):
@@ -133,6 +157,13 @@ class OrderItem(models.Model):
 	ordered = models.BooleanField(
 		verbose_name='確保済み',
 		default=False
+	)
+
+	kitting_plan = models.ForeignKey(
+		KittingPlan,
+		on_delete=models.CASCADE,
+		null=True,
+		blank=True
 	)
 
 	def __str__(self):
@@ -164,6 +195,15 @@ class StorageCart(models.Model):
 	ordered = models.BooleanField(
 		default=False
 	)
+	
+	def save(self, *args, **kwargs):
+		self.price = 0
+		for item in self.order_item.all():
+			price = item.storage_item.total_price * item.quantity
+			if item.kitting_plan is not None:
+				price += item.kitting_plan.price
+			self.price += price
+		super(StorageCart, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return self.requester.screenname
@@ -191,6 +231,14 @@ class Approve(models.Model):
 	dept_name = models.CharField(
 		verbose_name='部門名',
 		max_length=255
+	)
+
+	requester = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者',
+		null=True,
+		blank=True
 	)
 
 	def __str__(self):
