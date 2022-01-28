@@ -44,7 +44,7 @@
         </div>
         <div class="row" id="storageTable" style="display: none;">
             <div class="storage-table">
-                <table class="table table-bordered small mt-5">
+                <table class="table table-bordered table-sm table-hover mt-5">
                     <thead class="table-light">
                         <tr>
                             <th>発注番号</th>
@@ -63,7 +63,7 @@
                     </thead>
                     <tbody>
                     {% for storageitem in storageitem_list %}
-                        <tr id="table{{ storageitem.pk }}">
+                        <tr id="table{{ storageitem.pk }}" class="storage-item">
                             <td>{{ storageitem.order_number }}</td>
                             <td id="category{{ storageitem.pk }}">{{ storageitem.item.pc.get_category_display }}</td>
                             <td>{{ storageitem.item.pc.maker }}</td>
@@ -98,9 +98,9 @@
         <!-- カード表示 -->
         <div class="row" id="storageCard">
             {% for storageitem in storageitem_list %}
-                <div class="col-4 mt-5 storage-card" id="card{{ storageitem.pk }}">
-                    <div class="card">
-                        <div class="card-body px-4 py-5">
+                <div class="col-4 mt-5 storage-item" id="card{{ storageitem.pk }}">
+                    <div class="card storage-card">
+                        <div class="card-body" id="storageCard{{ storageitem.pk }}">
                             {% if storageitem.item.pc.img.name == '' %}
                                 <img src="/media/images/no_image_logo.png" alt="noimage" class="image-fluid card-img-cart">
                             {% else %}
@@ -143,6 +143,18 @@
 {% block javascript %}
 
     <script type="text/javascript">
+        {% for storageitem in storageitem_list %}
+            let get_table_{{ storageitem.pk }} = document.getElementById('table{{ storageitem.pk }}');
+            let get_card_{{ storageitem.pk }} = document.getElementById('storageCard{{ storageitem.pk }}');
+            get_table_{{ storageitem.pk }}.onclick = function() {
+                location.href = '{% url "stock:storage_detail" storageitem.pk %}';
+            }
+            get_card_{{ storageitem.pk }}.onclick = function() {
+                location.href = '{% url "stock:storage_detail" storageitem.pk %}'
+            }
+        {% endfor %}
+
+
         $(function() {
             $('#baseSelect').change(function() {
                 let val = $(this).val();
