@@ -229,6 +229,12 @@ class ApproveView(LoginRequiredMixin, TemplateView):
 	def get(self, request, *args, **kwargs):
 		cart = StorageCart.objects.get(requester=request.user, ordered=False)
 		approve = Approve.objects.filter(requester=request.user).last()
+		order_item_list = cart.order_item.all()
+		for order_item in order_item_list:
+			if order_item.kitting_plan is None:
+				kitting_plan = KittingPlan.objects.get(name='標準')
+				order_item.kitting_plan = kitting_plan
+				order_item.save()
 		context = {
 			'cart': cart
 		}
