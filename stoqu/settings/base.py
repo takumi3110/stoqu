@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 	'django_bootstrap5',
 	'django_filters',
 	'rest_framework',
+	'bootstrap_modal_forms',
 	'crispy_forms',
 	'crispy_bootstrap5',
 	'ldap',
