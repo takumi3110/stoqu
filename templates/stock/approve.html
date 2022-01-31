@@ -13,6 +13,11 @@
 	-->
 
 	<div class="container my-5">
+		<div class="modal fade" tabindex="-1" role="dialog" id="modal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content"></div>
+			</div>
+		</div>
 		<div class="row page-title">
 			<h2 class="title-text">依頼内容確認・変更画面</h2>
 		</div>
@@ -38,9 +43,12 @@
 							<p>部門名：{{ approve.dept_name }}</p>
 						</div>
 						<div class="col-1">
-							<a href="#">変更</a>
+							<a href="#" class="update-approve">変更</a>
 						</div>
 					{% else %}
+						<div class="col-8">
+							<a href="#" class="create-approve">登録</a>
+						</div>
 					{% endif %}
 				</div>
 				<div class="row mt-2">
@@ -92,7 +100,8 @@
 				<div class="card">
 					<div class="card-body">
 						<div class="row bottom-border">
-							<button type="button" class="btn btn-warning my-3">
+							<button type="button" class="btn btn-warning my-3"
+							        {% if approve is None %}disabled{% endif %}>
 								注文を確定
 							</button>
 						</div>
@@ -112,7 +121,6 @@
 								ご請求額：
 								<span class="float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
 							</p>
-
 						</div>
 					</div>
 				</div>
@@ -120,5 +128,31 @@
 		</div>
 	</div>
 
-
 {% endblock content %}
+
+{% block javascript %}
+
+	<script type="text/javascript">
+		$(function() {
+            $(".create-approve").each(function () {
+                $(this).modalForm({formURL: "{% url 'stock:approve_create' %}"});
+            });
+		});
+
+        {% if approve is not None %}
+	        $(".update-approve").each(function() {
+                $(this).modalForm({formURL: "{% url 'stock:approve_update' approve.pk %}"});
+	        });
+        {% endif %}
+
+		$("#modal").on('show.bs.modal', function() {
+            const form = document.querySelector('form');
+	        form.addEventListener("submit", event =>
+		    event.target.querySelectorAll("input:disabled, select:disabled").forEach(e => e.disabled = false)
+	    );
+		});
+
+
+	</script>
+
+{% endblock javascript %}
