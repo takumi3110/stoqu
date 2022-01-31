@@ -1,6 +1,10 @@
 from django.db import models
+from django.utils import timezone
+
+import datetime
 
 from device.models import PCDetail
+from user.models import User
 
 
 class Option(models.Model):
@@ -32,8 +36,8 @@ class Option(models.Model):
 		return f'{self.maker}{self.name}'
 
 	class Meta:
-		verbose_name = 'オプション'
-		verbose_name_plural = 'オプション'
+		verbose_name = '付属品'
+		verbose_name_plural = '付属品'
 
 
 class Base(models.Model):
@@ -74,7 +78,7 @@ class StorageItem(models.Model):
 
 	option = models.ManyToManyField(
 		Option,
-		verbose_name='オプション',
+		verbose_name='付属品',
 		blank=True
 	)
 
@@ -90,7 +94,7 @@ class StorageItem(models.Model):
 		verbose_name='在庫拠点',
 	)
 
-	delivery_date = models.DateField(
+	delivery_at = models.DateField(
 		verbose_name='納品日',
 		null=True,
 		blank=True
@@ -103,14 +107,226 @@ class StorageItem(models.Model):
 	)
 
 	def save(self, *args, **kwargs):
+		super().save(*args, **kwargs)
 		self.total_price = self.price
 		for option in self.option.all():
 			self.total_price += option.price
-		super(StorageItem, self).save(*args, **kwargs)
+		super().save(*args, **kwargs)
 
 	def __str__(self):
-		return f'{self.item.pc.maker}{self.item.pc.name}'
+		return f'{self.item.pc.maker} {self.item.pc.name}'
 
 	class Meta:
 		verbose_name = '貯蔵品'
 		verbose_name_plural = '貯蔵品'
+
+
+class KittingPlan(models.Model):
+	kitting_choice = (
+		('標準', '標準'),
+		('お急ぎ便', 'お急ぎ便')
+	)
+	name = models.CharField(
+		verbose_name='プラン名',
+		max_length=10,
+		choices=kitting_choice,
+		default='標準'
+	)
+
+	price = models.PositiveSmallIntegerField(
+		verbose_name='金額',
+	)
+
+	def __str__(self):
+		return f'{self.name} {self.price}'
+
+	class Meta:
+		verbose_name = 'キッティング価格'
+		verbose_name_plural = 'キッティング価格'
+
+
+class OrderItem(models.Model):
+	storage_item = models.ForeignKey(
+		StorageItem,
+		on_delete=models.CASCADE,
+		verbose_name='貯蔵品'
+	)
+
+	quantity = models.PositiveSmallIntegerField(
+		verbose_name='数量',
+		default=1
+	)
+
+	ordered = models.BooleanField(
+		verbose_name='確保済み',
+		default=False
+	)
+
+	kitting_plan = models.ForeignKey(
+		KittingPlan,
+		on_delete=models.CASCADE,
+		null=True,
+		blank=True
+	)
+
+	due_at = models.DateField(
+		verbose_name='納品予定日',
+		null=True,
+		blank=True
+	)
+
+	def save(self, *args, **kwargs):
+		kitting_plan = self.kitting_plan
+		if kitting_plan is not None:
+			now = datetime.datetime.now()
+			hour = now.hour
+			if kitting_plan.name == '標準':
+				if hour >= 17:
+					date = datetime.date.today() + datetime.timedelta(weeks=1, days=1)
+				else:
+					date = datetime.date.today() + datetime.timedelta(weeks=1)
+			else:
+				if hour >= 17:
+					date = datetime.date.today() + datetime.timedelta(days=4)
+				else:
+					date = datetime.date.today() + datetime.timedelta(days=3)
+			self.due_at = date
+		super(OrderItem, self).save(*args, **kwargs)
+
+	def __str__(self):
+		return f'{self.storage_item.item.pc.maker} {self.storage_item.item.pc.name} × {self.quantity}'
+
+	class Meta:
+		verbose_name = '確保アイテム'
+		verbose_name_plural = '確保アイテム'
+
+
+class StorageCart(models.Model):
+	requester = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者'
+	)
+
+	order_item = models.ManyToManyField(
+		OrderItem,
+		verbose_name='確保アイテム',
+	)
+
+	price = models.PositiveIntegerField(
+		verbose_name='合計金額',
+		null=True,
+		blank=True
+	)
+
+	ordered = models.BooleanField(
+		default=False
+	)
+	
+	def save(self, *args, **kwargs):
+		self.price = 0
+		for item in self.order_item.all():
+			price = item.storage_item.total_price * item.quantity
+			if item.kitting_plan is not None:
+				price += item.kitting_plan.price
+			self.price += price
+		super(StorageCart, self).save(*args, **kwargs)
+
+	def __str__(self):
+		return self.requester.screenname
+
+	class Meta:
+		verbose_name = '貯蔵品カート'
+		verbose_name_plural = '貯蔵品カート'
+
+
+class Approve(models.Model):
+	last_name = models.CharField(
+		verbose_name='姓',
+		max_length=32
+	)
+
+	first_name = models.CharField(
+		verbose_name='名',
+		max_length=32,
+	)
+
+	dept_code = models.PositiveSmallIntegerField(
+		verbose_name='部門コード'
+	)
+
+	dept_name = models.CharField(
+		verbose_name='部門名',
+		max_length=255
+	)
+
+	requester = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者',
+		null=True,
+		blank=True
+	)
+
+	def __str__(self):
+		return f'{self.last_name} {self.first_name}'
+
+	class Meta:
+		verbose_name = '承認者情報'
+		verbose_name_plural = '承認者情報'
+
+
+class OrderInfo(models.Model):
+	number = models.CharField(
+		verbose_name='受注番号',
+		max_length=100
+	)
+
+	ticket = models.PositiveIntegerField(
+		verbose_name='チケット番号',
+		null=True,
+		blank=True
+	)
+
+	storage_cart = models.ForeignKey(
+		StorageCart,
+		on_delete=models.CASCADE,
+		verbose_name='カート'
+	)
+
+	approve = models.ForeignKey(
+		Approve,
+		on_delete=models.CASCADE,
+		verbose_name='承認者情報'
+	)
+
+	requester = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者'
+	)
+
+	contact_user = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='担当者',
+		null=True,
+		blank=True,
+		related_name='contact_user'
+	)
+
+	ordered_at = models.DateTimeField(
+		verbose_name='依頼日',
+		auto_now=True
+	)
+
+	ordered = models.BooleanField(
+		verbose_name='依頼済み'
+	)
+
+	def __str__(self):
+		return f'{self.number}'
+
+	class Meta:
+		verbose_name = '依頼内容'
+		verbose_name_plural = '依頼内容'

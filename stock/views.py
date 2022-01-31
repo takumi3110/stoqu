@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView
+from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, DetailView, TemplateView, CreateView
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 
@@ -8,11 +9,10 @@ from rest_framework import viewsets
 import openpyxl as px
 import datetime
 
-import device.models
-from .models import Option, Base, StorageItem
-from device.models import CPU, PCDetail, PC, Storage
-from .serializer import OptionSerializer, BaseSerializer, StorageItemSerializer
-from .forms import StorageItemBSModalForm, StorageItemUpdateBSModalForm, OptionCreateBSModalForm
+from .models import *
+from device.models import *
+from .serializer import *
+from .forms import *
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -30,10 +30,30 @@ class StorageItemViewSet(viewsets.ModelViewSet):
 	serializer_class = StorageItemSerializer
 
 
+class StorageCartViewSet(viewsets.ModelViewSet):
+	queryset = StorageCart.objects.all()
+	serializer_class = StorageCartSerializer
+
+
+class OrderItemViewSet(viewsets.ModelViewSet):
+	queryset = OrderItem.objects.all()
+	serializer_class = OrderItemSerializer
+
+
+class ApproveViewSet(viewsets.ModelViewSet):
+	queryset = Approve.objects.all()
+	serializer_class = ApproveSerializer
+
+
+class OrderInfoViewSet(viewsets.ModelViewSet):
+	queryset = OrderInfo.objects.all()
+	serializer_class = OrderInfoSerializer
+
+
 class StorageItemListView(LoginRequiredMixin, ListView):
 	model = StorageItem
 	template_name = 'stock/storage_list.html'
-	paginate_by = 20
+	paginate_by = 30
 	ordering = 'order_number'
 
 	def get_context_data(self, *, object_list=None, **kwargs):
@@ -67,6 +87,176 @@ class OptionCreateView(LoginRequiredMixin, BSModalCreateView):
 	template_name = 'snippets/create_modal.html'
 	form_class = OptionCreateBSModalForm
 	success_url = reverse_lazy('stock:storage_list')
+
+
+class StorageCartListView(LoginRequiredMixin, ListView):
+	model = StorageCart
+	template_name = 'stock/cart_list.html'
+
+	def get_queryset(self, **kwargs):
+		queryset = super(StorageCartListView, self).get_queryset()
+		qs = queryset.filter(requester=self.request.user, ordered=False)
+		return qs
+
+	def get_context_data(self, *, object_list=None, **kwargs):
+		context = super(StorageCartListView, self).get_context_data()
+		storage_cart = StorageCart.objects.filter(requester=self.request.user, ordered=False)
+		order_item_list = []
+		for cart in storage_cart:
+			order_item_list.append(cart.order_item.all())
+		context['order_item_list'] = order_item_list
+		return context
+
+
+def get_obj(resource, request, pk):
+	"""
+
+	:param resource:
+	:param request:
+	:param pk:
+	:return:
+	"""
+	cart_list = StorageCart.objects.filter(requester=request.user, ordered=False)
+	if resource == 'add':
+		item = get_object_or_404(StorageItem, pk=pk)
+		order_item, created = OrderItem.objects.get_or_create(
+			storage_item=item,
+			ordered=False
+		)
+	else:
+		order_item = get_object_or_404(OrderItem, pk=pk)
+	obj_data = {
+		'cart_list': cart_list,
+		'order_item': order_item
+	}
+	return obj_data
+
+
+@login_required()
+def add_item(request, pk):
+	"""
+	カートにアイテムを追加する
+	:param request:
+	:param pk:
+	:return:
+	"""
+	obj_data = get_obj('add', request, pk)
+	order_item = obj_data['order_item']
+	cart_list = obj_data['cart_list']
+	storage_quantity = order_item.storage_item.quantity
+	if storage_quantity > 0:
+		order_item.storage_item.quantity -= 1
+		order_item.storage_item.save()
+		for option in order_item.storage_item.option.all():
+			option.quantity -= 1
+			option.save()
+	else:
+		return redirect('stock:cart')
+	if cart_list.exists():
+		storage_cart = cart_list[0]
+		if storage_cart.order_item.filter(storage_item__pk=order_item.storage_item.pk).exists():
+			order_item.quantity += 1
+			order_item.save()
+		else:
+			storage_cart.order_item.add(order_item)
+	else:
+		storage_cart = StorageCart.objects.create(
+			requester=request.user,
+		)
+		storage_cart.order_item.add(order_item)
+	return redirect('stock:cart')
+
+
+@login_required()
+def reduce_cart(request, pk):
+	"""
+	カートからアイテムを減らす
+	:param request:
+	:param pk:
+	:return:
+	"""
+	obj_data = get_obj('reduce', request, pk)
+	order_item = obj_data['order_item']
+	cart_list = obj_data['cart_list']
+	if cart_list.exists():
+		order_item.storage_item.quantity += 1
+		order_item.storage_item.save()
+		for option in order_item.storage_item.option.all():
+			option.quantity += 1
+			option.save()
+		if order_item.quantity > 1:
+			order_item.quantity -= 1
+			order_item.save()
+		else:
+			order_item.delete()
+	else:
+		pass
+	return redirect('stock:cart')
+
+
+@login_required()
+def remove_cart(request, pk):
+	"""
+	カートからアイテムを削除する
+	:param request:
+	:param pk:
+	:return:
+	"""
+	obj_data = get_obj('remove', request, pk)
+	order_item = obj_data['order_item']
+	cart_list = obj_data['cart_list']
+	if cart_list.exists():
+		quantity = order_item.quantity
+		order_item.storage_item.quantity += quantity
+		order_item.storage_item.save()
+		for option in order_item.storage_item.option.all():
+			option.quantity += quantity
+			option.save()
+		for cart in cart_list:
+			cart_items = cart.order_item.all().count()
+			if cart_items == 1:
+				cart.delete()
+				order_item.delete()
+			else:
+				order_item.delete()
+	else:
+		pass
+	return redirect('stock:cart')
+
+
+class ApproveView(LoginRequiredMixin, TemplateView):
+
+	def get(self, request, *args, **kwargs):
+		cart = StorageCart.objects.get(requester=request.user, ordered=False)
+		approve = Approve.objects.filter(requester=request.user).last()
+		order_item_list = cart.order_item.all()
+		for order_item in order_item_list:
+			if order_item.kitting_plan is None:
+				kitting_plan = KittingPlan.objects.get(name='標準')
+				order_item.kitting_plan = kitting_plan
+				order_item.save()
+		context = {
+			'cart': cart
+		}
+		if approve is not None:
+			context['approve'] = approve
+		else:
+			context['approve'] = None
+		return render(request, 'stock/approve.html', context)
+
+
+class ApproveCreateView(LoginRequiredMixin, BSModalCreateView):
+	model = Approve
+	template_name = 'snippets/create_modal.html'
+	form_class = ApproveBSModalForm
+	success_url = reverse_lazy('stock:approve')
+
+
+class ApproveUpdateView(LoginRequiredMixin, BSModalUpdateView):
+	model = Approve
+	template_name = 'snippets/update_modal.html'
+	form_class = ApproveBSModalForm
+	success_url = reverse_lazy('stock:approve')
 
 
 def create_storage_data(request):

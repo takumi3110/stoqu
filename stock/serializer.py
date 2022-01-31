@@ -2,8 +2,8 @@
 
 from rest_framework import serializers
 
-from .models import Option, Base, StorageItem
-from device.serializer import PCSerializer
+from .models import *
+from device.serializer import PCDetailSerializer
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -19,10 +19,34 @@ class BaseSerializer(serializers.ModelSerializer):
 
 
 class StorageItemSerializer(serializers.ModelSerializer):
-	item = PCSerializer()
+	item = PCDetailSerializer()
 	# option = OptionSerializer()
 	base = BaseSerializer()
 
 	class Meta:
 		model = StorageItem
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_date', 'remarks')
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_at', 'remarks')
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = OrderItem
+		fields = ('storage_item', 'quantity', 'ordered', 'kitting_plan')
+
+
+class StorageCartSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = StorageCart
+		fields = ('requester', 'order_item', 'order_item')
+
+
+class ApproveSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Approve
+		fields = ('last_name', 'first_name', 'dept_code', 'dept_name')
+
+
+class OrderInfoSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = OrderInfo
+		fields = ('number', 'ticket', 'storage_cart', 'approve', 'requester', 'contact_user', 'ordered_at', 'ordered')

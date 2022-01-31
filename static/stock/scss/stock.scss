@@ -1,3 +1,14 @@
+@import 'mixin';
+@import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
+
+$cBorder: #dfdfdf;
+
+.main-title {
+    font-family: 'Passion One', cursive;
+    font-size: 40px;
+    letter-spacing: -2px;
+}
+
 .get-data {
   &:hover {
     cursor: pointer;
@@ -32,6 +43,11 @@
   }
 }
 
+.card-img-cart {
+  width: 350px;
+  height: 270px;
+}
+
 .item-table {
   &:hover {
     cursor: pointer;
@@ -41,6 +57,81 @@
 .item-card {
   &:hover {
     cursor: pointer;
+  }
+}
+
+.storage-item {
+  overflow: hidden;
+  &:hover {
+    cursor: pointer;
+  }
+  & .card {
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+.navigation {
+  background-color: darkgray;
+  color: dimgray;
+  height: 100px;
+  text-align: center;
+  & .navigation-item {
+
+    border-bottom: dimgray solid;
+  }
+}
+
+.menu-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+.approve-item {
+  border-radius: 10px;
+  & .schedule {
+    color: forestgreen;
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  & .item-img {
+    width: 120px;
+    height: 120px;
+  }
+
+  & .item-name {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  & .item-price {
+    color: orangered;
+    font-weight: bold;
+  }
+}
+
+.approve-menu {
+  border-bottom: thin solid $cBorder;
+}
+
+.card-body {
+  .bottom-border {
+    border-bottom: thin solid $cBorder;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.confirm-text {
+  font-size: 20px;
+  font-weight: bold;
+
+  &.total-price {
+    color: orangered;
   }
 }
 

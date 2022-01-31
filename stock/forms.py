@@ -3,7 +3,7 @@
 from django import forms
 from bootstrap_modal_forms.forms import BSModalModelForm
 
-from .models import StorageItem, Option
+from .models import *
 
 
 class StorageItemBSModalForm(BSModalModelForm):
@@ -14,7 +14,7 @@ class StorageItemBSModalForm(BSModalModelForm):
 
 	class Meta:
 		model = StorageItem
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_date', 'remarks')
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_at', 'remarks')
 
 
 class StorageItemUpdateBSModalForm(BSModalModelForm):
@@ -26,7 +26,7 @@ class StorageItemUpdateBSModalForm(BSModalModelForm):
 
 	class Meta:
 		model = StorageItem
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_date', 'remarks')
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_at', 'remarks')
 
 
 class OptionCreateBSModalForm(BSModalModelForm):
@@ -38,3 +38,16 @@ class OptionCreateBSModalForm(BSModalModelForm):
 	class Meta:
 		model = Option
 		fields = ('maker', 'name', 'price', 'quantity', 'remarks')
+
+
+class ApproveBSModalForm(BSModalModelForm):
+	def __init__(self, *args, **kwargs):
+		super(ApproveBSModalForm, self).__init__(*args, **kwargs)
+		for field in self.fields.values():
+			field.widget.attrs['class'] = 'form-control'
+		self.fields['requester'].initial = kwargs['request'].user
+		self.fields['requester'].widget.attrs['disabled'] = True
+
+	class Meta:
+		model = Approve
+		fields = ('last_name', 'first_name', 'dept_code', 'dept_name', 'requester')

@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <div class="container">
+    <div class="container my-5">
         <div class="modal fade" tabindex="-1" role="dialog" id="modal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content"></div>
@@ -17,38 +17,34 @@
             <h2 class="title-text">在庫リスト</h2>
         </div>
         <div class="row mt-5">
-            <div class="col-1">在庫拠点：</div>
-            <div class="form-group col-1">
-                <label>
-                    <select title="base" name="base" class="custom-select" id="baseSelect">
-                        <option value="all">すべて</option>
-                        {% for base in base_list %}
-                            <option value="{{ base.name }}">{{ base.name }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
+            <div class="form-group col-2">
+            <label>在庫拠点：</label>
+            <select title="base" name="base" class="custom-select" id="baseSelect">
+                <option value="all">すべて</option>
+                {% for base in base_list %}
+                    <option value="{{ base.name }}">{{ base.name }}</option>
+                {% endfor %}
+            </select>
             </div>
+            <div class="form-group col-3">
+            <label>カテゴリー：</label>
+            <select title="category" name="category" class="custom-select" id="categorySelect">
+                <option value="all">すべて</option>
+                <option value="ノートPC">ノートPC</option>
+                <option value="デスクトップPC">デスクトップPC</option>
+                <option value="ミニPC">ミニPC</option>
+            </select>
+            </div>
+        </div>
+        <div class="row mt-3">
             <div class="col-4 item-list">
                 <i class="fas fa-list item-table"></i>
                 <i class="fas fa-table item-card ms-3"></i>
             </div>
         </div>
-        <div class="row mt-3">
-            <div class="col-1">カテゴリー：</div>
-            <div class="form-group col-1">
-                <label>
-                    <select title="category" name="category" class="custom-select" id="categorySelect">
-                        <option value="all">すべて</option>
-                        <option value="ノートPC">ノートPC</option>
-                        <option value="デスクトップPC">デスクトップPC</option>
-                        <option value="ミニPC">ミニPC</option>
-                    </select>
-                </label>
-            </div>
-        </div>
         <div class="row" id="storageTable" style="display: none;">
             <div class="storage-table">
-                <table class="table table-bordered small mt-5">
+                <table class="table table-bordered table-sm table-hover mt-5">
                     <thead class="table-light">
                         <tr>
                             <th>発注番号</th>
@@ -67,7 +63,7 @@
                     </thead>
                     <tbody>
                     {% for storageitem in storageitem_list %}
-                        <tr id="table{{ storageitem.pk }}">
+                        <tr id="table{{ storageitem.pk }}" class="storage-item">
                             <td>{{ storageitem.order_number }}</td>
                             <td id="category{{ storageitem.pk }}">{{ storageitem.item.pc.get_category_display }}</td>
                             <td>{{ storageitem.item.pc.maker }}</td>
@@ -76,11 +72,9 @@
                             <td>{{ storageitem.item.memory }}GB</td>
                             <td>{{ storageitem.item.storage }}</td>
                             <td>
-                                {% if storageitem.item.numpad %}
-                                    <input class="form-check-input" type="checkbox" id="numpad" aria-label="{{ storageitem.item.pc.name }}" checked disabled>
-                                {% else %}
-                                    {{ storageitem.item.numpad | boolean_check }}
-                                {% endif %}
+	                            <label for="tableNumpad" style="display: none;"></label>
+	                            <input class="form-check-input" type="checkbox" id="tableNumpad" aria-label="{{ storageitem.item.pc.name }}"
+	                                   {% if storageitem.item.numpad %}checked{% endif %}  disabled>
                             </td>
                             <td>{{ storageitem.quantity }}</td>
                             <td>{{ storageitem.total_price | intcomma }}</td>
@@ -104,9 +98,9 @@
         <!-- カード表示 -->
         <div class="row" id="storageCard">
             {% for storageitem in storageitem_list %}
-                <div class="col-4 mt-5 storage-card" id="card{{ storageitem.pk }}">
-                    <div class="card">
-                        <div class="card-body px-4 py-5">
+                <div class="col-4 mt-5 storage-item" id="card{{ storageitem.pk }}">
+                    <div class="card storage-card">
+                        <div class="card-body" id="storageCard{{ storageitem.pk }}">
                             {% if storageitem.item.pc.img.name == '' %}
                                 <img src="/media/images/no_image_logo.png" alt="noimage" class="image-fluid card-img-cart">
                             {% else %}
@@ -117,12 +111,10 @@
                             <p class="mb-1 mt-3" id="category{{ storage.pk }}">カテゴリー：{{ storageitem.item.pc.get_category_display }}</p>
                             <p class="mb-1">メモリ：{{ storageitem.item.memory }} GB</p>
                             <p class="mb-1">ストレージ：{{ storageitem.item.storage }}</p>
-                            <p class="mb-1">テンキー：
-                                {% if storageitem.item.numpad %}
-                                    <input class="form-check-input" type="checkbox" id="numpad" aria-label="{{ storage.item.pc.name }}" checked disabled>
-                                {% else %}
-                                    {{ storageitem.item.numpad | boolean_check }}
-                                {% endif %}
+                            <p class="mb-1">
+                                <label for="cardNumpad">テンキー：</label>
+                                <input class="form-check-input" type="checkbox" id="cardNumpad" aria-label="{{ storage.item.pc.name }}"
+                                       {% if storageitem.item.numpad %}checked{% endif %} disabled>
                             </p>
                             <p class="mb-1">在庫数：{{ storageitem.quantity }}</p>
                             <p class="mb-1" id="base{{ storage.pk }}">在庫拠点：{{ storageitem.base }}</p>
@@ -132,9 +124,9 @@
                             <a href="{% url 'stock:storage_detail' storageitem.pk %}" class="card-link">
                                 詳細
                             </a>
-                            <a href="#" class="btn btn-outline-primary float-end">
+                            <button type="button" class="btn btn-warning float-end" onclick="location.href='{% url "stock:add_item" storageitem.pk %}'">
                                 <i class="fas fa-cart-arrow-down">確保依頼する</i>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -151,14 +143,26 @@
 {% block javascript %}
 
     <script type="text/javascript">
+        {% for storageitem in storageitem_list %}
+            let get_table_{{ storageitem.pk }} = document.querySelector('#table{{ storageitem.pk }}');
+            let get_card_{{ storageitem.pk }} = document.querySelector('#storageCard{{ storageitem.pk }}');
+            get_table_{{ storageitem.pk }}.onclick = function() {
+                location.href = '{% url "stock:storage_detail" storageitem.pk %}';
+            }
+            get_card_{{ storageitem.pk }}.onclick = function() {
+                location.href = '{% url "stock:storage_detail" storageitem.pk %}'
+            }
+        {% endfor %}
+
+
         $(function() {
             $('#baseSelect').change(function() {
                 let val = $(this).val();
                 let categorySelect = $('#categorySelect').val();
                 {% for storageitem in storageitem_list %}
-                    let base_{{ storageitem.pk }} = document.getElementById('base{{ storageitem.pk }}');
+                    let base_{{ storageitem.pk }} = document.querySelector('#base{{ storageitem.pk }}');
                     let base_val_{{ storageitem.pk }} = base_{{ storageitem.pk }}.textContent;
-                    let category{{ storageitem.pk }} = document.getElementById('category{{ storageitem.pk }}');
+                    let category{{ storageitem.pk }} = document.querySelector('#category{{ storageitem.pk }}');
                     let category_val{{ storageitem.pk }} = category{{ storageitem.pk }}.textContent;
                     if (categorySelect === category_val{{ storageitem.pk }}) {
                        if (val === base_val_{{ storageitem.pk }}) {
@@ -195,9 +199,9 @@
                 let val = $(this).val();
                 let baseSelect = $('#baseSelect').val();
                 {% for storageitem in storageitem_list %}
-                    let category{{ storageitem.pk }} = document.getElementById('category{{ storageitem.pk }}');
+                    let category{{ storageitem.pk }} = document.querySelector('#category{{ storageitem.pk }}');
                     let category_val{{ storageitem.pk }} = category{{ storageitem.pk }}.textContent;
-                    let base_{{ storageitem.pk }} = document.getElementById('base{{ storageitem.pk }}');
+                    let base_{{ storageitem.pk }} = document.querySelector('#base{{ storageitem.pk }}');
                     let base_val_{{ storageitem.pk }} = base_{{ storageitem.pk }}.textContent;
                     if (baseSelect === base_val_{{ storageitem.pk }}) {
                         if (val === category_val{{ storageitem.pk }}) {
@@ -229,10 +233,10 @@
             });
         });
 
-        let listBtn = document.getElementsByClassName('item-table')[0];
-        let cardBtn = document.getElementsByClassName('item-card')[0];
-        let storageTable = document.getElementById('storageTable');
-        let storageCard = document.getElementById('storageCard');
+        let listBtn = document.querySelector('.item-table');
+        let cardBtn = document.querySelector('.item-card');
+        let storageTable = document.querySelector('#storageTable');
+        let storageCard = document.querySelector('#storageCard');
 
         let changeTable = (table, card) => {
             table.style.display = '';

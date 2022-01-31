@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load humanize %}
+{% load extras %}
+
+{% block content %}
+
+    <div class="container my-5">
+        <div class="row page-title">
+            <h2 class="title-text">依頼予定のPC</h2>
+        </div>
+        <div class="row mt-5">
+            <div class="card col-8">
+                <div class="card-body">
+                    <div class="row">
+                        {% for storagecart in storagecart_list %}
+                            {% for order_item in storagecart.order_item.all %}
+	                            <div class="row bottom-border mt-3">
+	                                <div class="col-6 text-center">
+	                                    {% if order_item.storage_item.item.pc.img.name == '' %}
+	                                        <img src="/media/images/no_image_logo.png" alt="noimage">
+	                                    {% else %}
+	                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}">
+	                                    {% endif %}
+	                                </div>
+	                                <div class="col-6">
+	                                    <p class="mb-1">{{ order_item.storage_item.order_number }}</p>
+	                                    <h4>{{ order_item.storage_item.item.pc.maker }}</h4>
+	                                    <h4>{{ order_item.storage_item.item.pc.name }}</h4>
+	                                    <h5>合計金額：￥{{ order_item.pk | total_price | intcomma }}</h5>
+	                                    <p class="font-wight-bold">付属品</p>
+	                                    {% for option in order_item.storage_item.option.all %}
+	                                        <p>{{ option.name }}：￥{{ option.price | intcomma }}</p>
+	                                    {% empty %}
+	                                        <p>なし</p>
+	                                    {% endfor %}
+	                                    <p><span class="font-weight-bold">本体価格：</span>￥{{ order_item.storage_item.price | intcomma}}</p>
+	                                    <p class="mb-1">
+	                                        数量：
+	                                        <button type="button" class="btn btn-secondary"
+	                                                onclick="location.href='{% url "stock:reduce_cart" order_item.pk %}'">-</button>
+	                                        {{ order_item.quantity }}
+	                                        <button type="button" class="btn btn-secondary"
+	                                                onclick="location.href='{% url "stock:add_item" order_item.storage_item.pk %}'">+</button>
+	                                    </p>
+	                                    <p>
+	                                        <a href="{% url 'stock:remove_cart' order_item.pk %}">
+	                                            削除
+	                                        </a>
+	                                    </p>
+	                                </div>
+	                            </div>
+                            {% empty %}
+                                <p class="mb-3">アイテムが選択されていません</p>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center px-2 py-3">
+                        <p>
+                            小計({{ request.user | storage_count }}個のアイテム):
+	                        <span class="font-weight-bold" style="text-align: left">
+                                ￥{{ request.user | storage_subtotal | intcomma}}
+                            </span>
+                        </p>
+                        <div class="mb-3">
+	                        <button type="button" class="btn btn-sm btn-warning btn-block"
+	                                onclick="location.href='{% url "stock:approve" %}';">
+		                        次に進む
+	                        </button>
+                        </div>
+	                    <div class="mb-3">
+		                    <button type="button" class="btn btn-sm btn-light btn-block"
+		                            onclick="location.href='{% url "stock:storage_list" %}';">
+			                    リストに戻る
+		                    </button>
+	                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}
+

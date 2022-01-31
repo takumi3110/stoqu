@@ -42,7 +42,7 @@ class CPU(models.Model):
 class Storage(models.Model):
 	type = models.CharField(
 		verbose_name='タイプ',
-		max_length=5,
+		max_length=6,
 		choices=type_choice,
 		default='1'
 	)
@@ -62,7 +62,7 @@ class Storage(models.Model):
 class PC(models.Model):
 	category = models.CharField(
 		verbose_name='カテゴリー',
-		max_length=5,
+		max_length=6,
 		choices=category_choice,
 	)
 
@@ -134,25 +134,21 @@ class PCDetail(models.Model):
 
 	camera = models.BooleanField(
 		verbose_name='webカメラ',
-		null=True,
 		blank=True
 	)
 
 	fingerprint = models.BooleanField(
 		verbose_name='指紋認証',
-		null=True,
 		blank=True
 	)
 
 	numpad = models.BooleanField(
 		verbose_name='テンキー',
-		null=True,
 		blank=True
 	)
 
 	lan = models.BooleanField(
 		verbose_name='有線LANポート',
-		null=True,
 		blank=True
 	)
 

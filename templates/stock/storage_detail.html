@@ -24,13 +24,22 @@
                     <p>在庫拠点：{{ storageitem.base.name }}</p>
                     <p>在庫数：{{ storageitem.quantity }}</p>
                     <p>本体価格：{{ storageitem.price | intcomma }}</p>
-                    <p>オプション</p>
+                    <p>付属品：</p>
                     {% for option in storageitem.option.all %}
                         <p>{{ option.maker }} {{ option.name }} {{ option.price | intcomma}}円</p>
+                        {% empty %}
+                        <p>なし</p>
                     {% endfor %}
                 </div>
                 <div class="row mt-3">
                     <p>合計金額：{{ storageitem.total_price | intcomma }}円</p>
+                </div>
+                <div class="row mt-3">
+                    <button type="button" class="btn btn-warning" onclick="location.href='{% url "stock:add_item" storageitem.pk %}'">
+                        <span>
+                            <i class="fas fa-cart-arrow-down"></i>注文する
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -67,54 +76,54 @@
                     <tr>
                         <td class="td-spec">webカメラ</td>
                         <td>
-                            {% if storageitem.item.camera %}
-                                <input type="checkbox" class="form-check-input" id="cameraCheck" aria-label="camera" checked disabled>
-                            {% else %}
-                                {{ storageitem.item.camera | boolean_check }}
-                            {% endif %}
+	                        <input type="checkbox" class="form-check-input" id="cameraCheck" aria-label="camera"
+	                               {% if storageitem.item.camera %}checked{% endif %} disabled>
                         </td>
                     </tr>
                     <tr>
                         <td class="td-spec">指紋認証</td>
                         <td>
-                            {% if storageitem.item.fingerprint %}
-                                <input type="checkbox" class="form-check-input" id="fingerprintCheck" aria-label="fingerprint" checked disabled>
-                            {% else %}
-                                {{ storageitem.item.fingerprint | boolean_check }}
-                            {% endif %}
+                            <input type="checkbox" class="form-check-input" id="fingerprintCheck" aria-label="fingerprint"
+                                   {% if storageitem.item.fingerprint %}checked{% endif %} disabled>
                         </td>
                     </tr>
                     <tr>
                         <td class="td-spec">テンキー</td>
                         <td>
-                            {% if storageitem.item.numpad %}
-                                <input type="checkbox" class="form-check-input" id="numpadCheck" aria-label="numpad" checked disabled>
-                            {% else %}
-                                {{ storageitem.item.numpad | boolean_check }}
-                            {% endif %}
+                            <input type="checkbox" class="form-check-input" id="numpadCheck" aria-label="numpad"
+                                   {% if storageitem.item.numpad %}checked{% endif %} disabled>
                         </td>
                     </tr>
                     <tr>
                         <td class="td-spec">有線LANポート</td>
                         <td>
-                            {% if storageitem.item.lan %}
-                                <input type="checkbox" class="form-check-input" id="lanCheck" aria-label="lan" checked disabled>
-                            {% else %}
-                                {{ storageitem.item.lan | boolean_check }}
-                            {% endif %}
+                            <input type="checkbox" class="form-check-input" id="lanCheck" aria-label="lan"
+                                   {% if storageitem.item.lan %}checked{% endif %} disabled>
                         </td>
                     </tr>
                     <tr>
                         <td class="td-spec">USBポート数</td>
-                        <td>{{ storageitem.item.usb | boolean_check }}</td>
+                        <td>
+	                        {% if storageitem.item.usb %}
+                                {{ storageitem.item.usb }}
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td class="td-spec">HDMI</td>
-                        <td>{{ storageitem.item.hdmi | boolean_check }}</td>
+                        <td>
+	                        {% if storageitem.item.hdmi %}
+	                            {{ storageitem.item.hdmi }}
+	                        {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td class="td-spec">VGA</td>
-                        <td>{{ storageitem.item.vga | boolean_check }}</td>
+                        <td>
+	                        {% if storageitem.item.vga %}
+	                            {{ storageitem.item.vga }}
+	                        {% endif %}
+                        </td>
                     </tr>
                     </tbody>
                 </table>
