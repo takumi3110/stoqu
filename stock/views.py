@@ -228,20 +228,29 @@ class ApproveView(LoginRequiredMixin, TemplateView):
 
 	def get(self, request, *args, **kwargs):
 		cart = StorageCart.objects.get(requester=request.user, ordered=False)
-		approve_list = Approve.objects.filter(requester=request.user).last()
+		approve = Approve.objects.filter(requester=request.user).last()
 		context = {
 			'cart': cart
 		}
-		if approve_list is not None:
-			context['approve'] = approve_list[0]
+		if approve is not None:
+			context['approve'] = approve
 		else:
 			context['approve'] = None
 		return render(request, 'stock/approve.html', context)
 
 
-class ApproveCreateView(LoginRequiredMixin, CreateView):
+class ApproveCreateView(LoginRequiredMixin, BSModalCreateView):
 	model = Approve
-	template_name = 'stock/approve_create.html'
+	template_name = 'snippets/create_modal.html'
+	form_class = ApproveCrateBSModalForm
+	success_url = reverse_lazy('stock:approve')
+
+
+class ApproveUpdateView(LoginRequiredMixin, BSModalUpdateView):
+	model = Approve
+	template_name = 'snippets/update_modal.html'
+	form_class = ApproveCrateBSModalForm
+	success_url = reverse_lazy('stock:approve')
 
 
 def create_storage_data(request):
