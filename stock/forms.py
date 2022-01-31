@@ -40,9 +40,9 @@ class OptionCreateBSModalForm(BSModalModelForm):
 		fields = ('maker', 'name', 'price', 'quantity', 'remarks')
 
 
-class ApproveCrateBSModalForm(BSModalModelForm):
+class ApproveBSModalForm(BSModalModelForm):
 	def __init__(self, *args, **kwargs):
-		super(ApproveCrateBSModalForm, self).__init__(*args, **kwargs)
+		super(ApproveBSModalForm, self).__init__(*args, **kwargs)
 		for field in self.fields.values():
 			field.widget.attrs['class'] = 'form-control'
 		self.fields['requester'].initial = kwargs['request'].user

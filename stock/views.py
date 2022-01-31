@@ -242,14 +242,14 @@ class ApproveView(LoginRequiredMixin, TemplateView):
 class ApproveCreateView(LoginRequiredMixin, BSModalCreateView):
 	model = Approve
 	template_name = 'snippets/create_modal.html'
-	form_class = ApproveCrateBSModalForm
+	form_class = ApproveBSModalForm
 	success_url = reverse_lazy('stock:approve')
 
 
 class ApproveUpdateView(LoginRequiredMixin, BSModalUpdateView):
 	model = Approve
 	template_name = 'snippets/update_modal.html'
-	form_class = ApproveCrateBSModalForm
+	form_class = ApproveBSModalForm
 	success_url = reverse_lazy('stock:approve')
 
 
