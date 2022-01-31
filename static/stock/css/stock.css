@@ -1,3 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Passion+One&display=swap");
+.main-title {
+  font-family: "Passion One", cursive;
+  font-size: 40px;
+  letter-spacing: -2px;
+}
+
 .get-data:hover {
   cursor: pointer;
   box-shadow: gray;

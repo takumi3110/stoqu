@@ -1,4 +1,13 @@
+@import 'mixin';
+@import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
+
 $cBorder: #dfdfdf;
+
+.main-title {
+    font-family: 'Passion One', cursive;
+    font-size: 40px;
+    letter-spacing: -2px;
+}
 
 .get-data {
   &:hover {
