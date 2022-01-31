@@ -144,8 +144,8 @@
 
     <script type="text/javascript">
         {% for storageitem in storageitem_list %}
-            let get_table_{{ storageitem.pk }} = document.getElementById('table{{ storageitem.pk }}');
-            let get_card_{{ storageitem.pk }} = document.getElementById('storageCard{{ storageitem.pk }}');
+            let get_table_{{ storageitem.pk }} = document.querySelector('#table{{ storageitem.pk }}');
+            let get_card_{{ storageitem.pk }} = document.querySelector('#storageCard{{ storageitem.pk }}');
             get_table_{{ storageitem.pk }}.onclick = function() {
                 location.href = '{% url "stock:storage_detail" storageitem.pk %}';
             }
@@ -160,9 +160,9 @@
                 let val = $(this).val();
                 let categorySelect = $('#categorySelect').val();
                 {% for storageitem in storageitem_list %}
-                    let base_{{ storageitem.pk }} = document.getElementById('base{{ storageitem.pk }}');
+                    let base_{{ storageitem.pk }} = document.querySelector('#base{{ storageitem.pk }}');
                     let base_val_{{ storageitem.pk }} = base_{{ storageitem.pk }}.textContent;
-                    let category{{ storageitem.pk }} = document.getElementById('category{{ storageitem.pk }}');
+                    let category{{ storageitem.pk }} = document.querySelector('#category{{ storageitem.pk }}');
                     let category_val{{ storageitem.pk }} = category{{ storageitem.pk }}.textContent;
                     if (categorySelect === category_val{{ storageitem.pk }}) {
                        if (val === base_val_{{ storageitem.pk }}) {
@@ -199,9 +199,9 @@
                 let val = $(this).val();
                 let baseSelect = $('#baseSelect').val();
                 {% for storageitem in storageitem_list %}
-                    let category{{ storageitem.pk }} = document.getElementById('category{{ storageitem.pk }}');
+                    let category{{ storageitem.pk }} = document.querySelector('#category{{ storageitem.pk }}');
                     let category_val{{ storageitem.pk }} = category{{ storageitem.pk }}.textContent;
-                    let base_{{ storageitem.pk }} = document.getElementById('base{{ storageitem.pk }}');
+                    let base_{{ storageitem.pk }} = document.querySelector('#base{{ storageitem.pk }}');
                     let base_val_{{ storageitem.pk }} = base_{{ storageitem.pk }}.textContent;
                     if (baseSelect === base_val_{{ storageitem.pk }}) {
                         if (val === category_val{{ storageitem.pk }}) {
@@ -233,10 +233,10 @@
             });
         });
 
-        let listBtn = document.getElementsByClassName('item-table')[0];
-        let cardBtn = document.getElementsByClassName('item-card')[0];
-        let storageTable = document.getElementById('storageTable');
-        let storageCard = document.getElementById('storageCard');
+        let listBtn = document.querySelector('.item-table');
+        let cardBtn = document.querySelector('.item-card');
+        let storageTable = document.querySelector('#storageTable');
+        let storageCard = document.querySelector('#storageCard');
 
         let changeTable = (table, card) => {
             table.style.display = '';
