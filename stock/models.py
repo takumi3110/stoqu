@@ -123,11 +123,11 @@ class StorageItem(models.Model):
 
 class KittingPlan(models.Model):
 	kitting_choice = (
-		('通常', '通常'),
+		('標準', '標準'),
 		('お急ぎ便', 'お急ぎ便')
 	)
 	name = models.CharField(
-		verbose_name='プラン',
+		verbose_name='プラン名',
 		max_length=10,
 		choices=kitting_choice,
 		default='標準'
@@ -178,10 +178,18 @@ class OrderItem(models.Model):
 	def save(self, *args, **kwargs):
 		kitting_plan = self.kitting_plan
 		if kitting_plan is not None:
+			now = datetime.datetime.now()
+			hour = now.hour
 			if kitting_plan.name == '標準':
-				date = datetime.date.today() + datetime.timedelta(weeks=1)
+				if hour >= 17:
+					date = datetime.date.today() + datetime.timedelta(weeks=1, days=1)
+				else:
+					date = datetime.date.today() + datetime.timedelta(weeks=1)
 			else:
-				date = datetime.date.today() + datetime.timedelta(days=3)
+				if hour >= 17:
+					date = datetime.date.today() + datetime.timedelta(days=4)
+				else:
+					date = datetime.date.today() + datetime.timedelta(days=3)
 			self.due_at = date
 		super(OrderItem, self).save(*args, **kwargs)
 
