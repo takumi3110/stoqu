@@ -86,15 +86,18 @@
 									</div>
 									<div class="col-5">
 										<p class="item-name">キッティングオプション</p>
-										<div class="form-check">
-											<label for="normalKitting{{ order_item.pk }}">通常キッティング　￥4,0000</label>
-											<input type="radio" class="form-check-input" name="kittingSelect{{ order_item.pk }}"
-											       id="normalKitting{{ order_item.pk }}" checked>
-										</div>
-										<div class="form-check">
-											<label for="specialKitting{{ order_item.pk }}">お急ぎ便　￥8,000</label>
-											<input type="radio" class="form-check-input" name="kittingSelect{{ order_item.pk }}" id="specialKitting{{ order_item.pk }}">
-										</div>
+										<form action="#" id="selectPlan">
+											{% for plan in kitting_plan %}
+												<div class="form-check">
+													<label for="kittingPlan{{ plan.pk }}_{{ order_item.pk }}">{{ plan.name }} ￥{{ plan.price | intcomma }}</label>
+													<input type="radio" class="form-check-input" id="kittingPlan{{ plan.pk }}_{{ order_item.pk }}"
+													       name="kittingSelect{{ order_item.pk }}" value="{{ plan.pk }}"
+															{% if plan.pk == order_item.kitting_plan.pk %}
+																checked
+															{% endif %}>
+												</div>
+											{% endfor %}
+										</form>
 									</div>
 								</div>
 							</div>
@@ -119,8 +122,9 @@
 							</p>
 							<p class="mb-1">
 								キッティング費用：
-								<span class="confirm-price float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
+								<span class="confirm-price kitting-price float-end"></span>
 							</p>
+							 <button id="get_btn" type="button">Get</button>
 						</div>
 						<div class="row bottom-border mb-3">
 							<p class="confirm-text total-price">
@@ -154,10 +158,27 @@
 		$("#modal").on('show.bs.modal', function() {
             const form = document.querySelector('form');
 	        form.addEventListener("submit", event =>
-		    event.target.querySelectorAll("input:disabled, select:disabled").forEach(e => e.disabled = false)
-	    );
+		        event.target.querySelectorAll("input:disabled, select:disabled").forEach(e => e.disabled = false)
+	        );
 		});
 
+        //ajax
+		const url = "{{ api_url }}";
+        const kittingPrice = document.querySelector('.kitting-price');
+        {% for order_item in cart.order_item.all %}
+            {% for plan in kitting_plan %}
+                let checkId{{ plan.pk }}_{{ order_item.pk }} = '#kittingPlan{{ plan.pk }}_{{ order_item.pk }}';
+                let postData{{ plan.pk }}_{{ order_item.pk }} = {
+                    id: "{{ order_item.pk }}",
+	                storage_item: "{{ order_item.storage_item }}",
+	                quantity: "{{ order_item.quantity }}",
+	                kitting_plan: {
+                        id: "{{ plan.pk }}"
+	                }
+                };
+	            radioCheck(checkId{{ plan.pk }}_{{ order_item.pk }}, postData{{ plan.pk }}_{{ order_item.pk }}, url);
+            {% endfor %}
+        {% endfor %}
 
 	</script>
 
