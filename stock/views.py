@@ -235,8 +235,10 @@ def remove_cart(request, pk):
 class ApproveView(LoginRequiredMixin, TemplateView):
 
 	def get(self, request, *args, **kwargs):
+		api_url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/'
 		cart = StorageCart.objects.get(requester=request.user, ordered=False)
 		approve = Approve.objects.filter(requester=request.user).last()
+		kitting_plan = KittingPlan.objects.all()
 		order_item_list = cart.order_item.all()
 		for order_item in order_item_list:
 			if order_item.kitting_plan is None:
@@ -244,7 +246,9 @@ class ApproveView(LoginRequiredMixin, TemplateView):
 				order_item.kitting_plan = kitting_plan
 				order_item.save()
 		context = {
-			'cart': cart
+			'cart': cart,
+			'kitting_plan': kitting_plan,
+			'api_url': api_url
 		}
 		if approve is not None:
 			context['approve'] = approve
