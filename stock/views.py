@@ -11,43 +11,51 @@ import datetime
 
 from .models import *
 from device.models import *
-from .serializer import *
+from .serializers import *
 from .forms import *
+from .filters import *
 
 
 class OptionViewSet(viewsets.ModelViewSet):
 	queryset = Option.objects.all()
 	serializer_class = OptionSerializer
+	filter_class = OptionFilter
 
 
 class BaseViewSet(viewsets.ModelViewSet):
 	queryset = Base.objects.all()
 	serializer_class = BaseSerializer
+	filter_class = BaseFilter
 
 
 class StorageItemViewSet(viewsets.ModelViewSet):
 	queryset = StorageItem.objects.all()
 	serializer_class = StorageItemSerializer
+	filter_class = StorageItemFilter
 
 
 class StorageCartViewSet(viewsets.ModelViewSet):
 	queryset = StorageCart.objects.all()
 	serializer_class = StorageCartSerializer
+	filter_class = StorageCartFilter
 
 
 class OrderItemViewSet(viewsets.ModelViewSet):
 	queryset = OrderItem.objects.all()
 	serializer_class = OrderItemSerializer
+	filter_class = OrderItemFilter
 
 
 class ApproveViewSet(viewsets.ModelViewSet):
 	queryset = Approve.objects.all()
 	serializer_class = ApproveSerializer
+	filter_class = ApproveFilter
 
 
 class OrderInfoViewSet(viewsets.ModelViewSet):
 	queryset = OrderInfo.objects.all()
 	serializer_class = OrderInfoSerializer
+	filter_class = OrderInfoFilter
 
 
 class StorageItemListView(LoginRequiredMixin, ListView):
