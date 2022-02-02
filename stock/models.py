@@ -137,6 +137,11 @@ class KittingPlan(models.Model):
 		verbose_name='金額',
 	)
 
+	due = models.PositiveSmallIntegerField(
+		verbose_name='納期',
+		default=7
+	)
+
 	def __str__(self):
 		return f'{self.name} {self.price}'
 
@@ -180,16 +185,12 @@ class OrderItem(models.Model):
 		if kitting_plan is not None:
 			now = datetime.datetime.now()
 			hour = now.hour
-			if kitting_plan.name == '標準':
-				if hour >= 17:
-					date = datetime.date.today() + datetime.timedelta(weeks=1, days=1)
-				else:
-					date = datetime.date.today() + datetime.timedelta(weeks=1)
+			day = kitting_plan.due
+			over_day = day + 1
+			if hour >= 17:
+				date = datetime.date.today() + datetime.timedelta(days=over_day)
 			else:
-				if hour >= 17:
-					date = datetime.date.today() + datetime.timedelta(days=4)
-				else:
-					date = datetime.date.today() + datetime.timedelta(days=3)
+				date = datetime.date.today() + datetime.timedelta(days=day)
 			self.due_at = date
 		super(OrderItem, self).save(*args, **kwargs)
 
