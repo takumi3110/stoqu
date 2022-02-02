@@ -114,7 +114,7 @@ class StorageItem(models.Model):
 		super().save(*args, **kwargs)
 
 	def __str__(self):
-		return f'{self.item.pc.maker} {self.item.pc.name}'
+		return f'{self.item} ({self.base})'
 
 	class Meta:
 		verbose_name = '貯蔵品'
@@ -194,7 +194,7 @@ class OrderItem(models.Model):
 		super(OrderItem, self).save(*args, **kwargs)
 
 	def __str__(self):
-		return f'{self.storage_item.item.pc.maker} {self.storage_item.item.pc.name} × {self.quantity}'
+		return f'{self.storage_item} × {self.quantity}'
 
 	class Meta:
 		verbose_name = '確保アイテム'
