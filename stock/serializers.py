@@ -16,6 +16,12 @@ class BaseSerializer(serializers.ModelSerializer):
 		fields = ('name',)
 
 
+class KittingPlanSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = KittingPlan
+		fields = ('id', 'name', 'price')
+
+
 class StorageItemSerializer(serializers.ModelSerializer):
 	item = PCDetailSerializer()
 	# option = OptionSerializer()
@@ -27,9 +33,11 @@ class StorageItemSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+	kitting_plan = KittingPlanSerializer()
+
 	class Meta:
 		model = OrderItem
-		fields = ('storage_item', 'quantity', 'ordered', 'kitting_plan')
+		fields = ('id', 'storage_item', 'quantity', 'ordered', 'kitting_plan')
 
 
 class StorageCartSerializer(serializers.ModelSerializer):
