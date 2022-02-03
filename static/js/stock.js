@@ -17,20 +17,16 @@ function radioCheck(id, postData, url) {
 }
 
 function ajaxPost(postData, url) {
-    kittingPrice.textContent = "";
-    const init = {method: 'GET'};
-    /*
+    // kittingPrice.textContent = "";
+    // const init = {method: 'GET'};
     const init = {
         method: 'POST',
-        credentials: 'include',
+        // credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(postData),
     };
-
-     */
-
     fetch(url, init)
         .then(response => {
             if(response.ok) {
@@ -43,7 +39,7 @@ function ajaxPost(postData, url) {
             let price = 0;
             for(const orderItem of data.results) {
                 price += orderItem.kitting_plan.price;
-                kittingPrice.innerHTML = '￥' + price.toLocaleString();
+                // kittingPrice.innerHTML = '￥' + price.toLocaleString();
             }
         })
         .catch (error => {
