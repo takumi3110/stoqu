@@ -18,7 +18,8 @@ function radioCheck(id, postData, url) {
 
 function ajaxPost(postData, url) {
     kittingPrice.textContent = "";
-    // const init = {method: 'GET'};
+    const init = {method: 'GET'};
+    /*
     const init = {
         method: 'POST',
         credentials: 'include',
@@ -27,6 +28,8 @@ function ajaxPost(postData, url) {
         },
         body: JSON.stringify(postData),
     };
+
+     */
 
     fetch(url, init)
         .then(response => {
@@ -40,7 +43,7 @@ function ajaxPost(postData, url) {
             let price = 0;
             for(const orderItem of data.results) {
                 price += orderItem.kitting_plan.price;
-                kittingPrice.innerHTML = price;
+                kittingPrice.innerHTML = '￥' + price.toLocaleString();
             }
         })
         .catch (error => {
