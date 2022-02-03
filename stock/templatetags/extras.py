@@ -67,3 +67,25 @@ def storage_subtotal(user):
 				price = make_subtotal(cart)
 			return add_tax(price)
 		return 0
+
+
+@register.filter
+def storage_kitting_price(user):
+	if user.is_authenticated:
+		cart_filter = StorageCart.objects.filter(requester=user, ordered=False)
+		if cart_filter.exists():
+			price = 0
+			for cart in cart_filter:
+				for order_item in cart.order_item.all():
+					kitting_price = order_item.kitting_plan.price
+					price += kitting_price
+			return add_tax(price)
+
+
+@register.filter
+def storage_total_price(user):
+	if user.is_authenticated:
+		sub_total = storage_subtotal(user)
+		kitting_price = storage_kitting_price(user)
+		total = sub_total + kitting_price
+		return total
