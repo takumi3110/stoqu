@@ -112,6 +112,64 @@ $cBorder: #dfdfdf;
   }
 }
 
+.cart-card {
+  & .cart-header {
+    position: relative;
+    & .cart-title {
+      font-size: 30px;
+      font-width: bold;
+    }
+
+    & .cart-price-name {
+      position: absolute;
+      margin-bottom: 0;
+      text-align: right;
+      bottom: 0;
+    }
+  }
+
+  & .cart-item {
+    & p {
+      margin-bottom: -2px;
+    }
+  }
+
+  & .cart-item-title {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  & .cart-item-location {
+    font-size: 15px;
+    color: green;
+  }
+
+  & .cart-price {
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
+
+.cart-total {
+  & p {
+    margin-bottom: -2px;
+    text-align: left;
+  }
+}
+
+.cart-total-title {
+  font-size: 20px;
+
+  & .cart-total-price {
+    font-weight: bold;
+  }
+
+  & .cart-end {
+    text-align: right;
+  }
+}
+
+
 .approve-menu {
   border-bottom: thin solid $cBorder;
 }
@@ -119,10 +177,6 @@ $cBorder: #dfdfdf;
 .card-body {
   .bottom-border {
     border-bottom: thin solid $cBorder;
-
-    &:last-child {
-      border-bottom: none;
-    }
   }
 }
 
@@ -134,4 +188,3 @@ $cBorder: #dfdfdf;
     color: orangered;
   }
 }
-
