@@ -94,6 +94,9 @@
   font-weight: bold;
 }
 
+.cart-card .bottom-border {
+  border-bottom: thin solid #dfdfdf;
+}
 .cart-card .cart-header {
   position: relative;
 }
@@ -142,8 +145,11 @@
   border-bottom: thin solid #dfdfdf;
 }
 
-.card-body .bottom-border {
+.approve-card .bottom-border {
   border-bottom: thin solid #dfdfdf;
+}
+.approve-card .bottom-border:last-child {
+  border-bottom: none;
 }
 
 .confirm-text {

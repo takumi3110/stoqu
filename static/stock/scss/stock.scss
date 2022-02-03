@@ -113,6 +113,10 @@ $cBorder: #dfdfdf;
 }
 
 .cart-card {
+  & .bottom-border {
+    border-bottom: thin solid $cBorder;
+  }
+
   & .cart-header {
     position: relative;
     & .cart-title {
@@ -174,9 +178,13 @@ $cBorder: #dfdfdf;
   border-bottom: thin solid $cBorder;
 }
 
-.card-body {
-  .bottom-border {
+.approve-card {
+  & .bottom-border {
     border-bottom: thin solid $cBorder;
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 }
 
