@@ -53,7 +53,7 @@
 				</div>
 				<div class="row mt-2">
 					<div class="col-4">
-						<span class="menu-title">3 商品の確認</span>
+						<span class="menu-title">3 商品とお届け情報の確認</span>
 					</div>
 				</div>
 				<div class="row">
@@ -77,10 +77,10 @@
 										<p class="item-price mb-1">￥{{ order_item.pk | total_price | intcomma}}</p>
 										<p class="mb-1">
 	                                        数量：
-	                                        <button type="button" class="btn btn-secondary"
+	                                        <button type="button" class="btn btn-sm btn-secondary"
 	                                                onclick="location.href='{% url "stock:reduce_cart" order_item.pk %}'">-</button>
 	                                        {{ order_item.quantity }}
-	                                        <button type="button" class="btn btn-secondary"
+	                                        <button type="button" class="btn btn-sm btn-secondary"
 	                                                onclick="location.href='{% url "stock:add_item" order_item.storage_item.pk %}'">+</button>
 	                                    </p>
 									</div>
@@ -106,7 +106,7 @@
 				</div>
 			</div>
 			<div class="col-3">
-				<div class="card">
+				<div class="card approve-card">
 					<div class="card-body">
 						<div class="row bottom-border">
 							<button type="button" class="btn btn-warning my-3"
@@ -115,21 +115,20 @@
 							</button>
 						</div>
 						<div class="row bottom-border mb-3">
-							<p class="confirm-text">注文内容</p>
+							<p><span class="confirm-text">注文内容</span>(税込み)</p>
 							<p class="mb-1">
 								商品の小計：
 								<span class="confirm-price float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
 							</p>
 							<p class="mb-1">
 								キッティング費用：
-								<span class="confirm-price kitting-price float-end"></span>
+								<span class="confirm-price kitting-price float-end">￥{{ request.user | storage_kitting_price | intcomma }}</span>
 							</p>
-							 <button id="get_btn" type="button">Get</button>
 						</div>
 						<div class="row bottom-border mb-3">
 							<p class="confirm-text total-price">
 								ご請求額：
-								<span class="float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
+								<span class="float-end">￥{{ request.user | storage_total_price | intcomma }}</span>
 							</p>
 						</div>
 					</div>
