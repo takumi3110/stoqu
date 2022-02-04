@@ -33,11 +33,9 @@ class StorageItemSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-	kitting_plan = KittingPlanSerializer()
-
 	class Meta:
 		model = OrderItem
-		fields = ('id', 'storage_item', 'quantity', 'ordered', 'kitting_plan')
+		fields = ('id', 'storage_item', 'quantity', 'ordered', 'kitting_plan', 'requester')
 
 
 class StorageCartSerializer(serializers.ModelSerializer):

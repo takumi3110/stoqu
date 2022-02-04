@@ -24,8 +24,8 @@ class StorageItemAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-	list_display = ('storage_item', 'quantity', 'ordered', 'kitting_plan')
-	list_display_links = ('storage_item', 'quantity', 'kitting_plan')
+	list_display = ('storage_item', 'quantity', 'ordered', 'kitting_plan', 'requester')
+	list_display_links = ('storage_item', 'quantity', 'kitting_plan', 'requester')
 	list_filter = ('ordered', 'kitting_plan')
 	search_fields = ('storage_item',)
 	actions_on_bottom = True

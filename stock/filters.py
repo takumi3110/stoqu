@@ -34,7 +34,7 @@ class KittingPlanFilter(filters.FilterSet):
 class OrderItemFilter(filters.FilterSet):
 	class Meta:
 		model = OrderItem
-		fields = ['storage_item__order_number', 'kitting_plan__name']
+		fields = ['storage_item__order_number', 'kitting_plan__name', 'requester__username']
 
 
 class StorageCartFilter(filters.FilterSet):
