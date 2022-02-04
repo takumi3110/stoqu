@@ -40,6 +40,12 @@ class StorageCartViewSet(viewsets.ModelViewSet):
 	filter_class = StorageCartFilter
 
 
+class KittingPlanViewSet(viewsets.ModelViewSet):
+	queryset = KittingPlan.objects.all()
+	serializer_class = KittingPlanSerializer
+	filter_class = KittingPlanFilter
+
+
 class OrderItemViewSet(viewsets.ModelViewSet):
 	queryset = OrderItem.objects.all()
 	serializer_class = OrderItemSerializer
@@ -129,7 +135,8 @@ def get_obj(resource, request, pk):
 		item = get_object_or_404(StorageItem, pk=pk)
 		order_item, created = OrderItem.objects.get_or_create(
 			storage_item=item,
-			ordered=False
+			ordered=False,
+			requester=request.user
 		)
 	else:
 		order_item = get_object_or_404(OrderItem, pk=pk)
