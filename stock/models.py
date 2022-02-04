@@ -100,12 +100,6 @@ class StorageItem(models.Model):
 		blank=True
 	)
 
-	requester = models.ForeignKey(
-		User,
-		on_delete=models.CASCADE,
-		verbose_name='依頼者',
-	)
-
 	remarks = models.TextField(
 		verbose_name='備考',
 		null=True,
@@ -184,6 +178,12 @@ class OrderItem(models.Model):
 		verbose_name='納品予定日',
 		null=True,
 		blank=True
+	)
+
+	requester = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者',
 	)
 
 	def save(self, *args, **kwargs):
