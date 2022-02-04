@@ -100,6 +100,12 @@ class StorageItem(models.Model):
 		blank=True
 	)
 
+	requester = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者',
+	)
+
 	remarks = models.TextField(
 		verbose_name='備考',
 		null=True,
