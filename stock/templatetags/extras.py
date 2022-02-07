@@ -78,7 +78,7 @@ def storage_kitting_price(user):
 			for cart in cart_filter:
 				for order_item in cart.order_item.all():
 					kitting_price = order_item.kitting_plan.price
-					price += kitting_price
+					price += kitting_price * order_item.quantity
 			return add_tax(price)
 
 
