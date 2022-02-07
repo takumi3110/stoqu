@@ -231,12 +231,13 @@ class StorageCart(models.Model):
 	)
 	
 	def save(self, *args, **kwargs):
-		self.price = 0
-		for item in self.order_item.all():
-			price = item.storage_item.total_price * item.quantity
-			if item.kitting_plan is not None:
-				price += item.kitting_plan.price
-			self.price += price
+		if self.pk is not None:
+			self.price = 0
+			for item in self.order_item.all():
+				price = item.storage_item.total_price * item.quantity
+				if item.kitting_plan is not None:
+					price += item.kitting_plan.price
+				self.price += price
 		super(StorageCart, self).save(*args, **kwargs)
 
 	def __str__(self):
