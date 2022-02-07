@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }, "");
 });
 
-// function radioCheck(id, data, url) {
-//     let checkOption = document.querySelector(id);
-//     checkOption.addEventListener('click', function() {
-//         let result = putData(url, data);
-//         // console.log(result)
-//     });
-// }
+function formatDate(date, format) {
+    const day = new Date(date);
+    format = format.replace(/YYYY/, day.getFullYear());
+    format = format.replace(/MM/, day.getMonth() + 1);
+    format = format.replace(/DD/, day.getDate());
+    return format;
+}
 
 const getCookie = (name) => {
     if (document.cookie && document.cookie !== '') {
@@ -28,28 +28,6 @@ const getCookie = (name) => {
 }
 const csrfToken = getCookie('csrftoken');
 
-// async function putData(url=url, data=data) {
-//     const init = {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': csrfToken
-//         },
-//         body: JSON.stringify(data),
-//     };
-//     return await fetch(url, init)
-//         .then(response => {
-//             if (response.ok) {
-//                 return response.json();
-//             } else {
-//                 throw Error();
-//             }
-//         })
-//         .then(data => {
-//             console.log(data)
-//         })
-// }
-
 function makeInit(data) {
     return {
         method: 'PUT',
@@ -61,3 +39,25 @@ function makeInit(data) {
     }
 }
 
+function changePrice(checkEl, totalEl, count) {
+    totalEl.innerHTML = '';
+    const tax = 1.10
+    let price = 0;
+    for (el of checkEl) {
+        if (el.checked) {
+            price += Number(el.value);
+        }
+    }
+    let subTotal = price * count;
+    let result = Math.round(subTotal * tax);
+    totalEl.innerHTML = result.toLocaleString();
+}
+    // let radio = document.querySelectorall(el);
+    // for (i = 0; i < radio.length - 1; i++) {
+    //     if (radio.checked) {
+    //         return true;
+    //     } else {
+    //         let result = false;
+    //     }
+    // }
+// }
