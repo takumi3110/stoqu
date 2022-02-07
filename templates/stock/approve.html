@@ -62,7 +62,7 @@
 							<div class="card-body">
 								<div class="row">
 									<p class="schedule">お届け予定日：
-										<span class="schedule-date">
+										<span class="schedule-date{{ order_item.pk }}">
 											{% if order_item.due_at is not None %}
 												{{ order_item.due_at }}
 											{% else %}
@@ -88,13 +88,15 @@
 									</div>
 									<div class="col-5">
 										<p class="item-name">キッティングオプション</p>
-										<form action="#" method="post" id="selectPlan">
+										<form action="#" method="post">
 											{% csrf_token %}
 											{% for plan in kitting_plan %}
 												<div class="form-check">
-													<label for="kittingPlan{{ plan.pk }}_{{ order_item.pk }}">{{ plan.name }} ￥{{ plan.price | intcomma }}</label>
-													<input type="radio" class="form-check-input" id="kittingPlan{{ plan.pk }}_{{ order_item.pk }}"
-													       name="kittingSelect{{ order_item.pk }}" value="{{ plan.pk }}"
+													<label for="kittingPlan{{ plan.pk }}_{{ order_item.pk }}">
+														{{ plan.name }}￥{{ plan.price | intcomma }}
+													</label>
+													<input type="radio" class="form-check-input select-plan" id="kittingPlan{{ plan.pk }}_{{ order_item.pk }}"
+													       name="kittingSelect{{ order_item.pk }}" value="{{ plan.price }}"
 															{% if plan.pk == order_item.kitting_plan.pk %}
 																checked
 															{% endif %}>
@@ -125,7 +127,9 @@
 							</p>
 							<p class="mb-1">
 								キッティング費用：
-								<span class="confirm-price kitting-price float-end">￥{{ request.user | storage_kitting_price | intcomma }}</span>
+								<span class="confirm-price float-end">￥
+									<span class="total-kitting-price">{{ request.user | storage_kitting_price | intcomma }}</span>
+								</span>
 							</p>
 						</div>
 						<div class="row bottom-border mb-3">
@@ -165,36 +169,30 @@
 		});
 
         //ajax
-        const scheduleDate = document.querySelector('.schedule-date');
-        const kittingPrice = document.querySelector('.kitting-price');
-
+        const kittingPrice = document.querySelector('.total-kitting-price');
+        const selectPlan = document.querySelectorAll('.select-plan');
 		{% for order_item in cart.order_item.all %}
+			const scheduleDate{{ order_item.pk }} = document.querySelector('.schedule-date{{ order_item.pk }}');
 			const url{{ order_item.pk }} = "{{ api_url }}{{ order_item.pk }}/";
             {% for plan in kitting_plan %}
                 let checkId{{ plan.pk }}_{{ order_item.pk }} = '#kittingPlan{{ plan.pk }}_{{ order_item.pk }}';
                 let data{{ plan.pk }}_{{ order_item.pk }} = {
-                    {#id: "{{ order_item.pk }}",#}
                     storage_item: {{ order_item.storage_item.pk }},
                     quantity: {{ order_item.quantity }},
                     requester: {{ request.user.pk }},
                     kitting_plan: {{ plan.pk }}
                 }
-                {#radioCheck(#}
-                {#    checkId{{ plan.pk }}_{{ order_item.pk }},#}
-	            {#    data{{ plan.pk }}_{{ order_item.pk }},#}
-	            {#    url{{ order_item.pk }}#}
-                {#);#}
 	            const changeRadio{{ plan.pk }}_{{ order_item.pk }} = document.querySelector(
                     checkId{{ plan.pk }}_{{ order_item.pk }}
 	            );
                 changeRadio{{ plan.pk }}_{{ order_item.pk }}.addEventListener('click', function() {
-	                const init = makeInit(data{{ plan.pk }}_{{ order_item.pk }})
-	                put(url{{ order_item.pk }}, init);
-                })
-
+                    const init = makeInit(data{{ plan.pk }}_{{ order_item.pk }})
+                    put(url{{ order_item.pk }}, init, scheduleDate{{ order_item.pk }});
+                    changePrice(selectPlan, kittingPrice, {{ order_item.quantity }});
+                });
             {% endfor %}
         {% endfor %}
-        async function put(url, init) {
+        async function put(url, init, el) {
             await fetch(url, init)
 	            .then(response => {
                     if (response.ok) {
@@ -204,9 +202,13 @@
                     }
 	            })
 	            .then(data => {
-                    console.log(data);
+                    const schedule = formatDate(data.due_at, 'YYYY年MM月DD日');
+                    el.innerHTML = '';
+                    el.innerHTML = schedule;
 	            })
         }
+
+
 	</script>
 
 {% endblock javascript %}
