@@ -62,11 +62,13 @@
 							<div class="card-body">
 								<div class="row">
 									<p class="schedule">お届け予定日：
-										{% if order_item.due_at is not None %}
-											{{ order_item.due_at }}
-										{% else %}
-											お問い合わせください
-										{% endif %}
+										<span class="schedule-date">
+											{% if order_item.due_at is not None %}
+												{{ order_item.due_at }}
+											{% else %}
+												お問い合わせください
+											{% endif %}
+										</span>
 									</p>
 									<div class="col-2">
 										<img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ order_item.storage_item }}"
@@ -86,7 +88,8 @@
 									</div>
 									<div class="col-5">
 										<p class="item-name">キッティングオプション</p>
-										<form action="#" id="selectPlan">
+										<form action="#" method="post" id="selectPlan">
+											{% csrf_token %}
 											{% for plan in kitting_plan %}
 												<div class="form-check">
 													<label for="kittingPlan{{ plan.pk }}_{{ order_item.pk }}">{{ plan.name }} ￥{{ plan.price | intcomma }}</label>
@@ -162,23 +165,48 @@
 		});
 
         //ajax
-		const url = "{{ api_url }}";
+        const scheduleDate = document.querySelector('.schedule-date');
         const kittingPrice = document.querySelector('.kitting-price');
-        {% for order_item in cart.order_item.all %}
+
+		{% for order_item in cart.order_item.all %}
+			const url{{ order_item.pk }} = "{{ api_url }}{{ order_item.pk }}/";
             {% for plan in kitting_plan %}
                 let checkId{{ plan.pk }}_{{ order_item.pk }} = '#kittingPlan{{ plan.pk }}_{{ order_item.pk }}';
-                let postData{{ plan.pk }}_{{ order_item.pk }} = {
-                    id: "{{ order_item.pk }}",
-	                storage_item: "{{ order_item.storage_item }}",
-	                quantity: "{{ order_item.quantity }}",
-	                kitting_plan: {
-                        id: "{{ plan.pk }}"
-	                }
-                };
-	            radioCheck(checkId{{ plan.pk }}_{{ order_item.pk }}, postData{{ plan.pk }}_{{ order_item.pk }}, url);
+                let data{{ plan.pk }}_{{ order_item.pk }} = {
+                    {#id: "{{ order_item.pk }}",#}
+                    storage_item: {{ order_item.storage_item.pk }},
+                    quantity: {{ order_item.quantity }},
+                    requester: {{ request.user.pk }},
+                    kitting_plan: {{ plan.pk }}
+                }
+                {#radioCheck(#}
+                {#    checkId{{ plan.pk }}_{{ order_item.pk }},#}
+	            {#    data{{ plan.pk }}_{{ order_item.pk }},#}
+	            {#    url{{ order_item.pk }}#}
+                {#);#}
+	            const changeRadio{{ plan.pk }}_{{ order_item.pk }} = document.querySelector(
+                    checkId{{ plan.pk }}_{{ order_item.pk }}
+	            );
+                changeRadio{{ plan.pk }}_{{ order_item.pk }}.addEventListener('click', function() {
+	                const init = makeInit(data{{ plan.pk }}_{{ order_item.pk }})
+	                put(url{{ order_item.pk }}, init);
+                })
+
             {% endfor %}
         {% endfor %}
-
+        async function put(url, init) {
+            await fetch(url, init)
+	            .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw Error();
+                    }
+	            })
+	            .then(data => {
+                    console.log(data);
+	            })
+        }
 	</script>
 
 {% endblock javascript %}
