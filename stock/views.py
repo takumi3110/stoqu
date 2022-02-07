@@ -179,6 +179,7 @@ def add_item(request, pk):
 			requester=request.user,
 		)
 		storage_cart.order_item.add(order_item)
+		storage_cart.save()
 	return redirect('stock:cart')
 
 
@@ -230,8 +231,8 @@ def remove_cart(request, pk):
 		for cart in cart_list:
 			cart_items = cart.order_item.all().count()
 			if cart_items == 1:
-				cart.delete()
 				order_item.delete()
+				cart.delete()
 			else:
 				order_item.delete()
 	else:
