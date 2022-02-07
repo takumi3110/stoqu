@@ -8,41 +8,56 @@ document.addEventListener('DOMContentLoaded', function() {
     }, "");
 });
 
-function radioCheck(id, postData, url) {
-    let checkOption = document.querySelector(id);
-        checkOption.addEventListener('click', function() {
-            console.log(document.querySelector(id).value);
-            ajaxPost(postData, url);
-        });
-}
+// function radioCheck(id, data, url) {
+//     let checkOption = document.querySelector(id);
+//     checkOption.addEventListener('click', function() {
+//         let result = putData(url, data);
+//         // console.log(result)
+//     });
+// }
 
-function ajaxPost(postData, url) {
-    // kittingPrice.textContent = "";
-    // const init = {method: 'GET'};
-    const init = {
-        method: 'POST',
-        // credentials: 'include',
+const getCookie = (name) => {
+    if (document.cookie && document.cookie !== '') {
+        for (const cookie of document.cookie.split(';')) {
+            const [key, value] = cookie.trim().split('=');
+            if (key === name) {
+                return decodeURIComponent(value);
+            }
+        }
+    }
+}
+const csrfToken = getCookie('csrftoken');
+
+// async function putData(url=url, data=data) {
+//     const init = {
+//         method: 'PUT',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': csrfToken
+//         },
+//         body: JSON.stringify(data),
+//     };
+//     return await fetch(url, init)
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.json();
+//             } else {
+//                 throw Error();
+//             }
+//         })
+//         .then(data => {
+//             console.log(data)
+//         })
+// }
+
+function makeInit(data) {
+    return {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
         },
-        body: JSON.stringify(postData),
-    };
-    fetch(url, init)
-        .then(response => {
-            if(response.ok) {
-                return response.json();
-            } else {
-                throw Error();
-            }
-        })
-        .then(data => {
-            let price = 0;
-            for(const orderItem of data.results) {
-                price += orderItem.kitting_plan.price;
-                // kittingPrice.innerHTML = '￥' + price.toLocaleString();
-            }
-        })
-        .catch (error => {
-            console.log(error);
-        });
+        body: JSON.stringify(data),
+    }
 }
+
