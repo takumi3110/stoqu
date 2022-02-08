@@ -279,6 +279,43 @@ class ApproveUpdateView(LoginRequiredMixin, BSModalUpdateView):
 	success_url = reverse_lazy('stock:approve')
 
 
+def add_order_info(request, pk):
+	"""
+	approve画面から確定でorder_infoに登録する
+	:param request:
+	:param pk:
+	:return:
+	"""
+	approve = Approve.objects.get(pk=pk)
+	cart = StorageCart.objects.get(requester=request.user, ordered=False)
+	date = datetime.datetime.now()
+	str_date = date.strftime('%Y%m%d')
+	order_info_obj = OrderInfo.objects.all().last()
+	if order_info_obj is not None:
+		if str_date in order_info_obj.number:
+			old_branch = order_info_obj.number.split('-')[1]
+			order_branch = int(old_branch) + 1
+		else:
+			order_branch = 1
+	else:
+		order_branch = 1
+	number = str_date + '-' + str(order_branch)
+	order_info, create = OrderInfo.objects.get_or_create(
+		number=number,
+		requester=request.user,
+		approve=approve,
+		storage_cart=cart,
+		ordered_at=timezone.now()
+	)
+	for order_item in cart.order_items.all():
+		order_item.ordered = True
+		order_item.save()
+	cart.ordered = True
+	cart.save()
+	return redirect('storage:confirm', order_info.pk)
+
+
+
 def create_storage_data(request):
 	"""
 	データ取り込み用

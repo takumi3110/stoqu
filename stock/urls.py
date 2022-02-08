@@ -28,5 +28,6 @@ urlpatterns = [
 	path('remove_item/<int:pk>', views.remove_cart, name='remove_cart'),
 	path('approve/', views.ApproveView.as_view(), name='approve'),
 	path('approve_create/', views.ApproveCreateView.as_view(), name='approve_create'),
-	path('approve_update/<int:pk>', views.ApproveUpdateView.as_view(), name='approve_update')
+	path('approve_update/<int:pk>', views.ApproveUpdateView.as_view(), name='approve_update'),
+	path('add_orderInfo/<int:pk>', views.add_order_info, name='add_order_info')
 ]
