@@ -114,7 +114,7 @@
 				<div class="card approve-card">
 					<div class="card-body">
 						<div class="row bottom-border">
-							<button type="button" class="btn btn-warning my-3"
+							<button type="button" class="btn btn-warning my-3" id="confirm"
 							        {% if approve is None %}disabled{% endif %}>
 								注文を確定
 							</button>
@@ -149,6 +149,10 @@
 {% block javascript %}
 
 	<script type="text/javascript">
+		const confirm = document.querySelector('#confirm');
+        const next_url = "{% url 'stock:add_order_info' %}"
+        linkClick(confirm, next_url);
+
 		$(function() {
             $(".create-approve").each(function () {
                 $(this).modalForm({formURL: "{% url 'stock:approve_create' %}"});
