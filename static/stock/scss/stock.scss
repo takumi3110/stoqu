@@ -3,10 +3,26 @@
 
 $cBorder: #dfdfdf;
 
-.main-title {
+.navigation {
+  //background-color: #131921;
+  //color: white;
+  height: 100px;
+  text-align: center;
+
+  &__title {
     font-family: 'Passion One', cursive;
     font-size: 40px;
     letter-spacing:3px;
+  }
+
+  &__requester {
+    font-size: 15px;
+  }
+
+  &__item {
+    display: block;
+    text-decoration: none;
+  }
 }
 
 .get-data {
@@ -72,16 +88,7 @@ $cBorder: #dfdfdf;
   }
 }
 
-.navigation {
-  background-color: darkgray;
-  color: dimgray;
-  height: 100px;
-  text-align: center;
-  & .navigation-item {
 
-    border-bottom: dimgray solid;
-  }
-}
 
 .menu-title {
     font-size: 20px;
