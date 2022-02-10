@@ -52,9 +52,9 @@ class ApproveAdmin(admin.ModelAdmin):
 
 @admin.register(OrderInfo)
 class OrderInfoAdmin(admin.ModelAdmin):
-	list_display = ('number', 'ticket', 'approve', 'requester', 'contact_user', 'ordered_at', 'ordered')
+	list_display = ('number', 'ticket', 'approve', 'requester', 'contact_user', 'ordered_at')
 	list_display_links = ('number', 'ticket', 'approve', 'requester', 'contact_user', 'ordered_at')
-	list_filter = ('approve', 'requester', 'contact_user', 'ordered')
+	list_filter = ('approve', 'requester', 'contact_user')
 	search_fields = ('number', 'ticket', 'approve', 'requester')
 	actions_on_bottom = True
 

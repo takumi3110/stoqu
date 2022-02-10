@@ -52,4 +52,4 @@ class ApproveFilter(filters.FilterSet):
 class OrderInfoFilter(filters.FilterSet):
 	class Meta:
 		model = OrderInfo
-		fields = ['number', 'ticket', 'requester__username', 'contact_user__username', 'ordered']
+		fields = ['number', 'ticket', 'requester__username', 'contact_user__username']

@@ -53,4 +53,4 @@ class ApproveSerializer(serializers.ModelSerializer):
 class OrderInfoSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = OrderInfo
-		fields = ('number', 'ticket', 'storage_cart', 'approve', 'requester', 'contact_user', 'ordered_at', 'ordered')
+		fields = ('number', 'ticket', 'storage_cart', 'approve', 'requester', 'contact_user', 'ordered_at')

@@ -325,12 +325,21 @@ class OrderInfo(models.Model):
 
 	ordered_at = models.DateTimeField(
 		verbose_name='依頼日',
-		auto_now=True
+		null=True,
+		blank=True
 	)
 
-	ordered = models.BooleanField(
-		verbose_name='依頼済み'
+	updated_at = models.DateTimeField(
+		verbose_name='更新日',
+		null=True,
+		blank=True
 	)
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.ordered_at = timezone.now()
+		self.updated_at = timezone.now()
+		return super(OrderInfo, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.number}'
