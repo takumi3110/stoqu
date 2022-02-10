@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const el = document.querySelector('.main-title');
+    const el = document.querySelector('.navigation__title');
     const str = el.innerHTML.trim().split("");
 
     el.innerHTML = str.reduce((acc, curr) => {
@@ -52,12 +52,10 @@ function changePrice(checkEl, totalEl, count) {
     let result = Math.round(subTotal * tax);
     totalEl.innerHTML = result.toLocaleString();
 }
-    // let radio = document.querySelectorall(el);
-    // for (i = 0; i < radio.length - 1; i++) {
-    //     if (radio.checked) {
-    //         return true;
-    //     } else {
-    //         let result = false;
-    //     }
-    // }
-// }
+
+
+function linkClick(el, url) {
+    el.addEventListener('click', function() {
+        location.href = url;
+    });
+}
