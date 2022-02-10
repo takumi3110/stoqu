@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Passion+One&display=swap");
 .navigation {
-  height: 100px;
   text-align: center;
 }
 .navigation__title {
@@ -8,12 +7,24 @@
   font-size: 40px;
   letter-spacing: 3px;
 }
-.navigation__requester {
-  font-size: 15px;
+.navigation__text {
+  margin-bottom: 1px;
 }
 .navigation__item {
-  display: block;
-  text-decoration: none;
+  font-weight: bold;
+  width: 120px;
+  height: 100px;
+  padding: 2px;
+}
+.navigation__item:hover {
+  border: solid 2px white;
+  cursor: pointer;
+}
+.navigation__cancel {
+  font-size: 10px;
+}
+.navigation__search {
+  width: 600px;
 }
 
 .get-data:hover {
