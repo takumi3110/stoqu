@@ -279,14 +279,15 @@ class ApproveUpdateView(LoginRequiredMixin, BSModalUpdateView):
 	success_url = reverse_lazy('stock:approve')
 
 
-def add_order_info(request, pk):
+@login_required()
+def add_order_info(request):
 	"""
 	approve画面から確定でorder_infoに登録する
 	:param request:
 	:param pk:
 	:return:
 	"""
-	approve = Approve.objects.get(pk=pk)
+	approve = Approve.objects.get(requester=request.user)
 	cart = StorageCart.objects.get(requester=request.user, ordered=False)
 	date = datetime.datetime.now()
 	str_date = date.strftime('%Y%m%d')
@@ -300,20 +301,28 @@ def add_order_info(request, pk):
 	else:
 		order_branch = 1
 	number = str_date + '-' + str(order_branch)
-	order_info, create = OrderInfo.objects.get_or_create(
+	order_info, update = OrderInfo.objects.update_or_create(
 		number=number,
 		requester=request.user,
 		approve=approve,
 		storage_cart=cart,
-		ordered_at=timezone.now()
 	)
-	for order_item in cart.order_items.all():
+	for order_item in cart.order_item.all():
 		order_item.ordered = True
 		order_item.save()
 	cart.ordered = True
 	cart.save()
-	return redirect('storage:confirm', order_info.pk)
+	return redirect('stock:confirm', order_info.pk)
 
+
+class ConfirmView(LoginRequiredMixin, TemplateView):
+	template_name = 'stock/confirm.html'
+
+	def get_context_data(self, *args, **kwargs):
+		context = super(ConfirmView, self).get_context_data(**kwargs)
+		order_info = OrderInfo.objects.get(pk=kwargs['pk'])
+		context['order_info'] = order_info
+		return context
 
 
 def create_storage_data(request):

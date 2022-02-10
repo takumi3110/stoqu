@@ -29,5 +29,6 @@ urlpatterns = [
 	path('approve/', views.ApproveView.as_view(), name='approve'),
 	path('approve_create/', views.ApproveCreateView.as_view(), name='approve_create'),
 	path('approve_update/<int:pk>', views.ApproveUpdateView.as_view(), name='approve_update'),
-	path('add_orderInfo/<int:pk>', views.add_order_info, name='add_order_info')
+	path('add_orderInfo/', views.add_order_info, name='add_order_info'),
+	path('confirm/<int:pk>', views.ConfirmView.as_view(), name='confirm')
 ]
