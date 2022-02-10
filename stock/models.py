@@ -114,7 +114,7 @@ class StorageItem(models.Model):
 		super().save(*args, **kwargs)
 
 	def __str__(self):
-		return f'{self.item.pc.maker} {self.item.pc.name}'
+		return f'{self.item} ({self.base})'
 
 	class Meta:
 		verbose_name = '貯蔵品'
@@ -135,6 +135,11 @@ class KittingPlan(models.Model):
 
 	price = models.PositiveSmallIntegerField(
 		verbose_name='金額',
+	)
+
+	due = models.PositiveSmallIntegerField(
+		verbose_name='納期',
+		default=7
 	)
 
 	def __str__(self):
@@ -175,26 +180,28 @@ class OrderItem(models.Model):
 		blank=True
 	)
 
+	requester = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者',
+	)
+
 	def save(self, *args, **kwargs):
 		kitting_plan = self.kitting_plan
 		if kitting_plan is not None:
 			now = datetime.datetime.now()
 			hour = now.hour
-			if kitting_plan.name == '標準':
-				if hour >= 17:
-					date = datetime.date.today() + datetime.timedelta(weeks=1, days=1)
-				else:
-					date = datetime.date.today() + datetime.timedelta(weeks=1)
+			day = kitting_plan.due
+			over_day = day + 1
+			if hour >= 17:
+				date = datetime.date.today() + datetime.timedelta(days=over_day)
 			else:
-				if hour >= 17:
-					date = datetime.date.today() + datetime.timedelta(days=4)
-				else:
-					date = datetime.date.today() + datetime.timedelta(days=3)
+				date = datetime.date.today() + datetime.timedelta(days=day)
 			self.due_at = date
 		super(OrderItem, self).save(*args, **kwargs)
 
 	def __str__(self):
-		return f'{self.storage_item.item.pc.maker} {self.storage_item.item.pc.name} × {self.quantity}'
+		return f'{self.storage_item} × {self.quantity}'
 
 	class Meta:
 		verbose_name = '確保アイテム'
@@ -224,12 +231,13 @@ class StorageCart(models.Model):
 	)
 	
 	def save(self, *args, **kwargs):
-		self.price = 0
-		for item in self.order_item.all():
-			price = item.storage_item.total_price * item.quantity
-			if item.kitting_plan is not None:
-				price += item.kitting_plan.price
-			self.price += price
+		if self.pk is not None:
+			self.price = 0
+			for item in self.order_item.all():
+				price = item.storage_item.total_price * item.quantity
+				if item.kitting_plan is not None:
+					price += item.kitting_plan.price
+				self.price += price
 		super(StorageCart, self).save(*args, **kwargs)
 
 	def __str__(self):
@@ -317,12 +325,21 @@ class OrderInfo(models.Model):
 
 	ordered_at = models.DateTimeField(
 		verbose_name='依頼日',
-		auto_now=True
+		null=True,
+		blank=True
 	)
 
-	ordered = models.BooleanField(
-		verbose_name='依頼済み'
+	updated_at = models.DateTimeField(
+		verbose_name='更新日',
+		null=True,
+		blank=True
 	)
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.ordered_at = timezone.now()
+		self.updated_at = timezone.now()
+		return super(OrderInfo, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.number}'

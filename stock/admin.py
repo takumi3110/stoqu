@@ -24,8 +24,8 @@ class StorageItemAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-	list_display = ('storage_item', 'quantity', 'ordered', 'kitting_plan')
-	list_display_links = ('storage_item', 'quantity', 'kitting_plan')
+	list_display = ('storage_item', 'quantity', 'ordered', 'kitting_plan', 'requester')
+	list_display_links = ('storage_item', 'quantity', 'kitting_plan', 'requester')
 	list_filter = ('ordered', 'kitting_plan')
 	search_fields = ('storage_item',)
 	actions_on_bottom = True
@@ -52,9 +52,9 @@ class ApproveAdmin(admin.ModelAdmin):
 
 @admin.register(OrderInfo)
 class OrderInfoAdmin(admin.ModelAdmin):
-	list_display = ('number', 'ticket', 'approve', 'requester', 'contact_user', 'ordered_at', 'ordered')
+	list_display = ('number', 'ticket', 'approve', 'requester', 'contact_user', 'ordered_at')
 	list_display_links = ('number', 'ticket', 'approve', 'requester', 'contact_user', 'ordered_at')
-	list_filter = ('approve', 'requester', 'contact_user', 'ordered')
+	list_filter = ('approve', 'requester', 'contact_user')
 	search_fields = ('number', 'ticket', 'approve', 'requester')
 	actions_on_bottom = True
 
