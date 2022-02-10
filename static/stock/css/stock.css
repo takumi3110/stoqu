@@ -27,6 +27,19 @@
   width: 600px;
 }
 
+.storage__card {
+  transition: all 0.3s;
+}
+.storage__card:hover {
+  cursor: pointer;
+}
+.storage__card:active {
+  transform: scale(0.9);
+}
+.storage__text {
+  font-size: 15px;
+}
+
 .get-data:hover {
   cursor: pointer;
   box-shadow: gray;
@@ -68,16 +81,6 @@
 
 .item-card:hover {
   cursor: pointer;
-}
-
-.storage-item {
-  overflow: hidden;
-}
-.storage-item:hover {
-  cursor: pointer;
-}
-.storage-item .card:active {
-  transform: scale(0.9);
 }
 
 .menu-title {

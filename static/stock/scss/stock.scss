@@ -36,6 +36,22 @@ $cBorder: #dfdfdf;
   }
 }
 
+.storage {
+  &__card {
+    transition: all 0.3s;
+    &:hover {
+      cursor: pointer;
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+
+  &__text {
+    font-size: 15px;
+  }
+}
+
 .get-data {
   &:hover {
     cursor: pointer;
@@ -86,20 +102,6 @@ $cBorder: #dfdfdf;
     cursor: pointer;
   }
 }
-
-.storage-item {
-  overflow: hidden;
-  &:hover {
-    cursor: pointer;
-  }
-  & .card {
-    &:active {
-      transform: scale(0.9);
-    }
-  }
-}
-
-
 
 .menu-title {
     font-size: 20px;
