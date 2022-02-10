@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 router.register(r'option', views.OptionViewSet)
 router.register(r'base', views.BaseViewSet)
 router.register(r'storage', views.StorageItemViewSet)
+router.register(r'kittingPlan', views.KittingPlanViewSet)
 router.register(r'orderItem', views.OrderItemViewSet)
 router.register(r'storageCart', views.StorageCartViewSet)
 router.register(r'approve', views.ApproveViewSet)
@@ -27,5 +28,7 @@ urlpatterns = [
 	path('remove_item/<int:pk>', views.remove_cart, name='remove_cart'),
 	path('approve/', views.ApproveView.as_view(), name='approve'),
 	path('approve_create/', views.ApproveCreateView.as_view(), name='approve_create'),
-	path('approve_update/<int:pk>', views.ApproveUpdateView.as_view(), name='approve_update')
+	path('approve_update/<int:pk>', views.ApproveUpdateView.as_view(), name='approve_update'),
+	path('add_orderInfo/', views.add_order_info, name='add_order_info'),
+	path('confirm/<int:pk>', views.ConfirmView.as_view(), name='confirm')
 ]

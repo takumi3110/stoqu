@@ -1,5 +1,3 @@
-# -*- cording:utf-8 -*-
-
 from rest_framework import serializers
 
 from .models import *
@@ -18,6 +16,12 @@ class BaseSerializer(serializers.ModelSerializer):
 		fields = ('name',)
 
 
+class KittingPlanSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = KittingPlan
+		fields = ('id', 'name', 'price')
+
+
 class StorageItemSerializer(serializers.ModelSerializer):
 	item = PCDetailSerializer()
 	# option = OptionSerializer()
@@ -31,7 +35,7 @@ class StorageItemSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = OrderItem
-		fields = ('storage_item', 'quantity', 'ordered', 'kitting_plan')
+		fields = ('id', 'storage_item', 'quantity', 'ordered', 'due_at', 'kitting_plan', 'requester')
 
 
 class StorageCartSerializer(serializers.ModelSerializer):
@@ -49,4 +53,4 @@ class ApproveSerializer(serializers.ModelSerializer):
 class OrderInfoSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = OrderInfo
-		fields = ('number', 'ticket', 'storage_cart', 'approve', 'requester', 'contact_user', 'ordered_at', 'ordered')
+		fields = ('number', 'ticket', 'storage_cart', 'approve', 'requester', 'contact_user', 'ordered_at')

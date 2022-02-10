@@ -11,43 +11,57 @@ import datetime
 
 from .models import *
 from device.models import *
-from .serializer import *
+from .serializers import *
 from .forms import *
+from .filters import *
 
 
 class OptionViewSet(viewsets.ModelViewSet):
 	queryset = Option.objects.all()
 	serializer_class = OptionSerializer
+	filter_class = OptionFilter
 
 
 class BaseViewSet(viewsets.ModelViewSet):
 	queryset = Base.objects.all()
 	serializer_class = BaseSerializer
+	filter_class = BaseFilter
 
 
 class StorageItemViewSet(viewsets.ModelViewSet):
 	queryset = StorageItem.objects.all()
 	serializer_class = StorageItemSerializer
+	filter_class = StorageItemFilter
 
 
 class StorageCartViewSet(viewsets.ModelViewSet):
 	queryset = StorageCart.objects.all()
 	serializer_class = StorageCartSerializer
+	filter_class = StorageCartFilter
+
+
+class KittingPlanViewSet(viewsets.ModelViewSet):
+	queryset = KittingPlan.objects.all()
+	serializer_class = KittingPlanSerializer
+	filter_class = KittingPlanFilter
 
 
 class OrderItemViewSet(viewsets.ModelViewSet):
 	queryset = OrderItem.objects.all()
 	serializer_class = OrderItemSerializer
+	filter_class = OrderItemFilter
 
 
 class ApproveViewSet(viewsets.ModelViewSet):
 	queryset = Approve.objects.all()
 	serializer_class = ApproveSerializer
+	filter_class = ApproveFilter
 
 
 class OrderInfoViewSet(viewsets.ModelViewSet):
 	queryset = OrderInfo.objects.all()
 	serializer_class = OrderInfoSerializer
+	filter_class = OrderInfoFilter
 
 
 class StorageItemListView(LoginRequiredMixin, ListView):
@@ -121,7 +135,8 @@ def get_obj(resource, request, pk):
 		item = get_object_or_404(StorageItem, pk=pk)
 		order_item, created = OrderItem.objects.get_or_create(
 			storage_item=item,
-			ordered=False
+			ordered=False,
+			requester=request.user
 		)
 	else:
 		order_item = get_object_or_404(OrderItem, pk=pk)
@@ -164,6 +179,7 @@ def add_item(request, pk):
 			requester=request.user,
 		)
 		storage_cart.order_item.add(order_item)
+		storage_cart.save()
 	return redirect('stock:cart')
 
 
@@ -215,8 +231,8 @@ def remove_cart(request, pk):
 		for cart in cart_list:
 			cart_items = cart.order_item.all().count()
 			if cart_items == 1:
-				cart.delete()
 				order_item.delete()
+				cart.delete()
 			else:
 				order_item.delete()
 	else:
@@ -227,8 +243,10 @@ def remove_cart(request, pk):
 class ApproveView(LoginRequiredMixin, TemplateView):
 
 	def get(self, request, *args, **kwargs):
+		api_url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/'
 		cart = StorageCart.objects.get(requester=request.user, ordered=False)
 		approve = Approve.objects.filter(requester=request.user).last()
+		kitting_plan = KittingPlan.objects.all()
 		order_item_list = cart.order_item.all()
 		for order_item in order_item_list:
 			if order_item.kitting_plan is None:
@@ -236,7 +254,9 @@ class ApproveView(LoginRequiredMixin, TemplateView):
 				order_item.kitting_plan = kitting_plan
 				order_item.save()
 		context = {
-			'cart': cart
+			'cart': cart,
+			'kitting_plan': kitting_plan,
+			'api_url': api_url
 		}
 		if approve is not None:
 			context['approve'] = approve
@@ -257,6 +277,52 @@ class ApproveUpdateView(LoginRequiredMixin, BSModalUpdateView):
 	template_name = 'snippets/update_modal.html'
 	form_class = ApproveBSModalForm
 	success_url = reverse_lazy('stock:approve')
+
+
+@login_required()
+def add_order_info(request):
+	"""
+	approve画面から確定でorder_infoに登録する
+	:param request:
+	:param pk:
+	:return:
+	"""
+	approve = Approve.objects.get(requester=request.user)
+	cart = StorageCart.objects.get(requester=request.user, ordered=False)
+	date = datetime.datetime.now()
+	str_date = date.strftime('%Y%m%d')
+	order_info_obj = OrderInfo.objects.all().last()
+	if order_info_obj is not None:
+		if str_date in order_info_obj.number:
+			old_branch = order_info_obj.number.split('-')[1]
+			order_branch = int(old_branch) + 1
+		else:
+			order_branch = 1
+	else:
+		order_branch = 1
+	number = str_date + '-' + str(order_branch)
+	order_info, update = OrderInfo.objects.update_or_create(
+		number=number,
+		requester=request.user,
+		approve=approve,
+		storage_cart=cart,
+	)
+	for order_item in cart.order_item.all():
+		order_item.ordered = True
+		order_item.save()
+	cart.ordered = True
+	cart.save()
+	return redirect('stock:confirm', order_info.pk)
+
+
+class ConfirmView(LoginRequiredMixin, TemplateView):
+	template_name = 'stock/confirm.html'
+
+	def get_context_data(self, *args, **kwargs):
+		context = super(ConfirmView, self).get_context_data(**kwargs)
+		order_info = OrderInfo.objects.get(pk=kwargs['pk'])
+		context['order_info'] = order_info
+		return context
 
 
 def create_storage_data(request):

@@ -53,7 +53,7 @@
 				</div>
 				<div class="row mt-2">
 					<div class="col-4">
-						<span class="menu-title">3 商品の確認</span>
+						<span class="menu-title">3 商品とお届け情報の確認</span>
 					</div>
 				</div>
 				<div class="row">
@@ -62,11 +62,13 @@
 							<div class="card-body">
 								<div class="row">
 									<p class="schedule">お届け予定日：
-										{% if order_item.due_at is not None %}
-											{{ order_item.due_at }}
-										{% else %}
-											お問い合わせください
-										{% endif %}
+										<span class="schedule-date{{ order_item.pk }}">
+											{% if order_item.due_at is not None %}
+												{{ order_item.due_at }}
+											{% else %}
+												お問い合わせください
+											{% endif %}
+										</span>
 									</p>
 									<div class="col-2">
 										<img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ order_item.storage_item }}"
@@ -77,24 +79,30 @@
 										<p class="item-price mb-1">￥{{ order_item.pk | total_price | intcomma}}</p>
 										<p class="mb-1">
 	                                        数量：
-	                                        <button type="button" class="btn btn-secondary"
+	                                        <button type="button" class="btn btn-sm btn-secondary"
 	                                                onclick="location.href='{% url "stock:reduce_cart" order_item.pk %}'">-</button>
 	                                        {{ order_item.quantity }}
-	                                        <button type="button" class="btn btn-secondary"
+	                                        <button type="button" class="btn btn-sm btn-secondary"
 	                                                onclick="location.href='{% url "stock:add_item" order_item.storage_item.pk %}'">+</button>
 	                                    </p>
 									</div>
 									<div class="col-5">
 										<p class="item-name">キッティングオプション</p>
-										<div class="form-check">
-											<label for="normalKitting{{ order_item.pk }}">通常キッティング　￥4,0000</label>
-											<input type="radio" class="form-check-input" name="kittingSelect{{ order_item.pk }}"
-											       id="normalKitting{{ order_item.pk }}" checked>
-										</div>
-										<div class="form-check">
-											<label for="specialKitting{{ order_item.pk }}">お急ぎ便　￥8,000</label>
-											<input type="radio" class="form-check-input" name="kittingSelect{{ order_item.pk }}" id="specialKitting{{ order_item.pk }}">
-										</div>
+										<form action="#" method="post">
+											{% csrf_token %}
+											{% for plan in kitting_plan %}
+												<div class="form-check">
+													<label for="kittingPlan{{ plan.pk }}_{{ order_item.pk }}">
+														{{ plan.name }}￥{{ plan.price | intcomma }}
+													</label>
+													<input type="radio" class="form-check-input select-plan" id="kittingPlan{{ plan.pk }}_{{ order_item.pk }}"
+													       name="kittingSelect{{ order_item.pk }}" value="{{ plan.price }}"
+															{% if plan.pk == order_item.kitting_plan.pk %}
+																checked
+															{% endif %}>
+												</div>
+											{% endfor %}
+										</form>
 									</div>
 								</div>
 							</div>
@@ -103,29 +111,31 @@
 				</div>
 			</div>
 			<div class="col-3">
-				<div class="card">
+				<div class="card approve-card">
 					<div class="card-body">
 						<div class="row bottom-border">
-							<button type="button" class="btn btn-warning my-3"
+							<button type="button" class="btn btn-warning my-3" id="confirm"
 							        {% if approve is None %}disabled{% endif %}>
 								注文を確定
 							</button>
 						</div>
 						<div class="row bottom-border mb-3">
-							<p class="confirm-text">注文内容</p>
+							<p><span class="confirm-text">注文内容</span>(税込み)</p>
 							<p class="mb-1">
 								商品の小計：
 								<span class="confirm-price float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
 							</p>
 							<p class="mb-1">
 								キッティング費用：
-								<span class="confirm-price float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
+								<span class="confirm-price float-end">￥
+									<span class="total-kitting-price">{{ request.user | storage_kitting_price | intcomma }}</span>
+								</span>
 							</p>
 						</div>
 						<div class="row bottom-border mb-3">
 							<p class="confirm-text total-price">
 								ご請求額：
-								<span class="float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
+								<span class="float-end">￥{{ request.user | storage_total_price | intcomma }}</span>
 							</p>
 						</div>
 					</div>
@@ -139,6 +149,10 @@
 {% block javascript %}
 
 	<script type="text/javascript">
+		const confirm = document.querySelector('#confirm');
+        const next_url = "{% url 'stock:add_order_info' %}"
+        linkClick(confirm, next_url);
+
 		$(function() {
             $(".create-approve").each(function () {
                 $(this).modalForm({formURL: "{% url 'stock:approve_create' %}"});
@@ -154,9 +168,49 @@
 		$("#modal").on('show.bs.modal', function() {
             const form = document.querySelector('form');
 	        form.addEventListener("submit", event =>
-		    event.target.querySelectorAll("input:disabled, select:disabled").forEach(e => e.disabled = false)
-	    );
+		        event.target.querySelectorAll("input:disabled, select:disabled").forEach(e => e.disabled = false)
+	        );
 		});
+
+        //ajax
+        const kittingPrice = document.querySelector('.total-kitting-price');
+        const selectPlan = document.querySelectorAll('.select-plan');
+		{% for order_item in cart.order_item.all %}
+			const scheduleDate{{ order_item.pk }} = document.querySelector('.schedule-date{{ order_item.pk }}');
+			const url{{ order_item.pk }} = "{{ api_url }}{{ order_item.pk }}/";
+            {% for plan in kitting_plan %}
+                let checkId{{ plan.pk }}_{{ order_item.pk }} = '#kittingPlan{{ plan.pk }}_{{ order_item.pk }}';
+                let data{{ plan.pk }}_{{ order_item.pk }} = {
+                    storage_item: {{ order_item.storage_item.pk }},
+                    quantity: {{ order_item.quantity }},
+                    requester: {{ request.user.pk }},
+                    kitting_plan: {{ plan.pk }}
+                }
+	            const changeRadio{{ plan.pk }}_{{ order_item.pk }} = document.querySelector(
+                    checkId{{ plan.pk }}_{{ order_item.pk }}
+	            );
+                changeRadio{{ plan.pk }}_{{ order_item.pk }}.addEventListener('click', function() {
+                    const init = makeInit(data{{ plan.pk }}_{{ order_item.pk }})
+                    put(url{{ order_item.pk }}, init, scheduleDate{{ order_item.pk }});
+                    changePrice(selectPlan, kittingPrice, {{ order_item.quantity }});
+                });
+            {% endfor %}
+        {% endfor %}
+        async function put(url, init, el) {
+            await fetch(url, init)
+	            .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw Error();
+                    }
+	            })
+	            .then(data => {
+                    const schedule = formatDate(data.due_at, 'YYYY年MM月DD日');
+                    el.innerHTML = '';
+                    el.innerHTML = schedule;
+	            })
+        }
 
 
 	</script>

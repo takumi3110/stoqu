@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load extras %}
+{% load humanize %}
+
+{% block content %}
+
+	<div class="container my-5">
+        <div class="row page-title">
+            <h2 class="title-text">依頼が確定しました！(受注番号：{{ order_info.number }})</h2>
+        </div>
+        <div class="row">
+            <h4>以下の内容で依頼を承りました。</h4>
+        </div>
+        <div class="row mt-5">
+            <div class="card col-md-9">
+                <div class="card-body">
+                    <h5 class="font-weight-bold border-bottom mb-3">費用承認者情報</h5>
+                    <p class="mb-1">部門コード：{{ order_info.approve.dept_code }}</p>
+                    <p class="mb-1">部門名：{{ order_info.approve.dept_name }}</p>
+                    <p class="mb-1">承認者氏名：{{ order_info.approve.last_name }}{{ order_info.approve.first_name }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+	            <button class="btn btn-warning btn-block" id="kittingTrue">キッティング依頼に進む</button>
+	            <button class="btn btn-outline-dark btn-block" id="kittingTrue">TOPに戻る</button>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="card col-md-9">
+                <div class="card-body">
+                    <h5 class="font-weight-bold border-bottom mb-3">依頼PC</h5>
+                    {% for order_item in order_info.storage_cart.order_item.all %}
+	                    <div class="border-bottom">
+	                        <p class="mb-1">メーカー：{{ order_item.storage_item.item.pc.maker }}</p>
+	                        <p class="mb-1">モデル名：{{ order_item.storage_item.item.pc.name }}</p>
+	                        <p class="mb-1">
+	                            数量：{{ order_item.quantity }}
+	                        </p>
+	                        <p><span class="font-weight-bold">価格：</span>￥{{ order_item.pk | total_price | intcomma }}(税込み)</p>
+	                        <p class="font-weight-bold">オプション</p>
+	                        {% for option in order_item.storage_item.option.all %}
+	                            <p>{{ option.name }}</p>
+                            {% endfor %}
+	                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}

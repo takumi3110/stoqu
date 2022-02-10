@@ -1,8 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Passion+One&display=swap");
-.main-title {
+.navigation {
+  height: 100px;
+  text-align: center;
+}
+.navigation__title {
   font-family: "Passion One", cursive;
   font-size: 40px;
-  letter-spacing: -2px;
+  letter-spacing: 3px;
+}
+.navigation__requester {
+  font-size: 15px;
+}
+.navigation__item {
+  display: block;
+  text-decoration: none;
 }
 
 .get-data:hover {
@@ -58,16 +69,6 @@
   transform: scale(0.9);
 }
 
-.navigation {
-  background-color: darkgray;
-  color: dimgray;
-  height: 100px;
-  text-align: center;
-}
-.navigation .navigation-item {
-  border-bottom: dimgray solid;
-}
-
 .menu-title {
   font-size: 20px;
   font-weight: bold;
@@ -94,14 +95,61 @@
   font-weight: bold;
 }
 
+.cart-card .bottom-border {
+  border-bottom: thin solid #dfdfdf;
+}
+.cart-card .cart-header {
+  position: relative;
+}
+.cart-card .cart-header .cart-title {
+  font-size: 30px;
+  font-width: bold;
+}
+.cart-card .cart-header .cart-price-name {
+  position: absolute;
+  margin-bottom: 0;
+  text-align: right;
+  bottom: 0;
+}
+.cart-card .cart-item p {
+  margin-bottom: -2px;
+}
+.cart-card .cart-item-title {
+  font-size: 25px;
+  font-weight: bold;
+}
+.cart-card .cart-item-location {
+  font-size: 15px;
+  color: green;
+}
+.cart-card .cart-price {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.cart-total p {
+  margin-bottom: -2px;
+  text-align: left;
+}
+
+.cart-total-title {
+  font-size: 20px;
+}
+.cart-total-title .cart-total-price {
+  font-weight: bold;
+}
+.cart-total-title .cart-end {
+  text-align: right;
+}
+
 .approve-menu {
   border-bottom: thin solid #dfdfdf;
 }
 
-.card-body .bottom-border {
+.approve-card .bottom-border {
   border-bottom: thin solid #dfdfdf;
 }
-.card-body .bottom-border:last-child {
+.approve-card .bottom-border:last-child {
   border-bottom: none;
 }
 

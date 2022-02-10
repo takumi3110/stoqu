@@ -3,10 +3,26 @@
 
 $cBorder: #dfdfdf;
 
-.main-title {
+.navigation {
+  //background-color: #131921;
+  //color: white;
+  height: 100px;
+  text-align: center;
+
+  &__title {
     font-family: 'Passion One', cursive;
     font-size: 40px;
-    letter-spacing: -2px;
+    letter-spacing:3px;
+  }
+
+  &__requester {
+    font-size: 15px;
+  }
+
+  &__item {
+    display: block;
+    text-decoration: none;
+  }
 }
 
 .get-data {
@@ -72,16 +88,7 @@ $cBorder: #dfdfdf;
   }
 }
 
-.navigation {
-  background-color: darkgray;
-  color: dimgray;
-  height: 100px;
-  text-align: center;
-  & .navigation-item {
 
-    border-bottom: dimgray solid;
-  }
-}
 
 .menu-title {
     font-size: 20px;
@@ -112,12 +119,74 @@ $cBorder: #dfdfdf;
   }
 }
 
+.cart-card {
+  & .bottom-border {
+    border-bottom: thin solid $cBorder;
+  }
+
+  & .cart-header {
+    position: relative;
+    & .cart-title {
+      font-size: 30px;
+      font-width: bold;
+    }
+
+    & .cart-price-name {
+      position: absolute;
+      margin-bottom: 0;
+      text-align: right;
+      bottom: 0;
+    }
+  }
+
+  & .cart-item {
+    & p {
+      margin-bottom: -2px;
+    }
+  }
+
+  & .cart-item-title {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  & .cart-item-location {
+    font-size: 15px;
+    color: green;
+  }
+
+  & .cart-price {
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
+
+.cart-total {
+  & p {
+    margin-bottom: -2px;
+    text-align: left;
+  }
+}
+
+.cart-total-title {
+  font-size: 20px;
+
+  & .cart-total-price {
+    font-weight: bold;
+  }
+
+  & .cart-end {
+    text-align: right;
+  }
+}
+
+
 .approve-menu {
   border-bottom: thin solid $cBorder;
 }
 
-.card-body {
-  .bottom-border {
+.approve-card {
+  & .bottom-border {
     border-bottom: thin solid $cBorder;
 
     &:last-child {
@@ -134,4 +203,3 @@ $cBorder: #dfdfdf;
     color: orangered;
   }
 }
-
