@@ -4,9 +4,6 @@
 $cBorder: #dfdfdf;
 
 .navigation {
-  //background-color: #131921;
-  //color: white;
-  height: 100px;
   text-align: center;
 
   &__title {
@@ -15,13 +12,43 @@ $cBorder: #dfdfdf;
     letter-spacing:3px;
   }
 
-  &__requester {
-    font-size: 15px;
+  &__text {
+    margin-bottom: 1px;
   }
 
   &__item {
-    display: block;
-    text-decoration: none;
+    font-weight: bold;
+    width: 120px;
+    height: 100px;
+    padding: 2px;
+    &:hover {
+      border: solid 2px white;
+      cursor: pointer;
+    }
+  }
+
+  &__cancel {
+    font-size: 10px;
+  }
+
+  &__search {
+    width: 600px;
+  }
+}
+
+.storage {
+  &__card {
+    transition: all 0.3s;
+    &:hover {
+      cursor: pointer;
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+
+  &__text {
+    font-size: 15px;
   }
 }
 
@@ -75,20 +102,6 @@ $cBorder: #dfdfdf;
     cursor: pointer;
   }
 }
-
-.storage-item {
-  overflow: hidden;
-  &:hover {
-    cursor: pointer;
-  }
-  & .card {
-    &:active {
-      transform: scale(0.9);
-    }
-  }
-}
-
-
 
 .menu-title {
     font-size: 20px;
