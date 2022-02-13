@@ -335,10 +335,23 @@ class OrderInfo(models.Model):
 		blank=True
 	)
 
+	completed_delivery = models.BooleanField(
+		verbose_name='納品済み',
+		default=False
+	)
+
+	delivery_date = models.DateTimeField(
+		verbose_name='納品日',
+		null=True,
+		blank=True
+	)
+
 	def save(self, *args, **kwargs):
 		if not self.id:
 			self.ordered_at = timezone.now()
 		self.updated_at = timezone.now()
+		if self.delivery_date is not None:
+			self.completed_delivery = True
 		return super(OrderInfo, self).save(*args, **kwargs)
 
 	def __str__(self):
