@@ -216,3 +216,32 @@ $cBorder: #dfdfdf;
     color: orangered;
   }
 }
+
+.confirm {
+  background-color: lightslategrey;
+
+  &__title {
+    color: teal;
+  }
+
+  &__address {
+    border-bottom: thin solid $cBorder;
+    & .address {
+      font-weight: bold;
+    }
+  }
+
+  &__schedule {
+    font-weight: bold;
+    color: green;
+  }
+
+  &__image {
+    width: 100px;
+    height: 100px;
+  }
+
+  &__kitting_btn {
+    width: 100%;
+  }
+}

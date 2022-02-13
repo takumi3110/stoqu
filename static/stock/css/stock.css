@@ -1,0 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=Passion+One&display=swap");
+.navigation {
+  text-align: center;
+}
+.navigation__title {
+  font-family: "Passion One", cursive;
+  font-size: 40px;
+  letter-spacing: 3px;
+}
+.navigation__text {
+  margin-bottom: 1px;
+}
+.navigation__item {
+  font-weight: bold;
+  width: 120px;
+  height: 100px;
+  padding: 2px;
+}
+.navigation__item:hover {
+  border: solid 2px white;
+  cursor: pointer;
+}
+.navigation__cancel {
+  font-size: 10px;
+}
+.navigation__search {
+  width: 600px;
+}
+
+.storage__card {
+  transition: all 0.3s;
+}
+.storage__card:hover {
+  cursor: pointer;
+}
+.storage__card:active {
+  transform: scale(0.9);
+}
+.storage__text {
+  font-size: 15px;
+}
+
+.get-data:hover {
+  cursor: pointer;
+  box-shadow: gray;
+}
+
+.detail-img {
+  width: 500px;
+  height: 300px;
+}
+
+.detail-item {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.detail-table .spec-header {
+  font-size: 25px;
+  height: 70px;
+}
+.detail-table .td-spec {
+  font-weight: bold;
+  height: 50px;
+}
+.detail-table .down-allow {
+  text-align: right;
+}
+.detail-table .down-allow:hover {
+  cursor: pointer;
+}
+
+.card-img-cart {
+  width: 350px;
+  height: 270px;
+}
+
+.item-table:hover {
+  cursor: pointer;
+}
+
+.item-card:hover {
+  cursor: pointer;
+}
+
+.menu-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.approve-item {
+  border-radius: 10px;
+}
+.approve-item .schedule {
+  color: forestgreen;
+  font-size: 25px;
+  font-weight: bold;
+}
+.approve-item .item-img {
+  width: 120px;
+  height: 120px;
+}
+.approve-item .item-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+.approve-item .item-price {
+  color: orangered;
+  font-weight: bold;
+}
+
+.cart-card .bottom-border {
+  border-bottom: thin solid #dfdfdf;
+}
+.cart-card .cart-header {
+  position: relative;
+}
+.cart-card .cart-header .cart-title {
+  font-size: 30px;
+  font-width: bold;
+}
+.cart-card .cart-header .cart-price-name {
+  position: absolute;
+  margin-bottom: 0;
+  text-align: right;
+  bottom: 0;
+}
+.cart-card .cart-item p {
+  margin-bottom: -2px;
+}
+.cart-card .cart-item-title {
+  font-size: 25px;
+  font-weight: bold;
+}
+.cart-card .cart-item-location {
+  font-size: 15px;
+  color: green;
+}
+.cart-card .cart-price {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.cart-total p {
+  margin-bottom: -2px;
+  text-align: left;
+}
+
+.cart-total-title {
+  font-size: 20px;
+}
+.cart-total-title .cart-total-price {
+  font-weight: bold;
+}
+.cart-total-title .cart-end {
+  text-align: right;
+}
+
+.approve-menu {
+  border-bottom: thin solid #dfdfdf;
+}
+
+.approve-card .bottom-border {
+  border-bottom: thin solid #dfdfdf;
+}
+.approve-card .bottom-border:last-child {
+  border-bottom: none;
+}
+
+.confirm-text {
+  font-size: 20px;
+  font-weight: bold;
+}
+.confirm-text.total-price {
+  color: orangered;
+}
+
+.confirm {
+  background-color: lightslategrey;
+}
+.confirm__title {
+  color: teal;
+}
+.confirm__address {
+  border-bottom: thin solid #dfdfdf;
+}
+.confirm__address .address {
+  font-weight: bold;
+}
+.confirm__schedule {
+  font-weight: bold;
+  color: green;
+}
+.confirm__image {
+  width: 100px;
+  height: 100px;
+}
+.confirm__kitting_btn {
+  width: 100%;
+}
+
+/*# sourceMappingURL=stock.css.map */
