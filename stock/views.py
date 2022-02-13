@@ -324,6 +324,16 @@ class ConfirmView(LoginRequiredMixin, TemplateView):
 		return context
 
 
+class MyOrderInfoView(LoginRequiredMixin, ListView):
+	model = OrderInfo
+	template_name = 'stock/order_info_mypage.html'
+
+	def get_queryset(self, *args, **kwargs):
+		queryset = super(MyOrderInfoView, self).get_queryset()
+		qs = queryset.filter(requester=self.request.user)
+		return qs
+
+
 def create_storage_data(request):
 	"""
 	データ取り込み用
