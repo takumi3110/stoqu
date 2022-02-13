@@ -284,7 +284,6 @@ def add_order_info(request):
 	"""
 	approve画面から確定でorder_infoに登録する
 	:param request:
-	:param pk:
 	:return:
 	"""
 	approve = Approve.objects.get(requester=request.user)
