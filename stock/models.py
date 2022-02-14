@@ -94,8 +94,8 @@ class StorageItem(models.Model):
 		verbose_name='在庫拠点',
 	)
 
-	delivery_at = models.DateField(
-		verbose_name='納品日',
+	registration_at = models.DateField(
+		verbose_name='登録日',
 		null=True,
 		blank=True
 	)
@@ -107,11 +107,14 @@ class StorageItem(models.Model):
 	)
 
 	def save(self, *args, **kwargs):
-		super().save(*args, **kwargs)
+		if self.registration_at is None and not self.id:
+			self.registration_at = timezone.now()
 		self.total_price = self.price
-		for option in self.option.all():
-			self.total_price += option.price
-		super().save(*args, **kwargs)
+		super(StorageItem, self).save(*args, **kwargs)
+		if self.id is not None:
+			for option in self.option.all():
+				self.total_price += option.price
+		super(StorageItem, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.item} ({self.base})'
@@ -352,7 +355,7 @@ class OrderInfo(models.Model):
 		self.updated_at = timezone.now()
 		if self.delivery_date is not None:
 			self.completed_delivery = True
-		return super(OrderInfo, self).save(*args, **kwargs)
+		super(OrderInfo, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return f'{self.number}'

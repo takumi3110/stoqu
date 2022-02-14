@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 from django import forms
 from bootstrap_modal_forms.forms import BSModalModelForm
 
@@ -14,7 +12,7 @@ class StorageItemBSModalForm(BSModalModelForm):
 
 	class Meta:
 		model = StorageItem
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_at', 'remarks')
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'registration_at', 'remarks')
 
 
 class StorageItemUpdateBSModalForm(BSModalModelForm):
@@ -26,7 +24,7 @@ class StorageItemUpdateBSModalForm(BSModalModelForm):
 
 	class Meta:
 		model = StorageItem
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_at', 'remarks')
+		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'registration_at', 'remarks')
 
 
 class OptionCreateBSModalForm(BSModalModelForm):
