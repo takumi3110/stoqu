@@ -339,6 +339,11 @@ class OrderInfoDetailView(LoginRequiredMixin, DetailView):
 	template_name = 'stock/orderinfo_detail.html'
 
 
+class OrderInfoSelectView(LoginRequiredMixin, DetailView):
+	model = OrderInfo
+	template_name = 'stock/orderinfo_delete_select.html'
+
+
 def create_storage_data(request):
 	"""
 	データ取り込み用
