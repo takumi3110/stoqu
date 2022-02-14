@@ -360,7 +360,6 @@ def create_storage_data(request):
 		# category, numpad
 		category_numpad_size = get_category_and_numpad_and_size(b_value)
 		category = category_numpad_size['category']
-		numpad = category_numpad_size['numpad']
 		size = category_numpad_size['size']
 		# maker, name
 		split_name = item_name.split(' ')
@@ -383,7 +382,6 @@ def create_storage_data(request):
 				cpu_id=1,
 				storage_id=2,
 				size=size,
-				numpad=numpad,
 			)
 			get_base = Base.objects.get_or_create(
 				name=base
@@ -394,7 +392,7 @@ def create_storage_data(request):
 				item=pc_detail[0],
 				price=price,
 				base=get_base[0],
-				delivery_date=delivery_date,
+				registration_at=delivery_date,
 			)
 			if create_storage:
 				stock_storage.quantity = 1
