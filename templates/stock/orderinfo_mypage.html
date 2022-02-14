@@ -30,7 +30,7 @@
                                 <div class="col-3">
                                     <p class="text-right header-text">受注番号 {{ order_info.number }}</p>
                                     <p class="text-right">
-                                        <a href="#">依頼内容を表示</a>
+                                        <a href="{% url 'stock:order_info_detail' order_info.pk %}">依頼内容を表示</a>
                                     </p>
                                 </div>
                             </div>
