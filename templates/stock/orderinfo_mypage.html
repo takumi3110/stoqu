@@ -21,7 +21,7 @@
                                 </div>
                                 <div class="col-2">
                                     <p class="header-text">合計金額(税込み)</p>
-                                    <p>￥{{ order_info.storage_cart.price | intcomma }}</p>
+                                    <p>￥{{ order_info.storage_cart.pk | result_price | intcomma }}</p>
                                 </div>
                                 <div class="col-4">
                                     <p class="header-text">お届け先</p>
@@ -75,11 +75,13 @@
                                 </div>
                                 <div class="col-md-3">
 	                                <div class="row mb-2">
-	                                    <button class="btn btn-outline-secondary history__button">ステータスを確認</button>
+	                                    <button class="btn btn-warning history__button">ステータスを確認</button>
 	                                </div>
-	                                <div class="row">
-		                                <button class="btn btn-outline-secondary history__button">依頼をキャンセル</button>
-	                                </div>
+	                                {% if order_info.completed_delivery is False%}
+	                                    <div class="row">
+			                                <button class="btn btn-outline-secondary history__button">依頼をキャンセル</button>
+		                                </div>
+	                                {% endif %}
                                 </div>
                             </div>
                         </div>
