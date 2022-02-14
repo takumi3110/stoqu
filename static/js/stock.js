@@ -59,3 +59,17 @@ function linkClick(el, url) {
         location.href = url;
     });
 }
+
+function checkSelect(checkEl, el) {
+    const innerItem = document.querySelector('.select-item');
+    const nextBtn = document.querySelector('.next-btn');
+    checkEl.addEventListener('click', function() {
+        if (checkEl.checked) {
+            innerItem.innerHTML = el.innerHTML;
+            nextBtn.disabled = false;
+        } else {
+            innerItem.innerHTML = '';
+        }
+    });
+
+}
