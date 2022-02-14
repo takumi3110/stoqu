@@ -21,6 +21,15 @@ $cBorder: #dfdfdf;
     width: 120px;
     height: 100px;
     padding: 2px;
+
+    &.account-service {
+      width: 150px;
+    }
+
+    & .cart-icon {
+      font-size: 2.0rem;
+    }
+
     &:hover {
       border: solid 2px white;
       cursor: pointer;
