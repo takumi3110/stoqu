@@ -79,7 +79,7 @@
 	                                </div>
 	                                {% if order_info.completed_delivery is False%}
 	                                    <div class="row">
-			                                <button class="btn btn-outline-secondary history__button">依頼をキャンセル</button>
+			                                <button class="btn btn-outline-secondary history__button cancel-btn">依頼をキャンセル</button>
 		                                </div>
 	                                {% endif %}
                                 </div>
@@ -94,3 +94,13 @@
     </div>
 
 {% endblock %}
+
+{% block javascript %}
+
+	<script type="text/javascript">
+		const cancelBtn = document.querySelector('.cancel-btn');
+        {% for orderinfo in orderinfo_list %}
+            linkClick(cancelBtn, "{% url 'stock:delete_select' orderinfo.pk %}");
+        {% endfor %}
+	</script>
+{% endblock javascript %}
