@@ -62,6 +62,7 @@
 							<li><a class="dropdown-item" href="#">マイページ</a></li>
 							{% if user.is_superuser %}
 								<li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Page</a></li>
+								<li><a class="dropdown-item" href="{% url 'stock:get_data' %}">GET DATA</a></li>
 							{% endif %}
 							<li>
 								<hr class="dropdown-divider">
