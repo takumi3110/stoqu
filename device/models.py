@@ -144,11 +144,13 @@ class PCDetail(models.Model):
 
 	numpad = models.BooleanField(
 		verbose_name='テンキー',
+		default=False,
 		blank=True
 	)
 
 	lan = models.BooleanField(
 		verbose_name='有線LANポート',
+		default=False,
 		blank=True
 	)
 
@@ -191,10 +193,16 @@ class PCDetail(models.Model):
 				self.memory = 16
 			else:
 				self.memory = 8
-		if self.pc.category != '1':
+		if self.pc.category == '1':
+			self.camera = True
+			self.fingerprint = True
+			if self.size > 15:
+				self.numpad = False
+			else:
+				self.numpad = True
+		else:
 			self.camera = False
 			self.fingerprint = False
-			self.numpad = False
 			self.lan = True
 		super(PCDetail, self).save(*args, **kwargs)
 

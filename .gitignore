@@ -2,10 +2,9 @@
 venv
 *migrations
 diagram
-*__pycache__*
+__pycache__
 node_modules
 *lock
 
 stoqu/settings/hide_settings.py
 *.json
-*.pyc

@@ -284,7 +284,6 @@ def add_order_info(request):
 	"""
 	approve画面から確定でorder_infoに登録する
 	:param request:
-	:param pk:
 	:return:
 	"""
 	approve = Approve.objects.get(requester=request.user)
@@ -325,6 +324,16 @@ class ConfirmView(LoginRequiredMixin, TemplateView):
 		return context
 
 
+class MyOrderInfoView(LoginRequiredMixin, ListView):
+	model = OrderInfo
+	template_name = 'stock/order_info_mypage.html'
+
+	def get_queryset(self, *args, **kwargs):
+		queryset = super(MyOrderInfoView, self).get_queryset()
+		qs = queryset.filter(requester=self.request.user)
+		return qs
+
+
 def create_storage_data(request):
 	"""
 	データ取り込み用
@@ -351,7 +360,6 @@ def create_storage_data(request):
 		# category, numpad
 		category_numpad_size = get_category_and_numpad_and_size(b_value)
 		category = category_numpad_size['category']
-		numpad = category_numpad_size['numpad']
 		size = category_numpad_size['size']
 		# maker, name
 		split_name = item_name.split(' ')
@@ -374,7 +382,6 @@ def create_storage_data(request):
 				cpu_id=1,
 				storage_id=2,
 				size=size,
-				numpad=numpad,
 			)
 			get_base = Base.objects.get_or_create(
 				name=base
@@ -385,7 +392,7 @@ def create_storage_data(request):
 				item=pc_detail[0],
 				price=price,
 				base=get_base[0],
-				delivery_date=delivery_date,
+				registration_at=delivery_date,
 			)
 			if create_storage:
 				stock_storage.quantity = 1
