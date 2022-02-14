@@ -48,13 +48,24 @@
 				                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}" class="confirm__image">
 				                                    {% endif %}
                                                 </div>
-                                                <div class="col-md-8 mb-5">
-	                                                <a href="#">
-		                                                <span>
+                                                <div class="col-md-10 mb-5">
+	                                                <a href="{% url 'stock:storage_detail' order_item.storage_item.pk %}">
+		                                                <p class="mb-1">
 			                                                {{ order_item.storage_item.item }}
-		                                                </span>
-		                                                <span>メモリ： {{ order_item.storage_item.item.spec.memory }}</span>
-		                                                <span>ストレージ： {{ order_item.storage_item.item.spec.storage }}</span>
+		                                                </p>
+		                                                <p class="mb-1">
+			                                                <span>CPU：{{ order_item.storage_item.item.cpu }}</span>
+			                                                <span>メモリ：{{ order_item.storage_item.item.memory }}GB</span>
+			                                                <span>ストレージ：{{ order_item.storage_item.item.storage }}</span>
+		                                                </p>
+	                                                    <p>
+		                                                    付属品：
+			                                                {% for option in order_item.storage_item.option.all %}
+				                                                <span>{{ option }}</span>
+			                                                {% empty %}
+				                                                <span>なし</span>
+			                                                {% endfor %}
+		                                                </p>
 	                                                </a>
                                                     <p>数量： {{ order_item.quantity }}台</p>
                                                 </div>
@@ -63,7 +74,7 @@
                                     {% endfor %}
                                 </div>
                                 <div class="col-md-3">
-	                                <div class="row">
+	                                <div class="row mb-2">
 	                                    <button class="btn btn-outline-secondary history__button">ステータスを確認</button>
 	                                </div>
 	                                <div class="row">
