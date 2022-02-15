@@ -1,10 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load humanize %}
+
+{% block content %}
+
+	<div class="container delete-confirm my-5">
+		<div class="row">
+			<div class="col-9 offset-2">
+				<a href="{% url 'stock:my_order_info' %}">
+			        <i class="fas fa-long-arrow-alt-left"></i>依頼履歴に戻る
+		        </a>
+				<div class="card mt-3">
+					<div class="card-body">
+						<h3>
+							<i class="fa-solid fa-circle-info"></i>
+							以下の依頼をキャンセルしました。
+						</h3>
+						{% for order_item in order_item_list %}
+							<div class="row mt-3">
+								<div class="col-4 text-center">
+									{% if order_item.storage_item.item.pc.img.name == '' %}
+                                        <img src="/media/images/no_image_logo.png" alt="noimage">
+                                    {% else %}
+                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}">
+                                    {% endif %}
+								</div>
+								<div class="col-8">
+									<div class="row">
+										<span>{{ order_item.storage_item.item }}</span>
+										<span>CPU：{{ order_item.storage_item.item.cpu }}</span>
+										<span>メモリ：{{ order_item.storage_item.item.memory }}GB</span>
+										<span>ストレージ：{{ order_item.storage_item.item.storage }}</span>
+										<span>本体価格：￥{{ order_item.storage_item.total_price | intcomma }}</span>
+									</div>
+									<div class="row">
+										<span>数量：{{ order_item.quantity }}</span>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
