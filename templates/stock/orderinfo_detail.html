@@ -105,5 +105,13 @@
 		</div>
 	</div>
 
-
 {% endblock content %}
+
+{% block javascript %}
+
+	<script type="text/javascript">
+		const cancelBtn = document.querySelector('.cancel-btn');
+        linkClick(cancelBtn, "{% url 'stock:delete_select' orderinfo.pk %}");
+	</script>
+
+{% endblock javascript %}
