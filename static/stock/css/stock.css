@@ -16,6 +16,12 @@
   height: 100px;
   padding: 2px;
 }
+.navigation__item.account-service {
+  width: 150px;
+}
+.navigation__item .cart-icon {
+  font-size: 2rem;
+}
 .navigation__item:hover {
   border: solid 2px white;
   cursor: pointer;
@@ -197,6 +203,10 @@
 }
 .confirm__kitting_btn {
   width: 100%;
+}
+
+.order-detail__icon.selected {
+  transform: rotate(180deg);
 }
 
 /*# sourceMappingURL=stock.css.map */

@@ -250,8 +250,8 @@ class ApproveView(LoginRequiredMixin, TemplateView):
 		order_item_list = cart.order_item.all()
 		for order_item in order_item_list:
 			if order_item.kitting_plan is None:
-				kitting_plan = KittingPlan.objects.get(name='標準')
-				order_item.kitting_plan = kitting_plan
+				select_kitting = KittingPlan.objects.get(name='標準')
+				order_item.kitting_plan = select_kitting
 				order_item.save()
 		context = {
 			'cart': cart,
@@ -326,12 +326,40 @@ class ConfirmView(LoginRequiredMixin, TemplateView):
 
 class MyOrderInfoView(LoginRequiredMixin, ListView):
 	model = OrderInfo
-	template_name = 'stock/order_info_mypage.html'
+	template_name = 'stock/orderinfo_mypage.html'
 
 	def get_queryset(self, *args, **kwargs):
 		queryset = super(MyOrderInfoView, self).get_queryset()
-		qs = queryset.filter(requester=self.request.user)
+		qs = queryset.filter(requester=self.request.user).order_by('-pk')
 		return qs
+
+
+class OrderInfoDetailView(LoginRequiredMixin, DetailView):
+	model = OrderInfo
+	template_name = 'stock/orderinfo_detail.html'
+
+
+class OrderInfoSelectView(LoginRequiredMixin, DetailView):
+	model = OrderInfo
+	template_name = 'stock/orderinfo_delete_select.html'
+
+	def post(self, request, *args, **kwargs):
+		order_item_pks = request.POST.getlist('selectItem')
+		context = {
+			'order_item_list': []
+		}
+		for pk in order_item_pks:
+			order_item = OrderItem.objects.get(pk=pk)
+			context['order_item_list'].append(order_item)
+			order_item.storage_item.quantity += order_item.quantity
+			order_item.storage_item.save()
+			order_item.delete()
+		order_info = OrderInfo.objects.get(pk=kwargs['pk'])
+		order_item = order_info.storage_cart.order_item
+		if order_item is None:
+			order_info.storage_cart.delete()
+			order_info.delete()
+		return render(request, 'stock/orderinfo_delete.html', context)
 
 
 def create_storage_data(request):

@@ -52,7 +52,7 @@
 					</form>
 				</div>
 				<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item dropdown navigation__item">
+					<li class="nav-item dropdown navigation__item account-service">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 						   data-bs-toggle="dropdown" aria-expanded="false">
 							<p class="navigation__text">こんにちは、{{ user.last_name }}</p>
@@ -85,8 +85,8 @@
 					</li>
 					<li class="nav-item navigation__item">
 						<a class="nav-link" href="{% url 'stock:cart' %}">
-							<p class="navigation__text">カート</p>
-							<p class="navigation__text"><i class="fa-solid fa-cart-shopping"></i></p>
+							<span class="navigation__text cart-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+							<span class="navigation__text">カート</span>
 						</a>
 					</li>
 				</ul>

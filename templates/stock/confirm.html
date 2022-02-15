@@ -20,14 +20,14 @@
 					                <span class="address">依頼者 {{ order_info.requester.screenname }}</span>
 				                </p>
 				                <p class="bottom-border">
-					                 <span class="address">承認者 {{ order_info.approve.first_name }} {{ order_info.approve.last_name }}</span>
+					                 <span class="address">承認者 {{ order_info.approve.last_name }} {{ order_info.approve.first_name }}</span>
 					                {{ order_info.approve.dept_code }}, {{ order_info.approve.dept_name }}
 				                </p>
 		                    </div>
 		                    <div class="row mt-3">
 			                {% for order_item in order_info.storage_cart.order_item.all %}
 				                <div class="col-4">
-					                <span class="confirm__schedule">{{ order_item.due_at }}</span>
+					                <span class="confirm__schedule">お届け予定日 {{ order_item.due_at }}</span>
 				                </div>
 				                <div class="col-6">
 					                {% if order_item.storage_item.item.pc.img.name == '' %}

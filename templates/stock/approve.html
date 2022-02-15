@@ -71,8 +71,11 @@
 										</span>
 									</p>
 									<div class="col-2">
-										<img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ order_item.storage_item }}"
-										     class="item-img">
+										{% if order_item.storage_item.item.pc.img.name == '' %}
+	                                        <img src="/media/images/no_image_logo.png" alt="noimage" class="item-img">
+	                                    {% else %}
+	                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}" class="item-img">
+	                                    {% endif %}
 									</div>
 									<div class="col-5">
 										<p class="item-name mb-1">{{ order_item.storage_item }}</p>

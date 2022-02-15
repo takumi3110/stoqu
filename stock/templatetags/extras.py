@@ -11,14 +11,14 @@ def make_subtotal(cart):
 	:param cart:
 	:return all_price:
 	"""
-	subtotal_price = 0
+	price = 0
 	for order_item in cart.order_item.all():
 		item_price = order_item.storage_item.price
 		quantity = order_item.quantity
 		for option in order_item.storage_item.option.all():
 			item_price += option.price
-		subtotal_price += item_price * quantity
-	return subtotal_price
+		price += item_price * quantity
+	return price
 
 
 def add_tax(price):
@@ -74,18 +74,44 @@ def storage_kitting_price(user):
 	if user.is_authenticated:
 		cart_filter = StorageCart.objects.filter(requester=user, ordered=False)
 		if cart_filter.exists():
-			price = 0
+			result = 0
 			for cart in cart_filter:
 				for order_item in cart.order_item.all():
-					kitting_price = order_item.kitting_plan.price
-					price += kitting_price * order_item.quantity
-			return add_tax(price)
+					price = order_item.kitting_plan.price
+					result += price * order_item.quantity
+			return add_tax(result)
 
 
 @register.filter
 def storage_total_price(user):
 	if user.is_authenticated:
 		sub_total = storage_subtotal(user)
-		kitting_price = storage_kitting_price(user)
-		total = sub_total + kitting_price
+		price = storage_kitting_price(user)
+		total = sub_total + price
 		return total
+
+
+@register.filter
+def kitting_price(pk):
+	cart = StorageCart.objects.get(pk=pk)
+	result = 0
+	for order_item in cart.order_item.all():
+		price = order_item.kitting_plan.price
+		result += price * order_item.quantity
+	return add_tax(result)
+
+
+@register.filter
+def subtotal_price(pk):
+	cart = StorageCart.objects.get(pk=pk)
+	result = make_subtotal(cart)
+	return add_tax(result)
+
+
+@register.filter
+def result_price(pk):
+	cart = StorageCart.objects.get(pk=pk)
+	subtotal = make_subtotal(cart)
+	kitting = kitting_price(pk)
+	result = add_tax(subtotal) + kitting
+	return result

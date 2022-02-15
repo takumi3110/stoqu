@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const el = document.querySelector('.navigation__title');
     const str = el.innerHTML.trim().split("");
-
     el.innerHTML = str.reduce((acc, curr) => {
         curr = curr.replace(/\s+/, '&nbsp;');
         return `${acc}<span class="char">${curr}</span>`;
@@ -58,4 +57,45 @@ function linkClick(el, url) {
     el.addEventListener('click', function() {
         location.href = url;
     });
+}
+
+function checkSelect(checkEl, el) {
+    checkEl.addEventListener('click', function() {
+        const innerItem = document.querySelector('.select-item');
+        if (checkEl.checked) {
+            innerItem.innerHTML += el.innerHTML.trim();
+        } else if (innerItem.childElementCount > 1) {
+            let selectItem = document.querySelector('.select-item');
+            innerItem.innerHTML = selectItem.innerHTML.trim().replace(el.innerHTML.trim(), '');
+        } else {
+            innerItem.innerHTML = '';
+        }
+        deleteCheck();
+    });
+}
+
+function deleteCheck() {
+    const nextBtn = document.querySelector('.next-btn');
+    const checkList = document.querySelectorAll('.select-delete__check');
+    let flag = false;
+    checkList.forEach(function(val) {
+        if (val.checked) {
+            flag = true;
+        }
+    });
+    nextBtn.disabled = !flag;
+}
+
+class SelectDelete {
+    constructor(el) {
+        this.el = el;
+    }
+}
+
+function tradeCheck() {
+    const tradeHistory = document.querySelector('.order-detail__trade');
+    const icon = document.querySelector('.order-detail__icon');
+    tradeHistory.addEventListener('click', function() {
+        icon.classList.toggle('selected');
+    })
 }
