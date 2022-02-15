@@ -19,16 +19,16 @@
 								<div class="row mt-3">
 									<div class="form-check">
 										<div class="col-2">
-											<input type="checkbox" class="form-check-input" value="{{ order_item.pk }}"
+											<input type="checkbox" class="form-check-input select-delete__check" value="{{ order_item.pk }}"
 											       name="selectItem" id="selectItem{{ order_item.pk }}">
 										</div>
 										<div class="col-10">
 											<label for="selectItem{{ order_item.pk }}" class="form-check-label">
 												<span class="select-item__image{{ order_item.pk }}">
 			                                        {% if order_item.storage_item.item.pc.img.name == '' %}
-				                                        <img src="/media/images/no_image_logo.png" alt="noimage" class="confirm__image">
+				                                        <img src="/media/images/no_image_logo.png" alt="noimage_{{ order_item.storage_item.item }}" class="confirm__image">
 				                                    {% else %}
-				                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}" class="confirm__image">
+				                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ order_item.storage_item.item }}" class="confirm__image">
 				                                    {% endif %}
 												</span>
 												<span>{{ order_item.storage_item.item }}</span>
