@@ -4,57 +4,63 @@
 
 {% block content %}
 
-	<div class="container select-delete my-5">
-		<div class="row">
-			<div class="col-9">
-				<div class="card">
-					<div class="card-body">
-						<h3>キャンセルする商品を選択</h3>
-						{% for order_item in orderinfo.storage_cart.order_item.all %}
-							<div class="row mt-3">
-								<div class="form-check">
-									<div class="col-2">
-										<input type="checkbox" class="form-check-input" value="{{ order_item.pk }}"
-										       id="selectItem{{ order_item.pk }}">
-									</div>
-									<div class="col-10">
-										<label for="selectItem{{ order_item.pk }}" class="form-check-label">
-											<span class="select-item__image{{ order_item.pk }}">
-		                                        {% if order_item.storage_item.item.pc.img.name == '' %}
-			                                        <img src="/media/images/no_image_logo.png" alt="noimage" class="confirm__image">
-			                                    {% else %}
-			                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}" class="confirm__image">
-			                                    {% endif %}
-											</span>
-											<span>{{ order_item.storage_item.item }}</span>
-											<span>CPU：{{ order_item.storage_item.item.cpu }}</span>
-											<span>メモリ：{{ order_item.storage_item.item.memory }}GB</span>
-											<span>ストレージ：{{ order_item.storage_item.item.storage }}</span>
-											<span>￥{{ order_item.storage_item.total_price | intcomma }}</span>
-										</label>
+	<form action="#" method="post" name="selectDelete">
+	{% csrf_token %}
+		<div class="container select-delete my-5">
+			<div class="row">
+				 <a href="{% url 'stock:my_order_info' %}">
+			        <i class="fas fa-long-arrow-alt-left"></i>依頼履歴に戻る
+		        </a>
+				<div class="col-9">
+					<div class="card mt-3">
+						<div class="card-body">
+							<h3>キャンセルする商品を選択</h3>
+							{% for order_item in orderinfo.storage_cart.order_item.all %}
+								<div class="row mt-3">
+									<div class="form-check">
+										<div class="col-2">
+											<input type="checkbox" class="form-check-input" value="{{ order_item.pk }}"
+											       name="selectItem" id="selectItem{{ order_item.pk }}">
+										</div>
+										<div class="col-10">
+											<label for="selectItem{{ order_item.pk }}" class="form-check-label">
+												<span class="select-item__image{{ order_item.pk }}">
+			                                        {% if order_item.storage_item.item.pc.img.name == '' %}
+				                                        <img src="/media/images/no_image_logo.png" alt="noimage" class="confirm__image">
+				                                    {% else %}
+				                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}" class="confirm__image">
+				                                    {% endif %}
+												</span>
+												<span>{{ order_item.storage_item.item }}</span>
+												<span>CPU：{{ order_item.storage_item.item.cpu }}</span>
+												<span>メモリ：{{ order_item.storage_item.item.memory }}GB</span>
+												<span>ストレージ：{{ order_item.storage_item.item.storage }}</span>
+												<span>￥{{ order_item.storage_item.total_price | intcomma }}</span>
+											</label>
+										</div>
 									</div>
 								</div>
-							</div>
-						{% endfor %}
+							{% endfor %}
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-3">
-				<div class="card">
-					<div class="card-body">
-						<div class="row">
-							<button type="submit" class="btn btn-warning next-btn" disabled>次に進む</button>
-						</div>
-						<div class="row mt-5">
-							<p>返品する商品</p>
-							<div class="select-item">
+				<div class="col-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<button type="submit" class="btn btn-warning next-btn" disabled>次に進む</button>
+							</div>
+							<div class="row mt-5">
+								<p>キャンセルする商品</p>
+								<div class="select-item">
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 
 {% endblock content %}
 
