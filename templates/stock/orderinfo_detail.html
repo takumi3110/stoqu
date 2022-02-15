@@ -46,8 +46,8 @@
 						</div>
 					</div>
 					<div class="card-footer">
-						<i class="fa-solid fa-angle-down"></i>
-						<a href="#">取引履歴</a>
+						<i class="fa-solid fa-angle-down order-detail__icon"></i>
+						<a href="#" class="order-detail__trade">取引履歴</a>
 					</div>
 				</div>
 				<div class="card mt-2 detail-info">
@@ -114,6 +114,8 @@
 	<script type="text/javascript">
 		const cancelBtn = document.querySelector('.cancel-btn');
         linkClick(cancelBtn, "{% url 'stock:delete_select' orderinfo.pk %}");
+
+        tradeCheck();
 	</script>
 
 {% endblock javascript %}
