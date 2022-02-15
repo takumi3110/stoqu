@@ -9,7 +9,7 @@
         <div class="row">
             <h2 class="title-text">貯蔵品PC依頼履歴</h2>
         </div>
-        {% for order_info in orderinfo_list%}
+        {% for orderinfo in orderinfo_list%}
             <div class="row my-5">
                 <div class="col-md-12">
                     <div class="card">
@@ -17,20 +17,20 @@
                             <div class="row">
                                 <div class="col-3">
                                     <p class="header-text">依頼日</p>
-                                    <p>{{ order_info.ordered_at }}</p>
+                                    <p>{{ orderinfo.ordered_at }}</p>
                                 </div>
                                 <div class="col-2">
                                     <p class="header-text">合計金額(税込み)</p>
-                                    <p>￥{{ order_info.storage_cart.pk | result_price | intcomma }}</p>
+                                    <p>￥{{ orderinfo.storage_cart.pk | result_price | intcomma }}</p>
                                 </div>
                                 <div class="col-4">
                                     <p class="header-text">お届け先</p>
-                                    <p>{{ order_info.requester }}</p>
+                                    <p>{{ orderinfo.requester }}</p>
                                 </div>
                                 <div class="col-3">
-                                    <p class="text-right header-text">受注番号 {{ order_info.number }}</p>
+                                    <p class="text-right header-text">受注番号 {{ orderinfo.number }}</p>
                                     <p class="text-right">
-                                        <a href="{% url 'stock:order_info_detail' order_info.pk %}">依頼内容を表示</a>
+                                        <a href="{% url 'stock:orderinfo_detail' orderinfo.pk %}">依頼内容を表示</a>
                                     </p>
                                 </div>
                             </div>
@@ -39,10 +39,10 @@
                             <div class="row">
                                 <div class="col-md-9">
                                     <div class="card-body">
-                                        {% for order_item in order_info.storage_cart.order_item.all %}
+                                        {% for order_item in orderinfo.storage_cart.order_item.all %}
                                             <div class="row">
                                                 {% if orderinfo.completed_delivery %}
-	                                                <p class="history__schedule">{{ order_info.delivery_date }}にお届け完了しました。</p>
+	                                                <p class="history__schedule">{{ orderinfo.delivery_date }}にお届け完了しました。</p>
                                                 {% else %}
                                                     <p class="history__schedule">{{ order_item.due_at }}にお届け予定です</p>
                                                 {% endif %}
@@ -82,9 +82,9 @@
 	                                <div class="row mb-2">
 	                                    <button class="btn btn-warning history__button">ステータスを確認</button>
 	                                </div>
-	                                {% if order_info.completed_delivery is False%}
+	                                {% if orderinfo.completed_delivery is False%}
 	                                    <div class="row">
-			                                <button class="btn btn-outline-secondary history__button cancel-btn">依頼をキャンセル</button>
+			                                <button class="btn btn-outline-secondary history__button cancel-btn{{ orderinfo.pk }}">依頼をキャンセル</button>
 		                                </div>
 	                                {% endif %}
                                 </div>
@@ -103,9 +103,9 @@
 {% block javascript %}
 
 	<script type="text/javascript">
-		const cancelBtn = document.querySelector('.cancel-btn');
         {% for orderinfo in orderinfo_list %}
-            linkClick(cancelBtn, "{% url 'stock:delete_select' orderinfo.pk %}");
+	        const cancelBtn{{ orderinfo.pk }} = document.querySelector('.cancel-btn{{ orderinfo.pk }}');
+            linkClick(cancelBtn{{ orderinfo.pk }}, "{% url 'stock:delete_select' orderinfo.pk %}");
         {% endfor %}
 	</script>
 {% endblock javascript %}
