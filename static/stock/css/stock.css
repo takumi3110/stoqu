@@ -205,4 +205,8 @@
   width: 100%;
 }
 
+.order-detail__icon.selected {
+  transform: rotate(180deg);
+}
+
 /*# sourceMappingURL=stock.css.map */

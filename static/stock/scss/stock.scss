@@ -254,3 +254,12 @@ $cBorder: #dfdfdf;
     width: 100%;
   }
 }
+
+.order-detail {
+  &__icon {
+    &.selected {
+      transform: rotate(180deg);
+    }
+  }
+
+}
