@@ -4,7 +4,9 @@
 {% load extras %}
 
 {% block content %}
-
+	<a href="{% url 'stock:my_order_info' %}">
+        <i class="fas fa-long-arrow-alt-left"></i>依頼履歴に戻る
+    </a>
 	<div class="container order-detail my-5">
 		<div class="row">
 			<div class="col-10 offset-1">
@@ -94,7 +96,7 @@
                                 </div>
                                 {% if orderinfo.completed_delivery is False%}
                                     <div class="row">
-		                                <button class="btn btn-outline-secondary history__button">依頼をキャンセル</button>
+		                                <button class="btn btn-outline-secondary history__button cancel-btn">依頼をキャンセル</button>
 	                                </div>
                                 {% endif %}
 							</div>
