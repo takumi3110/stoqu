@@ -38,9 +38,14 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-9">
-                                    {% for order_item in order_info.storage_cart.order_item.all %}
-                                        <div class="card-body">
+                                    <div class="card-body">
+                                        {% for order_item in order_info.storage_cart.order_item.all %}
                                             <div class="row">
+                                                {% if orderinfo.completed_delivery %}
+	                                                <p class="history__schedule">{{ order_info.delivery_date }}にお届け完了しました。</p>
+                                                {% else %}
+                                                    <p class="history__schedule">{{ order_item.due_at }}にお届け予定です</p>
+                                                {% endif %}
                                                 <div class="col-md-2">
                                                     {% if order_item.storage_item.item.pc.img.name == '' %}
 				                                        <img src="/media/images/no_image_logo.png" alt="noimage" class="confirm__image">
@@ -70,8 +75,8 @@
                                                     <p>数量： {{ order_item.quantity }}台</p>
                                                 </div>
                                             </div>
-                                        </div>
-                                    {% endfor %}
+                                        {% endfor %}
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
 	                                <div class="row mb-2">
