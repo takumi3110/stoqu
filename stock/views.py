@@ -11,6 +11,7 @@ import datetime
 
 from .models import *
 from device.models import *
+from user.models import *
 from .serializers import *
 from .forms import *
 from .filters import *
@@ -20,12 +21,6 @@ class OptionViewSet(viewsets.ModelViewSet):
 	queryset = Option.objects.all()
 	serializer_class = OptionSerializer
 	filter_class = OptionFilter
-
-
-class BaseViewSet(viewsets.ModelViewSet):
-	queryset = Base.objects.all()
-	serializer_class = BaseSerializer
-	filter_class = BaseFilter
 
 
 class StorageItemViewSet(viewsets.ModelViewSet):

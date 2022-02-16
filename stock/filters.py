@@ -13,12 +13,6 @@ class OptionFilter(filters.FilterSet):
 		fields = ['maker', 'name']
 
 
-class BaseFilter(filters.FilterSet):
-	class Meta:
-		model = Base
-		fields = ['name']
-
-
 class StorageItemFilter(filters.FilterSet):
 	class Meta:
 		model = StorageItem

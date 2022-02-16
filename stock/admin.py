@@ -59,5 +59,4 @@ class OrderInfoAdmin(admin.ModelAdmin):
 	actions_on_bottom = True
 
 
-admin.site.register(Base)
 admin.site.register(KittingPlan)

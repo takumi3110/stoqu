@@ -4,7 +4,7 @@ from django.utils import timezone
 import datetime
 
 from device.models import PCDetail
-from user.models import User
+from user.models import *
 
 
 class Option(models.Model):
@@ -38,20 +38,6 @@ class Option(models.Model):
 	class Meta:
 		verbose_name = '付属品'
 		verbose_name_plural = '付属品'
-
-
-class Base(models.Model):
-	name = models.CharField(
-		verbose_name='拠点名',
-		max_length=50
-	)
-
-	def __str__(self):
-		return self.name
-
-	class Meta:
-		verbose_name = '拠点'
-		verbose_name_plural = '拠点'
 
 
 class StorageItem(models.Model):
