@@ -98,22 +98,18 @@ class OptionCreateView(LoginRequiredMixin, BSModalCreateView):
 	success_url = reverse_lazy('stock:storage_list')
 
 
-class StorageCartListView(LoginRequiredMixin, ListView):
+class StorageCartView(LoginRequiredMixin, TemplateView):
 	model = StorageCart
-	template_name = 'stock/cart_list.html'
+	template_name = 'stock/cart.html'
 
-	def get_queryset(self, **kwargs):
-		queryset = super(StorageCartListView, self).get_queryset()
-		qs = queryset.filter(requester__user=self.request.user, ordered=False)
-		return qs
-
-	def get_context_data(self, *, object_list=None, **kwargs):
-		context = super(StorageCartListView, self).get_context_data()
-		storage_cart = StorageCart.objects.filter(requester__user=self.request.user, ordered=False)
-		order_item_list = []
-		for cart in storage_cart:
-			order_item_list.append(cart.order_item.all())
-		context['order_item_list'] = order_item_list
+	def get_context_data(self, **kwargs):
+		context = super(StorageCartView, self).get_context_data(**kwargs)
+		storage_cart = StorageCart.objects.get_or_none(requester__user__pk=self.request.user.pk, ordered=False)
+		context['storagecart'] = storage_cart
+		if storage_cart is not None:
+			context['count'] = len(storage_cart.order_item.all())
+		else:
+			context['count'] = 0
 		return context
 
 
@@ -125,7 +121,8 @@ def get_obj(resource, requester, pk):
 	:param pk:
 	:return:
 	"""
-	cart_list = StorageCart.objects.filter(requester=requester, ordered=False)
+	# cart = StorageCart.objects.filter(requester=requester, ordered=False)
+	cart = StorageCart.objects.get_or_none(requester=requester, ordered=False)
 	if resource == 'add':
 		item = get_object_or_404(StorageItem, pk=pk)
 		order_item, created = OrderItem.objects.get_or_create(
@@ -136,7 +133,8 @@ def get_obj(resource, requester, pk):
 	else:
 		order_item = get_object_or_404(OrderItem, pk=pk)
 	obj_data = {
-		'cart_list': cart_list,
+		# 'cart': cart,
+		'cart': cart,
 		'order_item': order_item
 	}
 	return obj_data
@@ -153,7 +151,8 @@ def add_item(request, pk):
 	requester = Requester.objects.get(user=request.user)
 	obj_data = get_obj('add', requester, pk)
 	order_item = obj_data['order_item']
-	cart_list = obj_data['cart_list']
+	# cart = obj_data['cart']
+	cart = obj_data['cart']
 	storage_quantity = order_item.storage_item.quantity
 	if storage_quantity > 0:
 		order_item.storage_item.quantity -= 1
@@ -163,8 +162,10 @@ def add_item(request, pk):
 			option.save()
 	else:
 		return redirect('stock:cart')
-	if cart_list.exists():
-		storage_cart = cart_list[0]
+	# if cart.exists():
+	if cart is not None:
+		# storage_cart = cart[0]
+		storage_cart = cart
 		if storage_cart.order_item.filter(storage_item__pk=order_item.storage_item.pk).exists():
 			order_item.quantity += 1
 			order_item.save()
@@ -190,8 +191,8 @@ def reduce_cart(request, pk):
 	requester = Requester.objects.get(user=request.user)
 	obj_data = get_obj('reduce', requester, pk)
 	order_item = obj_data['order_item']
-	cart_list = obj_data['cart_list']
-	if cart_list.exists():
+	cart = obj_data['cart']
+	if cart is not None:
 		order_item.storage_item.quantity += 1
 		order_item.storage_item.save()
 		for option in order_item.storage_item.option.all():
@@ -218,21 +219,20 @@ def remove_cart(request, pk):
 	requester = Requester.objects.get(user=request.user)
 	obj_data = get_obj('remove', requester, pk)
 	order_item = obj_data['order_item']
-	cart_list = obj_data['cart_list']
-	if cart_list.exists():
+	cart = obj_data['cart']
+	if cart is not None:
 		quantity = order_item.quantity
 		order_item.storage_item.quantity += quantity
 		order_item.storage_item.save()
 		for option in order_item.storage_item.option.all():
 			option.quantity += quantity
 			option.save()
-		for cart in cart_list:
-			cart_items = cart.order_item.all().count()
-			if cart_items == 1:
-				order_item.delete()
-				cart.delete()
-			else:
-				order_item.delete()
+		cart_items = cart.order_item.all().count()
+		if cart_items <= 1:
+			order_item.delete()
+			cart.delete()
+		else:
+			order_item.delete()
 	else:
 		pass
 	return redirect('stock:cart')
