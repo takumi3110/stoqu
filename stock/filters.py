@@ -28,22 +28,22 @@ class KittingPlanFilter(filters.FilterSet):
 class OrderItemFilter(filters.FilterSet):
 	class Meta:
 		model = OrderItem
-		fields = ['storage_item__order_number', 'kitting_plan__name', 'requester__username']
+		fields = ['storage_item__order_number', 'kitting_plan__name', 'requester__user__username']
 
 
 class StorageCartFilter(filters.FilterSet):
 	class Meta:
 		model = StorageCart
-		fields = ['requester__username', 'ordered']
+		fields = ['requester__user__username', 'ordered']
 
 
 class ApproveFilter(filters.FilterSet):
 	class Meta:
 		model = Approve
-		fields = ['last_name', 'first_name', 'dept_code', 'dept_name', 'requester__username']
+		fields = ['last_name', 'first_name', 'dept_code', 'dept_name', 'requester__user__username']
 
 
 class OrderInfoFilter(filters.FilterSet):
 	class Meta:
 		model = OrderInfo
-		fields = ['number', 'ticket', 'requester__username', 'contact_user__username']
+		fields = ['number', 'ticket', 'requester__user__username', 'contact_user__username']
