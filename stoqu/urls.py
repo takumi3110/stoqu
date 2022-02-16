@@ -11,7 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/device/', include(device_router.urls)),
     path('api/v1/stock/', include(stock_router.urls)),
-    path('api/v1/user/', includ(user_router.urls)),
+    path('api/v1/user/', include(user_router.urls)),
     path('', include('stock.urls')),
     path('device/', include('device.urls')),
     path('user/', include('user.urls'))

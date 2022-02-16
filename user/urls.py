@@ -5,6 +5,7 @@ from . import views
 
 app_name = 'user'
 
+router = routers.DefaultRouter()
 router.register(r'base', views.BaseViewSet)
 router.register(r'room', views.RoomViewSet)
 router.register(r'requester', views.RequesterViewSet)

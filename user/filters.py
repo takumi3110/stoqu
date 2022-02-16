@@ -17,5 +17,5 @@ class RoomFilter(filters.FilterSet):
 
 class RequesterFilter(filters.FilterSet):
 	class Meta:
-		model = Reuqester
+		model = Requester
 		fields = ['user__username', 'room__name']
