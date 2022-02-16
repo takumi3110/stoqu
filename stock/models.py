@@ -7,6 +7,14 @@ from device.models import PCDetail
 from user.models import *
 
 
+class BaseManager(models.Manager):
+	def get_or_none(self, **kwargs):
+		try:
+			return self.get_queryset().get(**kwargs)
+		except self.model.DoesNotExist:
+			return None
+
+
 class Option(models.Model):
 	maker = models.CharField(
 		verbose_name='メーカー',
@@ -79,12 +87,6 @@ class StorageItem(models.Model):
 		on_delete=models.CASCADE,
 		verbose_name='在庫拠点',
 	)
-
-	# base = models.CharField(
-	# 	max_length=20,
-	# 	null=True,
-	# 	blank=True
-	# )
 
 	registration_at = models.DateField(
 		verbose_name='登録日',
@@ -204,6 +206,8 @@ class OrderItem(models.Model):
 
 
 class StorageCart(models.Model):
+	objects = BaseManager()
+
 	requester = models.ForeignKey(
 		Requester,
 		on_delete=models.CASCADE,
@@ -236,7 +240,7 @@ class StorageCart(models.Model):
 		super(StorageCart, self).save(*args, **kwargs)
 
 	def __str__(self):
-		return self.requester
+		return self.requester.user.screenname
 
 	class Meta:
 		verbose_name = '貯蔵品カート'
@@ -280,6 +284,8 @@ class Approve(models.Model):
 
 
 class OrderInfo(models.Model):
+	objects = BaseManager()
+
 	number = models.CharField(
 		verbose_name='受注番号',
 		max_length=100
