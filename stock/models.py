@@ -80,6 +80,12 @@ class StorageItem(models.Model):
 		verbose_name='在庫拠点',
 	)
 
+	# base = models.CharField(
+	# 	max_length=20,
+	# 	null=True,
+	# 	blank=True
+	# )
+
 	registration_at = models.DateField(
 		verbose_name='登録日',
 		null=True,
@@ -170,7 +176,7 @@ class OrderItem(models.Model):
 	)
 
 	requester = models.ForeignKey(
-		User,
+		Requester,
 		on_delete=models.CASCADE,
 		verbose_name='依頼者',
 	)
@@ -199,7 +205,7 @@ class OrderItem(models.Model):
 
 class StorageCart(models.Model):
 	requester = models.ForeignKey(
-		User,
+		Requester,
 		on_delete=models.CASCADE,
 		verbose_name='依頼者'
 	)
@@ -230,7 +236,7 @@ class StorageCart(models.Model):
 		super(StorageCart, self).save(*args, **kwargs)
 
 	def __str__(self):
-		return self.requester.screenname
+		return self.requester
 
 	class Meta:
 		verbose_name = '貯蔵品カート'
@@ -258,7 +264,7 @@ class Approve(models.Model):
 	)
 
 	requester = models.ForeignKey(
-		User,
+		Requester,
 		on_delete=models.CASCADE,
 		verbose_name='依頼者',
 		null=True,
@@ -298,7 +304,7 @@ class OrderInfo(models.Model):
 	)
 
 	requester = models.ForeignKey(
-		User,
+		Requester,
 		on_delete=models.CASCADE,
 		verbose_name='依頼者'
 	)
