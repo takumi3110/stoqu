@@ -104,12 +104,12 @@ class StorageCartListView(LoginRequiredMixin, ListView):
 
 	def get_queryset(self, **kwargs):
 		queryset = super(StorageCartListView, self).get_queryset()
-		qs = queryset.filter(requester=self.request.user, ordered=False)
+		qs = queryset.filter(requester__user=self.request.user, ordered=False)
 		return qs
 
 	def get_context_data(self, *, object_list=None, **kwargs):
 		context = super(StorageCartListView, self).get_context_data()
-		storage_cart = StorageCart.objects.filter(requester=self.request.user, ordered=False)
+		storage_cart = StorageCart.objects.filter(requester__user=self.request.user, ordered=False)
 		order_item_list = []
 		for cart in storage_cart:
 			order_item_list.append(cart.order_item.all())
@@ -117,21 +117,21 @@ class StorageCartListView(LoginRequiredMixin, ListView):
 		return context
 
 
-def get_obj(resource, request, pk):
+def get_obj(resource, requester, pk):
 	"""
 
 	:param resource:
-	:param request:
+	:param requester:
 	:param pk:
 	:return:
 	"""
-	cart_list = StorageCart.objects.filter(requester=request.user, ordered=False)
+	cart_list = StorageCart.objects.filter(requester=requester, ordered=False)
 	if resource == 'add':
 		item = get_object_or_404(StorageItem, pk=pk)
 		order_item, created = OrderItem.objects.get_or_create(
 			storage_item=item,
 			ordered=False,
-			requester=request.user
+			requester=requester
 		)
 	else:
 		order_item = get_object_or_404(OrderItem, pk=pk)
@@ -150,7 +150,8 @@ def add_item(request, pk):
 	:param pk:
 	:return:
 	"""
-	obj_data = get_obj('add', request, pk)
+	requester = Requester.objects.get(user=request.user)
+	obj_data = get_obj('add', requester, pk)
 	order_item = obj_data['order_item']
 	cart_list = obj_data['cart_list']
 	storage_quantity = order_item.storage_item.quantity
@@ -171,7 +172,7 @@ def add_item(request, pk):
 			storage_cart.order_item.add(order_item)
 	else:
 		storage_cart = StorageCart.objects.create(
-			requester=request.user,
+			requester=requester
 		)
 		storage_cart.order_item.add(order_item)
 		storage_cart.save()
@@ -186,7 +187,8 @@ def reduce_cart(request, pk):
 	:param pk:
 	:return:
 	"""
-	obj_data = get_obj('reduce', request, pk)
+	requester = Requester.objects.get(user=request.user)
+	obj_data = get_obj('reduce', requester, pk)
 	order_item = obj_data['order_item']
 	cart_list = obj_data['cart_list']
 	if cart_list.exists():
@@ -213,7 +215,8 @@ def remove_cart(request, pk):
 	:param pk:
 	:return:
 	"""
-	obj_data = get_obj('remove', request, pk)
+	requester = Requester.objects.get(user=request.user)
+	obj_data = get_obj('remove', requester, pk)
 	order_item = obj_data['order_item']
 	cart_list = obj_data['cart_list']
 	if cart_list.exists():
@@ -238,9 +241,10 @@ def remove_cart(request, pk):
 class ApproveView(LoginRequiredMixin, TemplateView):
 
 	def get(self, request, *args, **kwargs):
+		requester = Requester.objects.get(user=request.user)
 		api_url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/'
-		cart = StorageCart.objects.get(requester=request.user, ordered=False)
-		approve = Approve.objects.filter(requester=request.user).last()
+		cart = StorageCart.objects.get(requester=requester, ordered=False)
+		approve = Approve.objects.filter(requester=requester).last()
 		kitting_plan = KittingPlan.objects.all()
 		order_item_list = cart.order_item.all()
 		for order_item in order_item_list:
@@ -281,8 +285,9 @@ def add_order_info(request):
 	:param request:
 	:return:
 	"""
-	approve = Approve.objects.get(requester=request.user)
-	cart = StorageCart.objects.get(requester=request.user, ordered=False)
+	requester = Requester.objects.get(user=request.user)
+	approve = Approve.objects.get(requester=requester)
+	cart = StorageCart.objects.get(requester=requester, ordered=False)
 	date = datetime.datetime.now()
 	str_date = date.strftime('%Y%m%d')
 	order_info_obj = OrderInfo.objects.all().last()
@@ -297,7 +302,7 @@ def add_order_info(request):
 	number = str_date + '-' + str(order_branch)
 	order_info, update = OrderInfo.objects.update_or_create(
 		number=number,
-		requester=request.user,
+		requester=requester,
 		approve=approve,
 		storage_cart=cart,
 	)
@@ -324,8 +329,9 @@ class MyOrderInfoView(LoginRequiredMixin, ListView):
 	template_name = 'stock/orderinfo_mypage.html'
 
 	def get_queryset(self, *args, **kwargs):
+		requester = Requester.objects.get(user=self.request.user)
 		queryset = super(MyOrderInfoView, self).get_queryset()
-		qs = queryset.filter(requester=self.request.user).order_by('-pk')
+		qs = queryset.filter(requester=requester).order_by('-pk')
 		return qs
 
 
