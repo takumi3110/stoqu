@@ -355,8 +355,8 @@ class OrderInfoSelectView(LoginRequiredMixin, DetailView):
 			order_item.storage_item.save()
 			order_item.delete()
 		order_info = OrderInfo.objects.get(pk=kwargs['pk'])
-		order_item = order_info.storage_cart.order_item
-		if order_item is None:
+		order_item = order_info.storage_cart.order_item.all()
+		if len(order_item) == 0:
 			order_info.storage_cart.delete()
 			order_info.delete()
 		return render(request, 'stock/orderinfo_delete.html', context)
