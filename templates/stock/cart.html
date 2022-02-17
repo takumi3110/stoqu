@@ -23,37 +23,38 @@
 			        </div>
 		        {% endif %}
 	            <div class="card">
-	                <div class="card-body cart-card">
-	                    <div class="row bottom-border cart-header">
+	                <div class="card-body cart">
+	                    <div class="row bottom-border cart__header">
 		                    <div class="col-11">
-		                        <p class="cart-title">ショッピングカート</p>
+		                        <p class="cart__title">ショッピングカート</p>
 		                    </div>
 		                    <div class="col-1">
-			                    <p class="cart-price-name">価格</p>
+			                    <p class="header-price">価格</p>
 		                    </div>
 	                    </div>
 	                    {% for order_item in storagecart.order_item.all %}
-	                        <div class="row bottom-border mt-3">
+	                        <div class="row bottom-border mt-3 cart__item">
 	                            <div class="col-4 text-center">
 	                                {% if order_item.storage_item.item.pc.img.name == '' %}
-	                                    <img src="/media/images/no_image_logo.png" alt="noimage">
+	                                    <img src="/media/images/no_image_logo.png" alt="noimage" class="cart__image">
 	                                {% else %}
-	                                    <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}">
+	                                    <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}" class="cart__image">
 	                                {% endif %}
 	                            </div>
-	                            <div class="col-6 cart-item">
-	                                <p class="cart-item-title">
+	                            <div class="col-6">
+	                                <p class="cart__item__name">
 	                                    {{ order_item.storage_item.item.pc.maker }} {{ order_item.storage_item.item.pc.name }}
 	                                </p>
-	                                <p class="cart-item-location">
+	                                <p class="cart__item__location">
 	                                    拠点  {{ order_item.storage_item.base }} {{ order_item.storage_item.order_number }}
 	                                </p>
-	                                <p><span class="font-weight-bold">本体価格：</span>￥{{ order_item.storage_item.price | intcomma}}</p>
+		                            <div class="row">
+			                            <div class="col-5 cart__item__menu">本体価格：</div>
+			                            <div class="col-7">￥{{ order_item.storage_item.price | intcomma}}</div>
+		                            </div>
 	                                <div class="row">
-	                                    <div class="col-2">
-		                                    <p>付属品</p>
-	                                    </div>
-	                                    <div class="col-9">
+	                                    <div class="col-5 cart__item__menu">付属品：</div>
+	                                    <div class="col-7">
 		                                    {% for option in order_item.storage_item.option.all %}
 		                                        <p>{{ option.name }}：￥{{ option.price | intcomma }}</p>
 		                                    {% empty %}
@@ -61,51 +62,48 @@
 		                                    {% endfor %}
 	                                    </div>
 	                                </div>
-	                                <p>
-		                                <label for="quantity{{ order_item.pk }}">数量：</label>
-		                                <select name="" id="quantity{{ order_item.pk }}"></select>
-	                                    <a href="{% url 'stock:remove_cart' order_item.pk %}">
+	                                <div class="row">
+		                                <div class="col-5 cart__item__menu">キッティング費用：</div>
+		                                <div class="col-7">
+			                                ￥{{ order_item.kitting_plan.price | intcomma }}（{{ order_item.kitting_plan.name }}）
+		                                </div>
+
+	                                </div>
+		                            <div class="row">
+			                            <div class="col-5 cart__item__menu">
+				                            <label for="quantity{{ order_item.pk }}">数量：</label>
+
+				                            <select name="" id="quantity{{ order_item.pk }}"></select>
+			                            </div>
+			                            <a href="{% url 'stock:remove_cart' order_item.pk %}">
 	                                        削除
 	                                    </a>
-	                                </p>
+		                            </div>
+
 	                            </div>
 	                            <div class="col-2">
-	                                <p class="cart-price float-end">￥{{ order_item.pk | total_price | intcomma }}</p>
+	                                <p class="cart__item__price float-end">￥{{ order_item.price | intcomma }}</p>
 	                            </div>
 	                        </div>
 	                    {% empty %}
 	                        <p class="mb-3">アイテムが選択されていません</p>
 	                    {% endfor %}
-	                    <div class="row cart-total-title">
-	                        <p class="cart-end">
-	                            小計({{ count }}個のアイテム) (税込み):
-	                            <span class="cart-total-price">￥
-		                        {% if storagecart is not None%}
-			                        {{ storagecart.pk | subtotal_price | intcomma}}
-		                        {% else %}
-			                        0
-		                        {% endif %}
-			                    </span>
-		                    </p>
+	                    <div class="row cart__footer">
+		                    <span class="cart__total__title">小計({{ count }}個のアイテム) (税込み):</span>
+                            <span class="cart__total__price">￥{{ storagecart.price | intcomma }}</span>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
             <div class="col-md-3">
-                <div class="card cart-total">
+                <div class="card cart__total">
                     <div class="card-body">
-	                    <div class="row cart-total-title">
-	                        <p>
+	                    <div class="row">
+	                        <span class="cart__total__title">
 	                            小計({{ count }}個のアイテム) (税込み)
-	                        </p>
+	                        </span>
 		                    <p>:
-			                    <span class="cart-total-price">￥
-			                        {% if storagecart is not None%}
-				                        {{ storagecart.pk | subtotal_price | intcomma}}
-			                        {% else %}
-				                        0
-			                        {% endif %}
-			                    </span>
+			                    <span class="cart__total__price">￥{{ storagecart.price | intcomma }}</span>
 		                    </p>
 	                    </div>
 	                    <div class="row">
@@ -130,6 +128,7 @@
 	        let quantity_el{{ order_item.pk }} = document.querySelector('#quantity{{ order_item.pk }}');
             value = {
                 storage_item: {{ order_item.storage_item.pk }},
+	            price: {{ order_item.price }},
 	            requester: {{ order_item.requester.pk }}
             }
             quantity(quantity_el{{ order_item.pk }}, {{ order_item.storage_item.quantity }}, {{ order_item.quantity }});
