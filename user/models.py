@@ -72,16 +72,20 @@ class User(AbstractBaseUser, PermissionsMixin):
 	def __str__(self):
 		return self.screenname
 
-	class Meta:
-		verbose_name = _('user')
-		verbose_name_plural = _('user')
-
 	def get_full_name(self):
 		full_name = '%s %s' % (self.first_name, self.last_name)
 		return full_name
 
 	def get_short_name(self):
 		return self.last_name
+
+	def save(self, *args, **kwargs):
+		Requester.objects.update_or_create(user_id=self.pk)
+		super(User, self).save(*args, **kwargs)
+
+	class Meta:
+		verbose_name = _('user')
+		verbose_name_plural = _('user')
 
 
 class Group(models.Model):
@@ -118,6 +122,63 @@ class Member(models.Model):
 	class Meta:
 		verbose_name = 'メンバー'
 		verbose_name_plural = 'メンバー'
+
+
+class Base(models.Model):
+	name = models.CharField(
+		verbose_name='拠点名',
+		max_length=50
+	)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = '拠点'
+		verbose_name_plural = '拠点'
+
+
+class Room(models.Model):
+	name = models.CharField(
+		verbose_name='ルーム',
+		max_length=100
+	)
+
+	base = models.ForeignKey(
+		Base,
+		on_delete=models.CASCADE,
+		verbose_name='拠点'
+	)
+
+	def __str__(self):
+		return f'{self.base} {self.name}'
+
+	class Meta:
+		verbose_name = 'ルーム'
+		verbose_name_plural = 'ルーム'
+
+
+class Requester(models.Model):
+	user = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE,
+		verbose_name='依頼者'
+	)
+
+	room = models.ForeignKey(
+		Room,
+		on_delete=models.CASCADE,
+		verbose_name='ルーム',
+		null=True,
+		blank=True
+	)
+
+	def __str__(self):
+		return self.user.screenname
+
+	class Meta:
+		verbose_name = '依頼者'
+		verbose_name_plural = '依頼者'
 
 
 @receiver(models.signals.post_save, sender=User)
