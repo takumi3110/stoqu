@@ -4,8 +4,20 @@
 {% load extras %}
 
 {% block content %}
+	<!--
+	<div class="navigation">
+		<span class="navigation-item">1.Cart</span>
+		<span class="navigation-item">2.Approve</span>
+		<span class="navigation-item">3.Order</span>
+	</div>
+	-->
 
 	<div class="container my-5">
+		<div class="modal fade" tabindex="-1" role="dialog" id="modal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content"></div>
+			</div>
+		</div>
 		<div class="row page-title">
 			<h2 class="title-text">依頼内容確認・変更画面</h2>
 		</div>
@@ -114,19 +126,19 @@
 							<p><span class="confirm-text">注文内容</span>(税込み)</p>
 							<p class="mb-1">
 								商品の小計：
-								<span class="confirm-price float-end">￥{{ cart.pk | subtotal_price | intcomma }}</span>
+								<span class="confirm-price float-end">￥{{ request.user | storage_subtotal | intcomma }}</span>
 							</p>
 							<p class="mb-1">
 								キッティング費用：
 								<span class="confirm-price float-end">￥
-									<span class="total-kitting-price">{{ cart.pk | kitting_price | intcomma }}</span>
+									<span class="total-kitting-price">{{ request.user | storage_kitting_price | intcomma }}</span>
 								</span>
 							</p>
 						</div>
 						<div class="row bottom-border mb-3">
 							<p class="confirm-text total-price">
 								ご請求額：
-								<span class="float-end">￥{{ cart.pk | result_price | intcomma }}</span>
+								<span class="float-end">￥{{ request.user | storage_total_price | intcomma }}</span>
 							</p>
 						</div>
 					</div>

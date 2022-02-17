@@ -11,7 +11,6 @@ import datetime
 
 from .models import *
 from device.models import *
-from user.models import *
 from .serializers import *
 from .forms import *
 from .filters import *
@@ -21,6 +20,12 @@ class OptionViewSet(viewsets.ModelViewSet):
 	queryset = Option.objects.all()
 	serializer_class = OptionSerializer
 	filter_class = OptionFilter
+
+
+class BaseViewSet(viewsets.ModelViewSet):
+	queryset = Base.objects.all()
+	serializer_class = BaseSerializer
+	filter_class = BaseFilter
 
 
 class StorageItemViewSet(viewsets.ModelViewSet):
@@ -98,43 +103,45 @@ class OptionCreateView(LoginRequiredMixin, BSModalCreateView):
 	success_url = reverse_lazy('stock:storage_list')
 
 
-class StorageCartView(LoginRequiredMixin, TemplateView):
+class StorageCartListView(LoginRequiredMixin, ListView):
 	model = StorageCart
-	template_name = 'stock/cart.html'
+	template_name = 'stock/cart_list.html'
 
-	def get_context_data(self, **kwargs):
-		context = super(StorageCartView, self).get_context_data(**kwargs)
-		storage_cart = StorageCart.objects.get_or_none(requester__user__pk=self.request.user.pk, ordered=False)
-		context['storagecart'] = storage_cart
-		if storage_cart is not None:
-			context['count'] = len(storage_cart.order_item.all())
-		else:
-			context['count'] = 0
+	def get_queryset(self, **kwargs):
+		queryset = super(StorageCartListView, self).get_queryset()
+		qs = queryset.filter(requester=self.request.user, ordered=False)
+		return qs
+
+	def get_context_data(self, *, object_list=None, **kwargs):
+		context = super(StorageCartListView, self).get_context_data()
+		storage_cart = StorageCart.objects.filter(requester=self.request.user, ordered=False)
+		order_item_list = []
+		for cart in storage_cart:
+			order_item_list.append(cart.order_item.all())
+		context['order_item_list'] = order_item_list
 		return context
 
 
-def get_obj(resource, requester, pk):
+def get_obj(resource, request, pk):
 	"""
 
 	:param resource:
-	:param requester:
+	:param request:
 	:param pk:
 	:return:
 	"""
-	# cart = StorageCart.objects.filter(requester=requester, ordered=False)
-	cart = StorageCart.objects.get_or_none(requester=requester, ordered=False)
+	cart_list = StorageCart.objects.filter(requester=request.user, ordered=False)
 	if resource == 'add':
 		item = get_object_or_404(StorageItem, pk=pk)
 		order_item, created = OrderItem.objects.get_or_create(
 			storage_item=item,
 			ordered=False,
-			requester=requester
+			requester=request.user
 		)
 	else:
 		order_item = get_object_or_404(OrderItem, pk=pk)
 	obj_data = {
-		# 'cart': cart,
-		'cart': cart,
+		'cart_list': cart_list,
 		'order_item': order_item
 	}
 	return obj_data
@@ -148,11 +155,9 @@ def add_item(request, pk):
 	:param pk:
 	:return:
 	"""
-	requester = Requester.objects.get(user=request.user)
-	obj_data = get_obj('add', requester, pk)
+	obj_data = get_obj('add', request, pk)
 	order_item = obj_data['order_item']
-	# cart = obj_data['cart']
-	cart = obj_data['cart']
+	cart_list = obj_data['cart_list']
 	storage_quantity = order_item.storage_item.quantity
 	if storage_quantity > 0:
 		order_item.storage_item.quantity -= 1
@@ -162,10 +167,8 @@ def add_item(request, pk):
 			option.save()
 	else:
 		return redirect('stock:cart')
-	# if cart.exists():
-	if cart is not None:
-		# storage_cart = cart[0]
-		storage_cart = cart
+	if cart_list.exists():
+		storage_cart = cart_list[0]
 		if storage_cart.order_item.filter(storage_item__pk=order_item.storage_item.pk).exists():
 			order_item.quantity += 1
 			order_item.save()
@@ -173,7 +176,7 @@ def add_item(request, pk):
 			storage_cart.order_item.add(order_item)
 	else:
 		storage_cart = StorageCart.objects.create(
-			requester=requester
+			requester=request.user,
 		)
 		storage_cart.order_item.add(order_item)
 		storage_cart.save()
@@ -188,11 +191,10 @@ def reduce_cart(request, pk):
 	:param pk:
 	:return:
 	"""
-	requester = Requester.objects.get(user=request.user)
-	obj_data = get_obj('reduce', requester, pk)
+	obj_data = get_obj('reduce', request, pk)
 	order_item = obj_data['order_item']
-	cart = obj_data['cart']
-	if cart is not None:
+	cart_list = obj_data['cart_list']
+	if cart_list.exists():
 		order_item.storage_item.quantity += 1
 		order_item.storage_item.save()
 		for option in order_item.storage_item.option.all():
@@ -216,23 +218,23 @@ def remove_cart(request, pk):
 	:param pk:
 	:return:
 	"""
-	requester = Requester.objects.get(user=request.user)
-	obj_data = get_obj('remove', requester, pk)
+	obj_data = get_obj('remove', request, pk)
 	order_item = obj_data['order_item']
-	cart = obj_data['cart']
-	if cart is not None:
+	cart_list = obj_data['cart_list']
+	if cart_list.exists():
 		quantity = order_item.quantity
 		order_item.storage_item.quantity += quantity
 		order_item.storage_item.save()
 		for option in order_item.storage_item.option.all():
 			option.quantity += quantity
 			option.save()
-		cart_items = cart.order_item.all().count()
-		if cart_items <= 1:
-			order_item.delete()
-			cart.delete()
-		else:
-			order_item.delete()
+		for cart in cart_list:
+			cart_items = cart.order_item.all().count()
+			if cart_items == 1:
+				order_item.delete()
+				cart.delete()
+			else:
+				order_item.delete()
 	else:
 		pass
 	return redirect('stock:cart')
@@ -241,10 +243,9 @@ def remove_cart(request, pk):
 class ApproveView(LoginRequiredMixin, TemplateView):
 
 	def get(self, request, *args, **kwargs):
-		requester = Requester.objects.get(user=request.user)
 		api_url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/'
-		cart = StorageCart.objects.get(requester=requester, ordered=False)
-		approve = Approve.objects.filter(requester=requester).last()
+		cart = StorageCart.objects.get(requester=request.user, ordered=False)
+		approve = Approve.objects.filter(requester=request.user).last()
 		kitting_plan = KittingPlan.objects.all()
 		order_item_list = cart.order_item.all()
 		for order_item in order_item_list:
@@ -285,9 +286,8 @@ def add_order_info(request):
 	:param request:
 	:return:
 	"""
-	requester = Requester.objects.get(user=request.user)
-	approve = Approve.objects.get(requester=requester)
-	cart = StorageCart.objects.get(requester=requester, ordered=False)
+	approve = Approve.objects.get(requester=request.user)
+	cart = StorageCart.objects.get(requester=request.user, ordered=False)
 	date = datetime.datetime.now()
 	str_date = date.strftime('%Y%m%d')
 	order_info_obj = OrderInfo.objects.all().last()
@@ -302,7 +302,7 @@ def add_order_info(request):
 	number = str_date + '-' + str(order_branch)
 	order_info, update = OrderInfo.objects.update_or_create(
 		number=number,
-		requester=requester,
+		requester=request.user,
 		approve=approve,
 		storage_cart=cart,
 	)
@@ -329,9 +329,8 @@ class MyOrderInfoView(LoginRequiredMixin, ListView):
 	template_name = 'stock/orderinfo_mypage.html'
 
 	def get_queryset(self, *args, **kwargs):
-		requester = Requester.objects.get(user=self.request.user)
 		queryset = super(MyOrderInfoView, self).get_queryset()
-		qs = queryset.filter(requester=requester).order_by('-pk')
+		qs = queryset.filter(requester=self.request.user).order_by('-pk')
 		return qs
 
 

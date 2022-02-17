@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from.models import *
+from.models import User, Group, Member
+
+# Register your models here.
 
 
 @admin.register(User)
@@ -29,15 +31,3 @@ class MemberAdmin(admin.ModelAdmin):
 	list_display = ['group', 'user']
 	list_display_links = ['group', 'user']
 	search_fields = ['group', 'user']
-
-
-@admin.register(Requester)
-class RequesterAdmin(admin.ModelAdmin):
-	list_display = ('user', 'room')
-	list_display_links = ('user', 'room')
-	list_filter = ['room__name']
-	search_fields = ('user__screenname', 'room__name')
-
-
-admin.site.register(Base)
-admin.site.register(Room)

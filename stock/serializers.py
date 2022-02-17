@@ -2,13 +2,18 @@ from rest_framework import serializers
 
 from .models import *
 from device.serializer import PCDetailSerializer
-from user.serializers import BaseSerializer
 
 
 class OptionSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Option
 		fields = ('maker', 'name', 'price', 'quantity', 'remarks')
+
+
+class BaseSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Base
+		fields = ('name',)
 
 
 class KittingPlanSerializer(serializers.ModelSerializer):

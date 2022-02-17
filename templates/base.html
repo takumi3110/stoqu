@@ -24,11 +24,6 @@
 	      crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 <body>
-	<div class="modal fade" tabindex="-1" role="dialog" id="modal" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content"></div>
-		</div>
-	</div>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark navigation">
 		<div class="container-fluid">
 			<a class="navbar-brand navigation__title" href="{% url 'stock:storage_list' %}">STOQU</a>
@@ -39,16 +34,12 @@
 			<div class="collapse navbar-collapse" id="navbar">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item navigation__item">
-						<a class="nav-link requester-update" href="#">
-							<p class="navigation__text">{{ requester.user }} さん</p>
+						<a class="nav-link" href="#">
+							<p class="navigation__text">{{ user }} さん</p>
 							<p class="navigation__text">
+								<i class="fa-solid fa-location-dot"></i>
 								お届け先
 							</p>
-							<i class="fa-solid fa-location-dot"></i>
-							{% if requester.room is not None  %}
-								{{ requester.room }}
-							{% endif %} 
-							<p></p>
 						</a>
 					</li>
 				</ul>
@@ -123,13 +114,7 @@
 	<script src="{% static 'js/stock.js' %}"></script>
 	{% block javascript %}
 	{% endblock %}
-	<script type="text/javascript">
-		$(function () {
-			$(".requester-update").each(function() {
-                $(this).modalForm({formURL: "{% url 'user:requester_update' user.pk %}"});
-			});
-        });
-	</script>
+
 </body>
 
 </html>

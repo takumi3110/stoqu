@@ -4,15 +4,7 @@ from django.utils import timezone
 import datetime
 
 from device.models import PCDetail
-from user.models import *
-
-
-class BaseManager(models.Manager):
-	def get_or_none(self, **kwargs):
-		try:
-			return self.get_queryset().get(**kwargs)
-		except self.model.DoesNotExist:
-			return None
+from user.models import User
 
 
 class Option(models.Model):
@@ -46,6 +38,20 @@ class Option(models.Model):
 	class Meta:
 		verbose_name = '付属品'
 		verbose_name_plural = '付属品'
+
+
+class Base(models.Model):
+	name = models.CharField(
+		verbose_name='拠点名',
+		max_length=50
+	)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = '拠点'
+		verbose_name_plural = '拠点'
 
 
 class StorageItem(models.Model):
@@ -178,7 +184,7 @@ class OrderItem(models.Model):
 	)
 
 	requester = models.ForeignKey(
-		Requester,
+		User,
 		on_delete=models.CASCADE,
 		verbose_name='依頼者',
 	)
@@ -206,10 +212,8 @@ class OrderItem(models.Model):
 
 
 class StorageCart(models.Model):
-	objects = BaseManager()
-
 	requester = models.ForeignKey(
-		Requester,
+		User,
 		on_delete=models.CASCADE,
 		verbose_name='依頼者'
 	)
@@ -240,7 +244,7 @@ class StorageCart(models.Model):
 		super(StorageCart, self).save(*args, **kwargs)
 
 	def __str__(self):
-		return self.requester.user.screenname
+		return self.requester.screenname
 
 	class Meta:
 		verbose_name = '貯蔵品カート'
@@ -268,7 +272,7 @@ class Approve(models.Model):
 	)
 
 	requester = models.ForeignKey(
-		Requester,
+		User,
 		on_delete=models.CASCADE,
 		verbose_name='依頼者',
 		null=True,
@@ -284,8 +288,6 @@ class Approve(models.Model):
 
 
 class OrderInfo(models.Model):
-	objects = BaseManager()
-
 	number = models.CharField(
 		verbose_name='受注番号',
 		max_length=100
@@ -310,7 +312,7 @@ class OrderInfo(models.Model):
 	)
 
 	requester = models.ForeignKey(
-		Requester,
+		User,
 		on_delete=models.CASCADE,
 		verbose_name='依頼者'
 	)
