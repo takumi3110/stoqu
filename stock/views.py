@@ -176,7 +176,7 @@ def add_item(request, pk):
 			requester=requester
 		)
 		storage_cart.order_item.add(order_item)
-		storage_cart.save()
+	storage_cart.save()
 	return redirect('stock:cart')
 
 
@@ -233,6 +233,7 @@ def remove_cart(request, pk):
 			cart.delete()
 		else:
 			order_item.delete()
+		cart.save()
 	else:
 		pass
 	return redirect('stock:cart')
