@@ -237,7 +237,7 @@ class StorageCart(models.Model):
 	)
 
 	price = models.PositiveIntegerField(
-		verbose_name='合計金額',
+		verbose_name='合計金額（税込み）',
 		null=True,
 		blank=True
 	)
