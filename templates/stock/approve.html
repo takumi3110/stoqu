@@ -69,12 +69,8 @@
 										<p class="item-name mb-1">{{ order_item.storage_item }}</p>
 										<p class="item-price mb-1">￥{{ order_item.pk | total_price | intcomma}}</p>
 										<p class="mb-1">
-	                                        数量：
-	                                        <button type="button" class="btn btn-sm btn-secondary"
-	                                                onclick="location.href='{% url "stock:reduce_cart" order_item.pk %}'">-</button>
-	                                        {{ order_item.quantity }}
-	                                        <button type="button" class="btn btn-sm btn-secondary"
-	                                                onclick="location.href='{% url "stock:add_item" order_item.storage_item.pk %}'">+</button>
+	                                       <label for="quantity{{ order_item.pk }}">数量：</label>
+			                                <select name="" id="quantity{{ order_item.pk }}"></select>
 	                                    </p>
 									</div>
 									<div class="col-5">
@@ -167,6 +163,14 @@
         const kittingPrice = document.querySelector('.total-kitting-price');
         const selectPlan = document.querySelectorAll('.select-plan');
 		{% for order_item in cart.order_item.all %}
+	        let quantity_el{{ order_item.pk }} = document.querySelector('#quantity{{ order_item.pk }}');
+            value = {
+                storage_item: {{ order_item.storage_item.pk }},
+	            requester: {{ order_item.requester.pk }}
+            }
+            quantity(quantity_el{{ order_item.pk }}, {{ order_item.storage_item.quantity }}, {{ order_item.quantity }});
+            quantityChange(quantity_el{{ order_item.pk }}, value, {{ order_item.pk }});
+
 			const scheduleDate{{ order_item.pk }} = document.querySelector('.schedule-date{{ order_item.pk }}');
 			const url{{ order_item.pk }} = "{{ api_url }}{{ order_item.pk }}/";
             {% for plan in kitting_plan %}
@@ -181,7 +185,7 @@
                     checkId{{ plan.pk }}_{{ order_item.pk }}
 	            );
                 changeRadio{{ plan.pk }}_{{ order_item.pk }}.addEventListener('click', function() {
-                    const init = makeInit(data{{ plan.pk }}_{{ order_item.pk }})
+                    const init = makeInit(data{{ plan.pk }}_{{ order_item.pk }});
                     put(url{{ order_item.pk }}, init, scheduleDate{{ order_item.pk }});
                     changePrice(selectPlan, kittingPrice, {{ order_item.quantity }});
                 });

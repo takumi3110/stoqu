@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const el = document.querySelector('.navigation__title');
     const str = el.innerHTML.trim().split("");
     el.innerHTML = str.reduce((acc, curr) => {
@@ -54,13 +54,13 @@ function changePrice(checkEl, totalEl, count) {
 
 
 function linkClick(el, url) {
-    el.addEventListener('click', function() {
+    el.addEventListener('click', function () {
         location.href = url;
     });
 }
 
 function checkSelect(checkEl, el) {
-    checkEl.addEventListener('click', function() {
+    checkEl.addEventListener('click', function () {
         const innerItem = document.querySelector('.select-item');
         if (checkEl.checked) {
             innerItem.innerHTML += el.innerHTML.trim();
@@ -78,7 +78,7 @@ function deleteCheck() {
     const nextBtn = document.querySelector('.next-btn');
     const checkList = document.querySelectorAll('.select-delete__check');
     let flag = false;
-    checkList.forEach(function(val) {
+    checkList.forEach(function (val) {
         if (val.checked) {
             flag = true;
         }
@@ -86,16 +86,55 @@ function deleteCheck() {
     nextBtn.disabled = !flag;
 }
 
-class SelectDelete {
-    constructor(el) {
-        this.el = el;
-    }
-}
+// class SelectDelete {
+//     constructor(el) {
+//         this.el = el;
+//     }
+// }
 
 function tradeCheck() {
     const tradeHistory = document.querySelector('.order-detail__trade');
     const icon = document.querySelector('.order-detail__icon');
-    tradeHistory.addEventListener('click', function() {
+    tradeHistory.addEventListener('click', function () {
         icon.classList.toggle('selected');
     })
+}
+
+function quantity(el, value, selectedValue) {
+    for (let i = 1; i <= value + 1; i++) {
+        let new_option = document.createElement('option');
+        new_option.value = String(i);
+        new_option.text = String(i);
+        if (i === selectedValue) {
+            new_option.selected = true;
+        }
+        el.appendChild(new_option);
+    }
+}
+
+
+function quantityChange(el, value, pk) {
+    el.addEventListener('change', function() {
+        let url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/' + pk + '/';
+        let data = {
+            storage_item: value.storage_item,
+            quantity: this.value,
+            ordered: false,
+            due_at: null,
+            kitting_plan: null,
+            requester: value.requester
+        }
+        const init = makeInit(data);
+        fetch(url, init)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw Error();
+                }
+            })
+            .then(data => {
+                console.log(data);
+            });
+    });
 }
