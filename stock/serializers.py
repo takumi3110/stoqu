@@ -36,7 +36,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class StorageCartSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = StorageCart
-		fields = ('requester', 'order_item', 'order_item')
+		fields = ('requester', 'order_item', 'price', 'tax_price', 'ordered')
 
 
 class ApproveSerializer(serializers.ModelSerializer):
