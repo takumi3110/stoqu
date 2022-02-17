@@ -140,7 +140,7 @@ class KittingPlan(models.Model):
 	)
 
 	def __str__(self):
-		return f'{self.name} {self.price}'
+		return f'{self.name} {self.price}円'
 
 	class Meta:
 		verbose_name = 'キッティング価格'
@@ -171,6 +171,12 @@ class OrderItem(models.Model):
 		blank=True
 	)
 
+	price = models.PositiveIntegerField(
+		verbose_name='合計金額',
+		null=True,
+		blank=True
+	)
+
 	due_at = models.DateField(
 		verbose_name='納品予定日',
 		null=True,
@@ -184,6 +190,8 @@ class OrderItem(models.Model):
 	)
 
 	def save(self, *args, **kwargs):
+		item_price = self.storage_item.total_price
+		price = item_price * self.quantity
 		kitting_plan = self.kitting_plan
 		if kitting_plan is not None:
 			now = datetime.datetime.now()
@@ -195,6 +203,9 @@ class OrderItem(models.Model):
 			else:
 				date = datetime.date.today() + datetime.timedelta(days=day)
 			self.due_at = date
+			self.price = price + kitting_plan.price
+		else:
+			self.price = price
 		super(OrderItem, self).save(*args, **kwargs)
 
 	def __str__(self):
