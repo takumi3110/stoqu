@@ -242,6 +242,12 @@ class StorageCart(models.Model):
 		blank=True
 	)
 
+	tax_price = models.PositiveSmallIntegerField(
+		verbose_name='消費税',
+		null=True,
+		blank=True
+	)
+
 	ordered = models.BooleanField(
 		default=False
 	)
@@ -249,11 +255,15 @@ class StorageCart(models.Model):
 	def save(self, *args, **kwargs):
 		if self.pk is not None:
 			self.price = 0
+			subtotal = 0
+			tax = 0.1
+			self.tax_price = 0
 			for item in self.order_item.all():
-				price = item.storage_item.total_price * item.quantity
+				subtotal += item.storage_item.total_price * item.quantity
 				if item.kitting_plan is not None:
-					price += item.kitting_plan.price
-				self.price += price
+					subtotal += item.kitting_plan.price
+			self.tax_price += round(subtotal * tax)
+			self.price += subtotal + self.tax_price
 		super(StorageCart, self).save(*args, **kwargs)
 
 	def __str__(self):
