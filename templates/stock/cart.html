@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load humanize %}
+{% load extras %}
+
+{% block content %}
+
+    <div class="container my-5">
+        <div class="row page-title">
+            <h2 class="title-text">依頼予定のPC</h2>
+        </div>
+        <div class="row mt-5">
+	        <a href="{% url 'stock:storage_list' %}">
+		        <i class="fas fa-long-arrow-alt-left"></i>リストに戻る
+	        </a>
+	        <div class="col-9">
+		        {% if storagecart is not None %}
+			        <div class="card">
+				        <div class="card-body">
+					        追加されました
+				        </div>
+			        </div>
+		        {% endif %}
+	            <div class="card">
+	                <div class="card-body cart-card">
+	                    <div class="row bottom-border cart-header">
+		                    <div class="col-11">
+		                        <p class="cart-title">ショッピングカート</p>
+		                    </div>
+		                    <div class="col-1">
+			                    <p class="cart-price-name">価格</p>
+		                    </div>
+	                    </div>
+	                    {% for order_item in storagecart.order_item.all %}
+	                        <div class="row bottom-border mt-3">
+	                            <div class="col-4 text-center">
+	                                {% if order_item.storage_item.item.pc.img.name == '' %}
+	                                    <img src="/media/images/no_image_logo.png" alt="noimage">
+	                                {% else %}
+	                                    <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}">
+	                                {% endif %}
+	                            </div>
+	                            <div class="col-6 cart-item">
+	                                <p class="cart-item-title">
+	                                    {{ order_item.storage_item.item.pc.maker }} {{ order_item.storage_item.item.pc.name }}
+	                                </p>
+	                                <p class="cart-item-location">
+	                                    拠点  {{ order_item.storage_item.base }} {{ order_item.storage_item.order_number }}
+	                                </p>
+	                                <p><span class="font-weight-bold">本体価格：</span>￥{{ order_item.storage_item.price | intcomma}}</p>
+	                                <div class="row">
+	                                    <div class="col-2">
+		                                    <p>付属品</p>
+	                                    </div>
+	                                    <div class="col-9">
+		                                    {% for option in order_item.storage_item.option.all %}
+		                                        <p>{{ option.name }}：￥{{ option.price | intcomma }}</p>
+		                                    {% empty %}
+		                                        <p>なし</p>
+		                                    {% endfor %}
+	                                    </div>
+	                                </div>
+	                                <p>
+	                                    数量：
+	                                    <button type="button" class="btn btn-sm btn-secondary"
+	                                            onclick="location.href='{% url "stock:reduce_cart" order_item.pk %}'">-</button>
+	                                    {{ order_item.quantity }}
+	                                    <button type="button" class="btn btn-sm btn-secondary"
+	                                            onclick="location.href='{% url "stock:add_item" order_item.storage_item.pk %}'">+
+	                                    </button>
+	                                    <a href="{% url 'stock:remove_cart' order_item.pk %}">
+	                                        削除
+	                                    </a>
+	                                </p>
+	                            </div>
+	                            <div class="col-2">
+	                                <p class="cart-price float-end">￥{{ order_item.pk | total_price | intcomma }}</p>
+	                            </div>
+	                        </div>
+	                    {% empty %}
+	                        <p class="mb-3">アイテムが選択されていません</p>
+	                    {% endfor %}
+	                    <div class="row cart-total-title">
+	                        <p class="cart-end">
+	                            小計({{ count }}個のアイテム) (税込み):
+	                            <span class="cart-total-price">￥
+		                        {% if storagecart is not None%}
+			                        {{ storagecart.pk | subtotal_price | intcomma}}
+		                        {% else %}
+			                        0
+		                        {% endif %}
+			                    </span>
+		                    </p>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+            <div class="col-md-3">
+                <div class="card cart-total">
+                    <div class="card-body">
+	                    <div class="row cart-total-title">
+	                        <p>
+	                            小計({{ count }}個のアイテム) (税込み)
+	                        </p>
+		                    <p>:
+			                    <span class="cart-total-price">￥
+			                        {% if storagecart is not None%}
+				                        {{ storagecart.pk | subtotal_price | intcomma}}
+			                        {% else %}
+				                        0
+			                        {% endif %}
+			                    </span>
+		                    </p>
+	                    </div>
+	                    <div class="row">
+	                        <button type="button" class="btn btn-sm btn-warning my-3"
+	                                onclick="location.href='{% url "stock:approve" %}';">
+		                        次に進む
+	                        </button>
+	                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}
+
