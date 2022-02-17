@@ -79,6 +79,12 @@
   font-size: 20px;
   font-weight: bold;
 }
+.cart__item__quantity {
+  width: 100px;
+}
+.cart__item select {
+  width: 80px;
+}
 .cart__footer {
   text-align: right;
 }

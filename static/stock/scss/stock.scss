@@ -106,7 +106,12 @@ $cBorder: #dfdfdf;
       font-weight: bold;
     }
 
-    &__menu {
+    &__quantity {
+      width: 100px;
+    }
+
+    & select {
+      width: 80px;
     }
   }
 
@@ -215,8 +220,6 @@ $cBorder: #dfdfdf;
     font-weight: bold;
   }
 }
-
-
 
 
 .approve-menu {
