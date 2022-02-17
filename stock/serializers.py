@@ -18,13 +18,13 @@ class KittingPlanSerializer(serializers.ModelSerializer):
 
 
 class StorageItemSerializer(serializers.ModelSerializer):
-	item = PCDetailSerializer()
-	# option = OptionSerializer()
-	base = BaseSerializer()
+	# item = PCDetailSerializer()
+	# # option = OptionSerializer()
+	# base = BaseSerializer()
 
 	class Meta:
 		model = StorageItem
-		fields = ('order_number', 'item', 'price', 'quantity', 'option', 'base', 'delivery_at', 'remarks')
+		fields = ('id', 'order_number', 'item', 'price', 'quantity', 'option', 'base', 'remarks')
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
