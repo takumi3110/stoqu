@@ -49,6 +49,8 @@ class Option(models.Model):
 
 
 class StorageItem(models.Model):
+	objects = BaseManager()
+
 	order_number = models.CharField(
 		verbose_name='発注番号',
 		max_length=100
@@ -119,6 +121,8 @@ class StorageItem(models.Model):
 
 
 class KittingPlan(models.Model):
+	objects = BaseManager()
+
 	kitting_choice = (
 		('標準', '標準'),
 		('お急ぎ便', 'お急ぎ便')
@@ -148,6 +152,8 @@ class KittingPlan(models.Model):
 
 
 class OrderItem(models.Model):
+	objects = BaseManager()
+
 	storage_item = models.ForeignKey(
 		StorageItem,
 		on_delete=models.CASCADE,
@@ -239,7 +245,7 @@ class StorageCart(models.Model):
 	ordered = models.BooleanField(
 		default=False
 	)
-	
+
 	def save(self, *args, **kwargs):
 		if self.pk is not None:
 			self.price = 0
