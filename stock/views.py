@@ -244,6 +244,7 @@ class ApproveView(LoginRequiredMixin, TemplateView):
 		requester = Requester.objects.get(user=request.user)
 		api_url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/'
 		cart = StorageCart.objects.get(requester=requester, ordered=False)
+		cart.save()
 		approve = Approve.objects.filter(requester=requester).last()
 		kitting_plan = KittingPlan.objects.all()
 		context = {
