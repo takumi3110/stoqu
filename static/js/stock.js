@@ -169,3 +169,34 @@ function totalPriceChange() {
     );
     totalPrice.forEach(val => val.innerHTML = price.toLocaleString());
 }
+
+function changeRadio(radioEl, data, pk, date, quantity) {
+    radioEl.addEventListener('click', function() {
+        const url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/' + pk + '/';
+        const kittingPrice = document.querySelector('.total-kitting-price');
+        const selectPlan = document.querySelectorAll('.select-plan');
+        const init = makePutInit(data);
+        fetch(url, init)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw Error();
+                }
+            })
+            .then(data => {
+                const schedule = formatDate(data.due_at, 'YYYY年MM月DD日');
+                el.innerHTML = '';
+                el.innerHTML = schedule;
+            });
+        changePrice(selectPlan, kittingPrice, quantity);
+        const subTotalEl = document.querySelector('.subtotal-price').innerHTML;
+        const afterKittingEl = document.querySelector('.total-kitting-price').innerHTML;
+        const totalPriceEl = document.querySelector('.total-price');
+        const subTotalPrice = Number(subTotalEl.trim().replace(',', ''));
+        const afterKittingPrice = Number(afterKittingEl.trim().replace(',', ''));
+        const totalPrice = subTotalPrice + afterKittingPrice;
+        totalPriceEl.innerHTML = totalPrice.toLocaleString();
+    });
+}
+

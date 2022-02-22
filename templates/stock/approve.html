@@ -5,6 +5,9 @@
 
 {% block content %}
 
+	<a href="{% url 'stock:cart' %}">
+        <i class="fas fa-long-arrow-alt-left"></i>カートに戻る
+    </a>
 	<div class="container my-5">
 		<div class="row page-title">
 			<h2 class="title-text">依頼内容確認・変更画面</h2>
@@ -67,10 +70,13 @@
 									</div>
 									<div class="col-4">
 										<p class="item-name mb-1">{{ order_item.storage_item }}</p>
-										<p class="item-price">￥{{ order_item.pk | total_price | intcomma}}</p>
+										<p class="item-price">￥
+											<span id="itemPrice{{ order_item.pk }}">{{ order_item.pk | total_price | intcomma}}</span>
+										</p>
 										<p>
-	                                       <label for="quantity{{ order_item.pk }}">数量：</label>
-			                                <select name="" id="quantity{{ order_item.pk }}"></select>
+{#											<label for="quantity{{ order_item.pk }}">数量：</label>#}
+{#											<select name="" id="quantity{{ order_item.pk }}"></select>#}
+											数量：{{ order_item.quantity }}
 	                                    </p>
 									</div>
 									<div class="col-3">
@@ -119,7 +125,11 @@
 							<p><span class="confirm-text">注文内容</span>(税込み)</p>
 							<p class="mb-1">
 								商品の小計：
-								<span class="confirm-price float-end total-price">￥{{ cart.pk | subtotal_price | intcomma }}</span>
+								<span class="confirm-price float-end">￥
+									<span class="subtotal-price">
+										{{ cart.pk | subtotal_price | intcomma }}
+									</span>
+								</span>
 							</p>
 							<p class="mb-1">
 								キッティング費用：
@@ -129,9 +139,13 @@
 							</p>
 						</div>
 						<div class="row bottom-border mb-3">
-							<p class="confirm-text total-price">
+							<p class="confirm-text">
 								ご請求額：
-								<span class="float-end">￥{{ cart.price | intcomma }}</span>
+								<span class="float-end">￥
+									<span class="total-price">
+										{{ cart.price | intcomma }}
+									</span>
+								</span>
 							</p>
 						</div>
 					</div>
@@ -169,19 +183,18 @@
 		});
 
         //ajax
-        const kittingPrice = document.querySelector('.total-kitting-price');
-        const selectPlan = document.querySelectorAll('.select-plan');
+
 		{% for order_item in cart.order_item.all %}
-	        let quantity_el{{ order_item.pk }} = document.querySelector('#quantity{{ order_item.pk }}');
-            value = {
-                storage_item: {{ order_item.storage_item.pk }},
-	            requester: {{ order_item.requester.pk }}
-            }
-            quantity(quantity_el{{ order_item.pk }}, {{ order_item.storage_item.quantity }}, {{ order_item.quantity }});
-            quantityChange(quantity_el{{ order_item.pk }}, value, {{ order_item.pk }});
+	        {#let quantity_el{{ order_item.pk }} = document.querySelector('#quantity{{ order_item.pk }}');#}
+            {#value = {#}
+            {#    storage_item: {{ order_item.storage_item.pk }},#}
+	        {#    requester: {{ order_item.requester.pk }}#}
+
+            {#quantity(quantity_el{{ order_item.pk }}, {{ order_item.storage_item.quantity }}, {{ order_item.quantity }});#}
+            {#quantityChange(quantity_el{{ order_item.pk }}, value, {{ order_item.pk }});#}
 
 			const scheduleDate{{ order_item.pk }} = document.querySelector('.schedule-date{{ order_item.pk }}');
-			const url{{ order_item.pk }} = "{{ api_url }}{{ order_item.pk }}/";
+
             {% for plan in kitting_plan %}
                 let checkId{{ plan.pk }}_{{ order_item.pk }} = '#kittingPlan{{ plan.pk }}_{{ order_item.pk }}';
                 let data{{ plan.pk }}_{{ order_item.pk }} = {
@@ -190,32 +203,19 @@
                     requester: {{ request.user.pk }},
                     kitting_plan: {{ plan.pk }}
                 }
-	            const changeRadio{{ plan.pk }}_{{ order_item.pk }} = document.querySelector(
+	            const radioEl{{ plan.pk }}_{{ order_item.pk }} = document.querySelector(
                     checkId{{ plan.pk }}_{{ order_item.pk }}
 	            );
-                changeRadio{{ plan.pk }}_{{ order_item.pk }}.addEventListener('click', function() {
-                    const init = makePutInit(data{{ plan.pk }}_{{ order_item.pk }});
-                    put(url{{ order_item.pk }}, init, scheduleDate{{ order_item.pk }});
-                    changePrice(selectPlan, kittingPrice, {{ order_item.quantity }});
-                });
+                changeRadio(
+                    radioEl{{ plan.pk }}_{{ order_item.pk }},
+	                data{{ plan.pk }}_{{ order_item.pk }},
+	                {{ order_item.pk }},
+	                scheduleDate{{ order_item.pk }},
+	                {{ order_item.quantity }}
+                );
+
             {% endfor %}
         {% endfor %}
-        async function put(url, init, el) {
-            await fetch(url, init)
-	            .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw Error();
-                    }
-	            })
-	            .then(data => {
-                    const schedule = formatDate(data.due_at, 'YYYY年MM月DD日');
-                    el.innerHTML = '';
-                    el.innerHTML = schedule;
-	            })
-        }
-
 
 	</script>
 
