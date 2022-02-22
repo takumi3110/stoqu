@@ -54,7 +54,7 @@
 											本体価格：￥{{ order_item.storage_item.price | intcomma }}</div>
 									</div>
 									<div class="row">
-										<div class="col-3 cart__item__menu">付属品：</div>
+										<div class="col-2 cart__item__menu">付属品</div>
 										<div class="col-7">
 											{% for option in order_item.storage_item.option.all %}
 												<p>{{ option.name }}：￥{{ option.price | intcomma }}</p>
