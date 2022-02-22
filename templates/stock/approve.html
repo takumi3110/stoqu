@@ -65,15 +65,24 @@
 	                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}" class="item-img">
 	                                    {% endif %}
 									</div>
-									<div class="col-5">
+									<div class="col-4">
 										<p class="item-name mb-1">{{ order_item.storage_item }}</p>
-										<p class="item-price mb-1">￥{{ order_item.pk | total_price | intcomma}}</p>
-										<p class="mb-1">
+										<p class="item-price">￥{{ order_item.pk | total_price | intcomma}}</p>
+										<p>
 	                                       <label for="quantity{{ order_item.pk }}">数量：</label>
 			                                <select name="" id="quantity{{ order_item.pk }}"></select>
 	                                    </p>
 									</div>
-									<div class="col-5">
+									<div class="col-3">
+										<p class="item-name">付属品</p>
+										{% for option in order_item.storage_item.option.all %}
+											<p class="mb-1">{{ option }}</p>
+											<p class="item-price"> ￥{{ option.price | intcomma}}</p>
+										{% empty %}
+											なし
+										{% endfor %}
+									</div>
+									<div class="col-3">
 										<p class="item-name">キッティングオプション</p>
 										<form action="#" method="post">
 											{% csrf_token %}
