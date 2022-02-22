@@ -124,9 +124,11 @@ def get_obj(resource, requester, pk):
 	# cart = StorageCart.objects.filter(requester=requester, ordered=False)
 	cart = StorageCart.objects.get_or_none(requester=requester, ordered=False)
 	if resource == 'add':
+		kitting_plan = KittingPlan.objects.get_or_none(name='標準')
 		item = get_object_or_404(StorageItem, pk=pk)
 		order_item, created = OrderItem.objects.get_or_create(
 			storage_item=item,
+			kitting_plan=kitting_plan,
 			ordered=False,
 			requester=requester
 		)
@@ -151,7 +153,6 @@ def add_item(request, pk):
 	requester = Requester.objects.get(user=request.user)
 	obj_data = get_obj('add', requester, pk)
 	order_item = obj_data['order_item']
-	# cart = obj_data['cart']
 	cart = obj_data['cart']
 	storage_quantity = order_item.storage_item.quantity
 	if storage_quantity > 0:
@@ -162,9 +163,7 @@ def add_item(request, pk):
 			option.save()
 	else:
 		return redirect('stock:cart')
-	# if cart.exists():
 	if cart is not None:
-		# storage_cart = cart[0]
 		storage_cart = cart
 		if storage_cart.order_item.filter(storage_item__pk=order_item.storage_item.pk).exists():
 			order_item.quantity += 1
@@ -176,7 +175,7 @@ def add_item(request, pk):
 			requester=requester
 		)
 		storage_cart.order_item.add(order_item)
-		storage_cart.save()
+	storage_cart.save()
 	return redirect('stock:cart')
 
 
@@ -233,6 +232,7 @@ def remove_cart(request, pk):
 			cart.delete()
 		else:
 			order_item.delete()
+		cart.save()
 	else:
 		pass
 	return redirect('stock:cart')
@@ -244,14 +244,9 @@ class ApproveView(LoginRequiredMixin, TemplateView):
 		requester = Requester.objects.get(user=request.user)
 		api_url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/'
 		cart = StorageCart.objects.get(requester=requester, ordered=False)
+		cart.save()
 		approve = Approve.objects.filter(requester=requester).last()
 		kitting_plan = KittingPlan.objects.all()
-		order_item_list = cart.order_item.all()
-		for order_item in order_item_list:
-			if order_item.kitting_plan is None:
-				select_kitting = KittingPlan.objects.get(name='標準')
-				order_item.kitting_plan = select_kitting
-				order_item.save()
 		context = {
 			'cart': cart,
 			'kitting_plan': kitting_plan,
@@ -299,6 +294,12 @@ def add_order_info(request):
 			order_branch = 1
 	else:
 		order_branch = 1
+	for order_item in cart.order_item.all():
+		order_item.storage_item.quantity -= order_item.quantity
+		order_item.storage_item.save()
+		for option in order_item.storage_item.option.all():
+			option.quantity -= order_item.quantity
+			option.save()
 	number = str_date + '-' + str(order_branch)
 	order_info, update = OrderInfo.objects.update_or_create(
 		number=number,
@@ -320,6 +321,20 @@ class ConfirmView(LoginRequiredMixin, TemplateView):
 	def get_context_data(self, *args, **kwargs):
 		context = super(ConfirmView, self).get_context_data(**kwargs)
 		order_info = OrderInfo.objects.get(pk=kwargs['pk'])
+		order_item = order_info.storage_cart.order_item.all()
+		orderitem_list = {}
+		# for order_item in order_info.storage_cart.order_item.all():
+		# 	orderitem_list[order_item.due_at.strftime('%Y年%m月%d日')] = []
+		# 	orderitem_list[order_item.due_at.strftime('%Y年%m月%d日')].append(order_item)
+		for i in range(len(order_item)):
+			due = order_item[i].due_at
+			if i > 0:
+				if due != order_item[i - 1].due_at:
+					orderitem_list[due.strftime('%Y年%m月%d日')] = []
+			else:
+				orderitem_list[due.strftime('%Y年%m月%d日')] = []
+			orderitem_list[due.strftime('%Y年%m月%d日')].append(order_item[i])
+		context['orderitem_list'] = orderitem_list
 		context['order_info'] = order_info
 		return context
 

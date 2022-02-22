@@ -21,6 +21,7 @@ def make_subtotal(cart):
 	return price
 
 
+@register.filter
 def add_tax(price):
 	"""
 	:param

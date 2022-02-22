@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Passion+One&display=swap");
+a {
+  text-decoration: none;
+}
+
 .navigation {
   text-align: center;
 }
@@ -44,6 +48,60 @@
 }
 .storage__text {
   font-size: 15px;
+}
+
+.cart .bottom-border {
+  border-bottom: thin solid #dfdfdf;
+}
+.cart__header {
+  position: relative;
+}
+.cart__header .header-price {
+  font-size: 15px;
+  position: absolute;
+  margin-bottom: 0;
+  text-align: right;
+  bottom: 0;
+}
+.cart__title {
+  font-size: 30px;
+  font-width: bold;
+}
+.cart__image {
+  width: 100%;
+}
+.cart__item__name {
+  font-size: 25px;
+  font-weight: bold;
+}
+.cart__item__location {
+  font-size: 15px;
+  margin-bottom: -2px;
+  color: green;
+}
+.cart__item__price {
+  font-size: 20px;
+  font-weight: bold;
+}
+.cart__item__quantity {
+  width: 100px;
+}
+.cart__item select {
+  width: 80px;
+}
+.cart__footer {
+  text-align: right;
+}
+.cart__total__title {
+  font-size: 20px;
+}
+.cart__total p {
+  margin-bottom: -2px;
+  text-align: left;
+}
+.cart__total__price {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .get-data:hover {
@@ -113,53 +171,6 @@
 .approve-item .item-price {
   color: orangered;
   font-weight: bold;
-}
-
-.cart-card .bottom-border {
-  border-bottom: thin solid #dfdfdf;
-}
-.cart-card .cart-header {
-  position: relative;
-}
-.cart-card .cart-header .cart-title {
-  font-size: 30px;
-  font-width: bold;
-}
-.cart-card .cart-header .cart-price-name {
-  position: absolute;
-  margin-bottom: 0;
-  text-align: right;
-  bottom: 0;
-}
-.cart-card .cart-item p {
-  margin-bottom: -2px;
-}
-.cart-card .cart-item-title {
-  font-size: 25px;
-  font-weight: bold;
-}
-.cart-card .cart-item-location {
-  font-size: 15px;
-  color: green;
-}
-.cart-card .cart-price {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.cart-total p {
-  margin-bottom: -2px;
-  text-align: left;
-}
-
-.cart-total-title {
-  font-size: 20px;
-}
-.cart-total-title .cart-total-price {
-  font-weight: bold;
-}
-.cart-total-title .cart-end {
-  text-align: right;
 }
 
 .approve-menu {

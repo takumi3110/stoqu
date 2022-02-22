@@ -49,6 +49,8 @@ class Option(models.Model):
 
 
 class StorageItem(models.Model):
+	objects = BaseManager()
+
 	order_number = models.CharField(
 		verbose_name='発注番号',
 		max_length=100
@@ -119,6 +121,8 @@ class StorageItem(models.Model):
 
 
 class KittingPlan(models.Model):
+	objects = BaseManager()
+
 	kitting_choice = (
 		('標準', '標準'),
 		('お急ぎ便', 'お急ぎ便')
@@ -140,7 +144,7 @@ class KittingPlan(models.Model):
 	)
 
 	def __str__(self):
-		return f'{self.name} {self.price}'
+		return f'{self.name} {self.price}円'
 
 	class Meta:
 		verbose_name = 'キッティング価格'
@@ -148,6 +152,8 @@ class KittingPlan(models.Model):
 
 
 class OrderItem(models.Model):
+	objects = BaseManager()
+
 	storage_item = models.ForeignKey(
 		StorageItem,
 		on_delete=models.CASCADE,
@@ -171,6 +177,12 @@ class OrderItem(models.Model):
 		blank=True
 	)
 
+	price = models.PositiveIntegerField(
+		verbose_name='合計金額',
+		null=True,
+		blank=True
+	)
+
 	due_at = models.DateField(
 		verbose_name='納品予定日',
 		null=True,
@@ -184,6 +196,8 @@ class OrderItem(models.Model):
 	)
 
 	def save(self, *args, **kwargs):
+		item_price = self.storage_item.total_price
+		price = item_price * self.quantity
 		kitting_plan = self.kitting_plan
 		if kitting_plan is not None:
 			now = datetime.datetime.now()
@@ -195,6 +209,9 @@ class OrderItem(models.Model):
 			else:
 				date = datetime.date.today() + datetime.timedelta(days=day)
 			self.due_at = date
+			self.price = price + kitting_plan.price
+		else:
+			self.price = price
 		super(OrderItem, self).save(*args, **kwargs)
 
 	def __str__(self):
@@ -220,7 +237,13 @@ class StorageCart(models.Model):
 	)
 
 	price = models.PositiveIntegerField(
-		verbose_name='合計金額',
+		verbose_name='合計金額（税込み）',
+		null=True,
+		blank=True
+	)
+
+	tax_price = models.PositiveSmallIntegerField(
+		verbose_name='消費税',
 		null=True,
 		blank=True
 	)
@@ -228,15 +251,19 @@ class StorageCart(models.Model):
 	ordered = models.BooleanField(
 		default=False
 	)
-	
+
 	def save(self, *args, **kwargs):
 		if self.pk is not None:
 			self.price = 0
+			subtotal = 0
+			tax = 0.1
+			self.tax_price = 0
 			for item in self.order_item.all():
-				price = item.storage_item.total_price * item.quantity
+				subtotal += item.storage_item.total_price * item.quantity
 				if item.kitting_plan is not None:
-					price += item.kitting_plan.price
-				self.price += price
+					subtotal += item.kitting_plan.price
+			self.tax_price += round(subtotal * tax)
+			self.price += subtotal + self.tax_price
 		super(StorageCart, self).save(*args, **kwargs)
 
 	def __str__(self):

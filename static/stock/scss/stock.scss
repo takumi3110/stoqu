@@ -3,13 +3,18 @@
 
 $cBorder: #dfdfdf;
 
+a {
+  text-decoration: none;
+}
+
+
 .navigation {
   text-align: center;
 
   &__title {
     font-family: 'Passion One', cursive;
     font-size: 40px;
-    letter-spacing:3px;
+    letter-spacing: 3px;
   }
 
   &__text {
@@ -48,9 +53,11 @@ $cBorder: #dfdfdf;
 .storage {
   &__card {
     transition: all 0.3s;
+
     &:hover {
       cursor: pointer;
     }
+
     &:active {
       transform: scale(0.9);
     }
@@ -58,6 +65,80 @@ $cBorder: #dfdfdf;
 
   &__text {
     font-size: 15px;
+  }
+}
+
+.cart {
+  & .bottom-border {
+    border-bottom: thin solid $cBorder;
+  }
+
+  &__header {
+    position: relative;
+
+    & .header-price {
+      font-size: 15px;
+      position: absolute;
+      margin-bottom: 0;
+      text-align: right;
+      bottom: 0;
+    }
+  }
+
+  &__title {
+    font-size: 30px;
+    font-width: bold;
+  }
+
+  &__image {
+    width: 100%;
+  }
+
+  &__item {
+    &__name {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    &__location {
+      font-size: 15px;
+      margin-bottom: -2px;
+      color: green;
+    }
+
+    &__price {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    &__quantity {
+      width: 100px;
+    }
+
+    & select {
+      width: 80px;
+    }
+  }
+
+  &__footer {
+    text-align: right;
+  }
+
+  &__total {
+
+    &__title {
+      font-size: 20px;
+    }
+
+    & p {
+      margin-bottom: -2px;
+      text-align: left;
+    }
+
+    &__price {
+      font-size: 20px;
+      font-weight: bold;
+    }
   }
 }
 
@@ -83,12 +164,15 @@ $cBorder: #dfdfdf;
     font-size: 25px;
     height: 70px;
   }
+
   & .td-spec {
     font-weight: bold;
     height: 50px;
   }
+
   & .down-allow {
     text-align: right;
+
     &:hover {
       cursor: pointer;
     }
@@ -113,12 +197,13 @@ $cBorder: #dfdfdf;
 }
 
 .menu-title {
-    font-size: 20px;
-    font-weight: bold;
-  }
+  font-size: 20px;
+  font-weight: bold;
+}
 
 .approve-item {
   border-radius: 10px;
+
   & .schedule {
     color: forestgreen;
     font-size: 25px;
@@ -138,67 +223,6 @@ $cBorder: #dfdfdf;
   & .item-price {
     color: orangered;
     font-weight: bold;
-  }
-}
-
-.cart-card {
-  & .bottom-border {
-    border-bottom: thin solid $cBorder;
-  }
-
-  & .cart-header {
-    position: relative;
-    & .cart-title {
-      font-size: 30px;
-      font-width: bold;
-    }
-
-    & .cart-price-name {
-      position: absolute;
-      margin-bottom: 0;
-      text-align: right;
-      bottom: 0;
-    }
-  }
-
-  & .cart-item {
-    & p {
-      margin-bottom: -2px;
-    }
-  }
-
-  & .cart-item-title {
-    font-size: 25px;
-    font-weight: bold;
-  }
-
-  & .cart-item-location {
-    font-size: 15px;
-    color: green;
-  }
-
-  & .cart-price {
-    font-size: 20px;
-    font-weight: bold;
-  }
-}
-
-.cart-total {
-  & p {
-    margin-bottom: -2px;
-    text-align: left;
-  }
-}
-
-.cart-total-title {
-  font-size: 20px;
-
-  & .cart-total-price {
-    font-weight: bold;
-  }
-
-  & .cart-end {
-    text-align: right;
   }
 }
 
@@ -235,6 +259,7 @@ $cBorder: #dfdfdf;
 
   &__address {
     border-bottom: thin solid $cBorder;
+
     & .address {
       font-weight: bold;
     }

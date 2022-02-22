@@ -27,7 +27,7 @@ const getCookie = (name) => {
 }
 const csrfToken = getCookie('csrftoken');
 
-function makeInit(data) {
+function makePutInit(data) {
     return {
         method: 'PUT',
         headers: {
@@ -37,6 +37,27 @@ function makeInit(data) {
         body: JSON.stringify(data),
     }
 }
+
+// function makePostInit(data) {
+//     return {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': csrfToken
+//         },
+//         body: JSON.stringify(data),
+//     }
+// }
+
+// function GetInit() {
+//     return {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': csrfToken
+//         },
+//     }
+// }
 
 function changePrice(checkEl, totalEl, count) {
     totalEl.innerHTML = '';
@@ -101,10 +122,11 @@ function tradeCheck() {
 }
 
 function quantity(el, value, selectedValue) {
-    for (let i = 1; i <= value + 1; i++) {
+    for (let i = 1; i <= value; i++) {
         let new_option = document.createElement('option');
         new_option.value = String(i);
         new_option.text = String(i);
+        new_option.classList.add('cart__item__quantity');
         if (i === selectedValue) {
             new_option.selected = true;
         }
@@ -113,18 +135,13 @@ function quantity(el, value, selectedValue) {
 }
 
 
-function quantityChange(el, value, pk) {
+function quantityChange(el, data, pk) {
     el.addEventListener('change', function() {
         let url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/' + pk + '/';
-        let data = {
-            storage_item: value.storage_item,
-            quantity: this.value,
-            ordered: false,
-            due_at: null,
-            kitting_plan: null,
-            requester: value.requester
-        }
-        const init = makeInit(data);
+        let id = '#itemPrice' + pk;
+        let itemPrice = document.querySelector(id);
+        data.quantity = this.value;
+        const init = makePutInit(data);
         fetch(url, init)
             .then(response => {
                 if (response.ok) {
@@ -134,7 +151,52 @@ function quantityChange(el, value, pk) {
                 }
             })
             .then(data => {
-                console.log(data);
+                let tax = 1.10;
+                let subtotal = Math.round(data.price * tax);
+                itemPrice.innerHTML = subtotal.toLocaleString();
+                totalPriceChange();
+
             });
     });
 }
+
+function totalPriceChange() {
+    let itemPrice = document.querySelectorAll('.item-price');
+    let totalPrice = document.querySelectorAll('.total-price');
+    let price = 0;
+    itemPrice.forEach(
+        val => price += Number(val.innerHTML.replace(',', ''))
+    );
+    totalPrice.forEach(val => val.innerHTML = price.toLocaleString());
+}
+
+function changeRadio(radioEl, data, pk, date, quantity) {
+    radioEl.addEventListener('click', function() {
+        const url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/' + pk + '/';
+        const kittingPrice = document.querySelector('.total-kitting-price');
+        const selectPlan = document.querySelectorAll('.select-plan');
+        const init = makePutInit(data);
+        fetch(url, init)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw Error();
+                }
+            })
+            .then(data => {
+                const schedule = formatDate(data.due_at, 'YYYY年MM月DD日');
+                el.innerHTML = '';
+                el.innerHTML = schedule;
+            });
+        changePrice(selectPlan, kittingPrice, quantity);
+        const subTotalEl = document.querySelector('.subtotal-price').innerHTML;
+        const afterKittingEl = document.querySelector('.total-kitting-price').innerHTML;
+        const totalPriceEl = document.querySelector('.total-price');
+        const subTotalPrice = Number(subTotalEl.trim().replace(',', ''));
+        const afterKittingPrice = Number(afterKittingEl.trim().replace(',', ''));
+        const totalPrice = subTotalPrice + afterKittingPrice;
+        totalPriceEl.innerHTML = totalPrice.toLocaleString();
+    });
+}
+
