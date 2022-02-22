@@ -294,6 +294,12 @@ def add_order_info(request):
 			order_branch = 1
 	else:
 		order_branch = 1
+	for order_item in cart.order_item.all():
+		order_item.storage_item.quantity -= order_item.quantity
+		order_item.storage_item.save()
+		for option in order_item.storage_item.option.all():
+			option.quantity -= order_item.quantity
+			option.save()
 	number = str_date + '-' + str(order_branch)
 	order_info, update = OrderInfo.objects.update_or_create(
 		number=number,
@@ -315,6 +321,20 @@ class ConfirmView(LoginRequiredMixin, TemplateView):
 	def get_context_data(self, *args, **kwargs):
 		context = super(ConfirmView, self).get_context_data(**kwargs)
 		order_info = OrderInfo.objects.get(pk=kwargs['pk'])
+		order_item = order_info.storage_cart.order_item.all()
+		orderitem_list = {}
+		# for order_item in order_info.storage_cart.order_item.all():
+		# 	orderitem_list[order_item.due_at.strftime('%Y年%m月%d日')] = []
+		# 	orderitem_list[order_item.due_at.strftime('%Y年%m月%d日')].append(order_item)
+		for i in range(len(order_item)):
+			due = order_item[i].due_at
+			if i > 0:
+				if due != order_item[i - 1].due_at:
+					orderitem_list[due.strftime('%Y年%m月%d日')] = []
+			else:
+				orderitem_list[due.strftime('%Y年%m月%d日')] = []
+			orderitem_list[due.strftime('%Y年%m月%d日')].append(order_item[i])
+		context['orderitem_list'] = orderitem_list
 		context['order_info'] = order_info
 		return context
 
