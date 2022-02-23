@@ -378,6 +378,17 @@ class OrderInfoSelectView(LoginRequiredMixin, DetailView):
 		return render(request, 'stock/orderinfo_delete.html', context)
 
 
+def change_quantity(request, **kwargs):
+	order_item = OrderItem.objects.get(kwargs['pk'])
+	quantity = order_item.quantity
+	storage_quantity = order_item.storage_item.quantity
+	context = {
+		'storage_quantity': storage_quantity,
+		'quantity': quantity
+	}
+	return render(request, 'snippets/quantity.html', context)
+
+
 def create_storage_data(request):
 	"""
 	データ取り込み用
