@@ -1,12 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<form action="#" method="post">
+	{% csrf_token %}
+	<div class="modal-header">
+		<h5 class="modal-title">数量変更</h5>
+		<button class="btn btn-secondary close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-3">変更前</div>
+			<div class="col-9">{{ quantity }}</div>
+		</div>
+		<div class="row">
+			<div class="col-3"><label for="changeQuantity">変更後</label></div>
+			<div class="col-9">
+				<select name="quantity" id="changeQuantity"></select>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" aria-label="Close">
+            キャンセル
+        </button>
+        <button type="submit" class="btn btn-warning float-end my-2">変更する</button>
+	</div>
+</form>
