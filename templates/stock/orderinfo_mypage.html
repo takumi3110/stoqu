@@ -5,102 +5,108 @@
 
 {% block content %}
 
-    <div class="container history my-5">
-        <div class="row">
-            <h2 class="title-text">貯蔵品PC依頼履歴</h2>
-        </div>
-        {% for orderinfo in orderinfo_list%}
-            <div class="row my-5">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header history__header">
-                            <div class="row">
-                                <div class="col-3">
-                                    <p class="header-text">依頼日</p>
-                                    <p>{{ orderinfo.ordered_at }}</p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="header-text">合計金額(税込み)</p>
-                                    <p>￥{{ orderinfo.storage_cart.pk | result_price | intcomma }}</p>
-                                </div>
-                                <div class="col-4">
-                                    <p class="header-text">お届け先</p>
-                                    <p>{{ orderinfo.requester }}</p>
-                                </div>
-                                <div class="col-3">
-                                    <p class="text-right header-text">受注番号 {{ orderinfo.number }}</p>
-                                    <p class="text-right">
-                                        <a href="{% url 'stock:orderinfo_detail' orderinfo.pk %}">依頼内容を表示</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <div class="card-body">
-                                        {% for order_item in orderinfo.storage_cart.order_item.all %}
-                                            <div class="row">
-                                                {% if orderinfo.completed_delivery %}
-	                                                <p class="history__schedule">{{ orderinfo.delivery_date }}にお届け完了しました。</p>
-                                                {% else %}
-                                                    <p class="history__schedule">{{ order_item.due_at }}にお届け予定です</p>
-                                                {% endif %}
-                                                <div class="col-md-2">
-                                                    {% if order_item.storage_item.item.pc.img.name == '' %}
-				                                        <img src="/media/images/no_image_logo.png" alt="noimage" class="confirm__image">
-				                                    {% else %}
-				                                        <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}" class="confirm__image">
-				                                    {% endif %}
-                                                </div>
-                                                <div class="col-md-10 mb-5">
-	                                                <a href="{% url 'stock:storage_detail' order_item.storage_item.pk %}">
-		                                                <p class="mb-1">
-			                                                {{ order_item.storage_item.item }}
-		                                                </p>
-		                                                <p class="mb-1">
-			                                                <span>CPU：{{ order_item.storage_item.item.cpu }}</span>
-			                                                <span>メモリ：{{ order_item.storage_item.item.memory }}GB</span>
-			                                                <span>ストレージ：{{ order_item.storage_item.item.storage }}</span>
-		                                                </p>
-	                                                    <p>
-		                                                    付属品：
-			                                                {% for option in order_item.storage_item.option.all %}
-				                                                <span>{{ option }}</span>
-			                                                {% empty %}
-				                                                <span>なし</span>
-			                                                {% endfor %}
-		                                                </p>
-	                                                </a>
-                                                    <p>数量： {{ order_item.quantity }}台
-                                                        <span>
-	                                                        <a href="#">数量を変更</a>
-                                                        </span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-	                                <div class="row mb-2">
-	                                    <button class="btn btn-warning history__button">ステータスを確認</button>
-	                                </div>
-	                                {% if orderinfo.completed_delivery is False%}
-	                                    <div class="row">
-			                                <button class="btn btn-outline-secondary history__button cancel-btn{{ orderinfo.pk }}">依頼をキャンセル</button>
-		                                </div>
-	                                {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% empty %}
-            まだ依頼がありません
-        {% endfor %}
-    </div>
+	<div class="container history my-5">
+		<div class="row">
+			<h2 class="title-text">貯蔵品PC依頼履歴</h2>
+		</div>
+		{% for orderinfo in orderinfo_list %}
+			<div class="row my-5">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header history__header">
+							<div class="row">
+								<div class="col-3">
+									<p class="header-text">依頼日</p>
+									<p>{{ orderinfo.ordered_at }}</p>
+								</div>
+								<div class="col-2">
+									<p class="header-text">合計金額(税込み)</p>
+									<p>￥{{ orderinfo.storage_cart.pk | result_price | intcomma }}</p>
+								</div>
+								<div class="col-4">
+									<p class="header-text">お届け先</p>
+									<p>{{ orderinfo.requester }}</p>
+								</div>
+								<div class="col-3">
+									<p class="text-right header-text">受注番号 {{ orderinfo.number }}</p>
+									<p class="text-right">
+										<a href="{% url 'stock:orderinfo_detail' orderinfo.pk %}">依頼内容を表示</a>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-9">
+									<div class="card-body">
+										{% for order_item in orderinfo.storage_cart.order_item.all %}
+											<div class="row">
+												{% if orderinfo.completed_delivery %}
+													<p class="history__schedule">{{ orderinfo.delivery_date }}にお届け完了しました。</p>
+												{% else %}
+													<p class="history__schedule">{{ order_item.due_at }}にお届け予定です</p>
+												{% endif %}
+												<div class="col-md-2">
+													{% if order_item.storage_item.item.pc.img.name == '' %}
+														<img src="/media/images/no_image_logo.png" alt="noimage"
+														     class="confirm__image">
+													{% else %}
+														<img src="{{ order_item.storage_item.item.pc.img.url }}"
+														     alt="{{ storage_item.item.pc.name }}"
+														     class="confirm__image">
+													{% endif %}
+												</div>
+												<div class="col-md-10 mb-5">
+													<a href="{% url 'stock:storage_detail' order_item.storage_item.pk %}">
+														<p class="mb-1">
+															{{ order_item.storage_item.item }}
+														</p>
+														<p class="mb-1">
+															<span>CPU：{{ order_item.storage_item.item.cpu }}</span>
+															<span>メモリ：{{ order_item.storage_item.item.memory }}GB</span>
+															<span>ストレージ：{{ order_item.storage_item.item.storage }}</span>
+														</p>
+														<p>
+															付属品：
+															{% for option in order_item.storage_item.option.all %}
+																<span>{{ option }}</span>
+															{% empty %}
+																<span>なし</span>
+															{% endfor %}
+														</p>
+													</a>
+													<p>数量： {{ order_item.quantity }}台
+														<span>
+															<a href="#"
+															   class="change-quantity{{ order_item.pk }}">数量を変更</a>
+														</span>
+													</p>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="row mb-2">
+										<button class="btn btn-warning history__button">ステータスを確認</button>
+									</div>
+									{% if orderinfo.completed_delivery is False %}
+										<div class="row">
+											<button class="btn btn-outline-secondary history__button cancel-btn{{ orderinfo.pk }}">
+												依頼をキャンセル
+											</button>
+										</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% empty %}
+			まだ依頼がありません
+		{% endfor %}
+	</div>
 
 {% endblock %}
 
@@ -108,8 +114,16 @@
 
 	<script type="text/javascript">
         {% for orderinfo in orderinfo_list %}
-	        const cancelBtn{{ orderinfo.pk }} = document.querySelector('.cancel-btn{{ orderinfo.pk }}');
+            const cancelBtn{{ orderinfo.pk }} = document.querySelector('.cancel-btn{{ orderinfo.pk }}');
             linkClick(cancelBtn{{ orderinfo.pk }}, "{% url 'stock:delete_select' orderinfo.pk %}");
+
+            {% for order_item in orderinfo.storage_cart.order_item.all %}
+                const quantity{{ order_item.pk }} = document.querySelector('.change-quantity{{ order_item.pk }}');
+                quantity{{ order_item.pk }}.each(function () {
+                    this.modalForm({formURL: "{% url 'stock:change_quantity' order_item.pk %}"});
+                })
+            {% endfor %}
+
         {% endfor %}
 	</script>
 {% endblock javascript %}

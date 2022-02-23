@@ -85,7 +85,7 @@
 			                                </a>
 				                            <p class="order-detail__price">￥{{ order_item.storage_item.total_price | intcomma }}</p>
 			                                <p>数量： {{ order_item.quantity }}台
-				                                <span><a href="#">数量変更</a></span>
+				                                <span><a href="#" class="change_quantity{{ order_item.pk }}">数量変更</a></span>
 			                                </p>
 			                                <p>キッティング費用： ￥{{ order_item.kitting_plan.price | intcomma }}</p>
 			                            </div>
@@ -116,8 +116,14 @@
 	<script type="text/javascript">
 		const cancelBtn = document.querySelector('.cancel-btn');
         linkClick(cancelBtn, "{% url 'stock:delete_select' orderinfo.pk %}");
-
         tradeCheck();
+
+        {% for order_item in orderinfo.storage_cart.order_item.all %}
+            const quantity{{ order_item.pk }} = document.querySelector('.change-quantity{{ order_item.pk }}');
+            quantity{{ order_item.pk }}.each(function() {
+                this.modalForm({formURL: "{% url 'stock:change_quantity' order_item.pk %}"});
+            })
+        {% endfor %}
 	</script>
 
 {% endblock javascript %}
