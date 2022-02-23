@@ -84,7 +84,9 @@
 			                                    </p>
 			                                </a>
 				                            <p class="order-detail__price">￥{{ order_item.storage_item.total_price | intcomma }}</p>
-			                                <p>数量： {{ order_item.quantity }}台</p>
+			                                <p>数量： {{ order_item.quantity }}台
+				                                <span><a href="#">数量変更</a></span>
+			                                </p>
 			                                <p>キッティング費用： ￥{{ order_item.kitting_plan.price | intcomma }}</p>
 			                            </div>
 			                        </div>
