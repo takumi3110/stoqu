@@ -113,8 +113,6 @@
 {% block javascript %}
 
 	<script type="text/javascript">
-
-		const modal = document.querySelector('#modal');
 		{% for orderinfo in orderinfo_list %}
 			const cancelBtn{{ orderinfo.pk }} = document.querySelector('.cancel-btn{{ orderinfo.pk }}');
 			linkClick(cancelBtn{{ orderinfo.pk }}, "{% url 'stock:delete_select' orderinfo.pk %}");
@@ -123,16 +121,8 @@
 				quantityEl{{ order_item.pk }}.each(function () {
 					this.modalForm({formURL: "{% url 'stock:change_quantity' order_item.pk %}"});
 				});
-				modal.on('show.bs.modal', function () {
-					const quantitySelect = document.querySelector('#changeQuantity');
-					quantity(quantitySelect, {{ order_item.storage_item.quantity }}, {{ order_item.quantity }});
-				});
 			{% endfor %}
 		{% endfor %}
-		modal.on('show.bs.modal', function () {
-			formSubmit();
-		});
-
 	</script>
 
 {% endblock javascript %}
