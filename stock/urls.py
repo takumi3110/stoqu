@@ -33,5 +33,5 @@ urlpatterns = [
 	path('my_order_info/', views.MyOrderInfoView.as_view(), name='my_order_info'),
 	path('order_info_detail/<int:pk>', views.OrderInfoDetailView.as_view(), name='orderinfo_detail'),
 	path('order_info_delete_select/<int:pk>', views.OrderInfoSelectView.as_view(), name='delete_select'),
-	path('chang_quantity/<int:pk>', views.change_quantity, name='change_quantity'),
+	path('chang_quantity/<int:pk>', views.ChangeQuantity.as_view(), name='change_quantity'),
 ]

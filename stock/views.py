@@ -359,7 +359,8 @@ class OrderInfoSelectView(LoginRequiredMixin, DetailView):
 	model = OrderInfo
 	template_name = 'stock/orderinfo_delete_select.html'
 
-	def post(self, request, *args, **kwargs):
+	@staticmethod
+	def post(request, *args, **kwargs):
 		order_item_pks = request.POST.getlist('selectItem')
 		context = {
 			'order_item_list': []
@@ -378,15 +379,28 @@ class OrderInfoSelectView(LoginRequiredMixin, DetailView):
 		return render(request, 'stock/orderinfo_delete.html', context)
 
 
-def change_quantity(request, **kwargs):
-	order_item = OrderItem.objects.get(kwargs['pk'])
-	quantity = order_item.quantity
-	storage_quantity = order_item.storage_item.quantity
-	context = {
-		'storage_quantity': storage_quantity,
-		'quantity': quantity
-	}
-	return render(request, 'snippets/quantity.html', context)
+class ChangeQuantity(LoginRequiredMixin, TemplateView):
+	def get(self, request, **kwargs):
+		order_item = OrderItem.objects.get(pk=kwargs['pk'])
+		quantity = order_item.quantity
+		storage_quantity = order_item.storage_item.quantity
+		context = {
+			'storage_quantity': storage_quantity,
+			'quantity': quantity
+		}
+		return render(request, 'snippets/quantity.html', context)
+
+	@staticmethod
+	def post(request, **kwargs):
+		order_item = OrderItem.objects.get(pk=kwargs['pk'])
+		storage_item = order_item.storage_item
+		post_quantity = request.POST['quantity']
+		after_quantity = order_item.quantity - post_quantity
+		storage_item.quantity += after_quantity
+		strage_item.save()
+		order_item.quantity = post_quantity
+		order_item.save()
+		return redirect('stock:orderinfo_detail', {pk: kwargs['pk']})
 
 
 def create_storage_data(request):
