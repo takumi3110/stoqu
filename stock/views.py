@@ -388,19 +388,20 @@ class ChangeQuantity(LoginRequiredMixin, TemplateView):
 			'storage_quantity': storage_quantity,
 			'quantity': quantity
 		}
-		return render(request, 'snippets/quantity.html', context)
+		return render(request, 'snippets/quantity_modal.html', context)
 
 	@staticmethod
 	def post(request, **kwargs):
 		order_item = OrderItem.objects.get(pk=kwargs['pk'])
 		storage_item = order_item.storage_item
-		post_quantity = request.POST['quantity']
+		post_quantity = int(request.POST['quantity'])
 		after_quantity = order_item.quantity - post_quantity
 		storage_item.quantity += after_quantity
-		strage_item.save()
+		storage_item.save()
 		order_item.quantity = post_quantity
 		order_item.save()
-		return redirect('stock:orderinfo_detail', {pk: kwargs['pk']})
+		order_info = OrderInfo.objects.get(storage_cart__order_item=order_item)
+		return redirect('stock:orderinfo_detail', order_info.pk)
 
 
 def create_storage_data(request):
