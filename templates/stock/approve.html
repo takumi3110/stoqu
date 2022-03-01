@@ -160,32 +160,30 @@
 
 	<script type="text/javascript">
 		const confirm = document.querySelector('#confirm');
-        const next_url = "{% url 'stock:add_order_info' %}"
-        linkClick(confirm, next_url);
+		const next_url = "{% url 'stock:add_order_info' %}"
+		linkClick(confirm, next_url);
 
-		$(function() {
-            $(".create-approve").each(function () {
-                $(this).modalForm({formURL: "{% url 'stock:approve_create' %}"});
-            });
+		$(".create-approve").each(function () {
+			$(this).modalForm({formURL: "{% url 'stock:approve_create' %}"});
 		});
 
-        {% if approve is not None %}
-	        $(".update-approve").each(function() {
-                $(this).modalForm({formURL: "{% url 'stock:approve_update' approve.pk %}"});
-	        });
-        {% endif %}
 
-		$("#modal").on('show.bs.modal', function() {
-            const form = document.querySelector('form');
-	        form.addEventListener("submit", event =>
-		        event.target.querySelectorAll("input:disabled, select:disabled").forEach(e => e.disabled = false)
-	        );
+		{% if approve is not None %}
+			$(".update-approve").each(function() {
+				$(this).modalForm({formURL: "{% url 'stock:approve_update' approve.pk %}"});
+			});
+		{% endif %}
+
+		const modal = document.querySelector('#modal');
+
+		$('#modal').on('show.bs.modal', function() {
+			formSubmit();
 		});
 
         //ajax
 
 		{% for order_item in cart.order_item.all %}
-	        {#let quantity_el{{ order_item.pk }} = document.querySelector('#quantity{{ order_item.pk }}');#}
+			{#let quantity_el{{ order_item.pk }} = document.querySelector('#quantity{{ order_item.pk }}');#}
             {#value = {#}
             {#    storage_item: {{ order_item.storage_item.pk }},#}
 	        {#    requester: {{ order_item.requester.pk }}#}
@@ -195,27 +193,27 @@
 
 			const scheduleDate{{ order_item.pk }} = document.querySelector('.schedule-date{{ order_item.pk }}');
 
-            {% for plan in kitting_plan %}
-                let checkId{{ plan.pk }}_{{ order_item.pk }} = '#kittingPlan{{ plan.pk }}_{{ order_item.pk }}';
-                let data{{ plan.pk }}_{{ order_item.pk }} = {
-                    storage_item: {{ order_item.storage_item.pk }},
-                    quantity: {{ order_item.quantity }},
-                    requester: {{ request.user.pk }},
-                    kitting_plan: {{ plan.pk }}
-                }
-	            const radioEl{{ plan.pk }}_{{ order_item.pk }} = document.querySelector(
-                    checkId{{ plan.pk }}_{{ order_item.pk }}
-	            );
-                changeRadio(
-                    radioEl{{ plan.pk }}_{{ order_item.pk }},
-	                data{{ plan.pk }}_{{ order_item.pk }},
-	                {{ order_item.pk }},
-	                scheduleDate{{ order_item.pk }},
-	                {{ order_item.quantity }}
-                );
+			{% for plan in kitting_plan %}
+				let checkId{{ plan.pk }}_{{ order_item.pk }} = '#kittingPlan{{ plan.pk }}_{{ order_item.pk }}';
+				let data{{ plan.pk }}_{{ order_item.pk }} = {
+					storage_item: {{ order_item.storage_item.pk }},
+					quantity: {{ order_item.quantity }},
+					requester: {{ request.user.pk }},
+					kitting_plan: {{ plan.pk }}
+				}
+				const radioEl{{ plan.pk }}_{{ order_item.pk }} = document.querySelector(
+					checkId{{ plan.pk }}_{{ order_item.pk }}
+				);
+				changeRadio(
+					radioEl{{ plan.pk }}_{{ order_item.pk }},
+					data{{ plan.pk }}_{{ order_item.pk }},
+					{{ order_item.pk }},
+					scheduleDate{{ order_item.pk }},
+					{{ order_item.quantity }}
+				);
 
-            {% endfor %}
-        {% endfor %}
+			{% endfor %}
+		{% endfor %}
 
 	</script>
 

@@ -359,7 +359,8 @@ class OrderInfoSelectView(LoginRequiredMixin, DetailView):
 	model = OrderInfo
 	template_name = 'stock/orderinfo_delete_select.html'
 
-	def post(self, request, *args, **kwargs):
+	@staticmethod
+	def post(request, *args, **kwargs):
 		order_item_pks = request.POST.getlist('selectItem')
 		context = {
 			'order_item_list': []
@@ -376,6 +377,31 @@ class OrderInfoSelectView(LoginRequiredMixin, DetailView):
 			order_info.storage_cart.delete()
 			order_info.delete()
 		return render(request, 'stock/orderinfo_delete.html', context)
+
+
+class ChangeQuantity(LoginRequiredMixin, TemplateView):
+	def get(self, request, **kwargs):
+		order_item = OrderItem.objects.get(pk=kwargs['pk'])
+		quantity = order_item.quantity
+		storage_quantity = order_item.storage_item.quantity
+		context = {
+			'storage_quantity': storage_quantity,
+			'quantity': quantity
+		}
+		return render(request, 'snippets/quantity_modal.html', context)
+
+	@staticmethod
+	def post(request, **kwargs):
+		order_item = OrderItem.objects.get(pk=kwargs['pk'])
+		storage_item = order_item.storage_item
+		post_quantity = int(request.POST['quantity'])
+		after_quantity = order_item.quantity - post_quantity
+		storage_item.quantity += after_quantity
+		storage_item.save()
+		order_item.quantity = post_quantity
+		order_item.save()
+		order_info = OrderInfo.objects.get(storage_cart__order_item=order_item)
+		return redirect('stock:orderinfo_detail', order_info.pk)
 
 
 def create_storage_data(request):

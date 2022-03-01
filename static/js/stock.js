@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
         curr = curr.replace(/\s+/, '&nbsp;');
         return `${acc}<span class="char">${curr}</span>`;
     }, "");
+    // const modal = document.querySelector('#modal');
 });
 
 function formatDate(date, format) {
@@ -136,7 +137,7 @@ function quantity(el, value, selectedValue) {
 
 
 function quantityChange(el, data, pk) {
-    el.addEventListener('change', function() {
+    el.addEventListener('change', function () {
         let url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/' + pk + '/';
         let id = '#itemPrice' + pk;
         let itemPrice = document.querySelector(id);
@@ -171,7 +172,7 @@ function totalPriceChange() {
 }
 
 function changeRadio(radioEl, data, pk, date, quantity) {
-    radioEl.addEventListener('click', function() {
+    radioEl.addEventListener('click', function () {
         const url = 'http://127.0.0.1:8000/api/v1/stock/orderItem/' + pk + '/';
         const kittingPrice = document.querySelector('.total-kitting-price');
         const selectPlan = document.querySelectorAll('.select-plan');
@@ -198,5 +199,13 @@ function changeRadio(radioEl, data, pk, date, quantity) {
         const totalPrice = subTotalPrice + afterKittingPrice;
         totalPriceEl.innerHTML = totalPrice.toLocaleString();
     });
+}
+
+function formSubmit() {
+    const form = document.querySelector('form');
+    form.addEventListener('submit', event =>
+    event.target.querySelectorAll('input:disabled, select:disabled').forEach(
+        e => e.disabled = false
+    ));
 }
 

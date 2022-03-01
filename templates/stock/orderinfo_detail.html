@@ -5,8 +5,8 @@
 
 {% block content %}
 	<a href="{% url 'stock:my_order_info' %}">
-        <i class="fas fa-long-arrow-alt-left"></i>依頼履歴に戻る
-    </a>
+		<i class="fas fa-long-arrow-alt-left"></i>依頼履歴に戻る
+	</a>
 	<div class="container order-detail my-5">
 		<div class="row">
 			<div class="col-10 offset-1">
@@ -19,12 +19,12 @@
 						<div class="row">
 							<div class="col-4 order-detail__content">
 								<p class="content-text">依頼者情報</p>
-								<p>{{ orderinfo.requester.screenname }}</p>
-								<p>{{ orderinfo.requester.department }}</p>
+								<p>{{ orderinfo.requester.user.screenname }}</p>
+								<p>{{ orderinfo.requester.user.department }}</p>
 							</div>
 							<div class="col-3 offset-1">
 								<p class="content-text">承認者情報</p>
-								<p>{{ orderinfo.approve}}</p>
+								<p>{{ orderinfo.approve }}</p>
 								<p>{{ orderinfo.approve.dept_code }}</p>
 								<p>{{ orderinfo.approve.dept_name }}</p>
 							</div>
@@ -57,48 +57,56 @@
 								{% for order_item in orderinfo.storage_cart.order_item.all %}
 									<h4 class="detail-info__schedule">{{ order_item.due_at }}にお届け予定</h4>
 									<div class="row">
-			                            <div class="col-md-3">
-			                                {% if order_item.storage_item.item.pc.img.name == '' %}
-			                                    <img src="/media/images/no_image_logo.png" alt="noimage" class="confirm__image">
-			                                {% else %}
-			                                    <img src="{{ order_item.storage_item.item.pc.img.url }}" alt="{{ storage_item.item.pc.name }}" class="confirm__image">
-			                                {% endif %}
-			                            </div>
-			                            <div class="col-md-9 mb-5">
-			                                <a href="{% url 'stock:storage_detail' order_item.storage_item.pk %}">
-			                                    <p class="mb-1">
-			                                        {{ order_item.storage_item.item }}
-			                                    </p>
-			                                    <p class="mb-1">
-			                                        <span>CPU：{{ order_item.storage_item.item.cpu }}</span>
-			                                        <span>メモリ：{{ order_item.storage_item.item.memory }}GB</span>
-			                                        <span>ストレージ：{{ order_item.storage_item.item.storage }}</span>
-			                                    </p>
-			                                    <p>
-			                                        付属品：
-			                                        {% for option in order_item.storage_item.option.all %}
-			                                            <span>{{ option }}</span>
-			                                        {% empty %}
-			                                            <span>なし</span>
-			                                        {% endfor %}
-			                                    </p>
-			                                </a>
-				                            <p class="order-detail__price">￥{{ order_item.storage_item.total_price | intcomma }}</p>
-			                                <p>数量： {{ order_item.quantity }}台</p>
-			                                <p>キッティング費用： ￥{{ order_item.kitting_plan.price | intcomma }}</p>
-			                            </div>
-			                        </div>
+										<div class="col-md-3">
+											{% if order_item.storage_item.item.pc.img.name == '' %}
+												<img src="/media/images/no_image_logo.png" alt="noimage"
+												     class="confirm__image">
+											{% else %}
+												<img src="{{ order_item.storage_item.item.pc.img.url }}"
+												     alt="{{ storage_item.item.pc.name }}" class="confirm__image">
+											{% endif %}
+										</div>
+										<div class="col-md-9 mb-5">
+											<a href="{% url 'stock:storage_detail' order_item.storage_item.pk %}">
+												<p class="mb-1">
+													{{ order_item.storage_item.item }}
+												</p>
+												<p class="mb-1">
+													<span>CPU：{{ order_item.storage_item.item.cpu }}</span>
+													<span>メモリ：{{ order_item.storage_item.item.memory }}GB</span>
+													<span>ストレージ：{{ order_item.storage_item.item.storage }}</span>
+												</p>
+												<p>
+													付属品：
+													{% for option in order_item.storage_item.option.all %}
+														<span>{{ option }}</span>
+													{% empty %}
+														<span>なし</span>
+													{% endfor %}
+												</p>
+											</a>
+											<p class="order-detail__price">
+												￥{{ order_item.storage_item.total_price | intcomma }}</p>
+											<p>数量： {{ order_item.quantity }}台
+												<span>
+													<a href="#" class="change-quantity{{ order_item.pk }}">数量変更</a>
+												</span>
+											</p>
+											<p>キッティング費用： ￥{{ order_item.kitting_plan.price | intcomma }}</p>
+										</div>
+									</div>
 								{% endfor %}
 							</div>
 							<div class="col-3">
 								<div class="row mb-3">
-                                    <button class="btn btn-warning history__button">ステータスを確認</button>
-                                </div>
-                                {% if orderinfo.completed_delivery is False%}
-                                    <div class="row">
-		                                <button class="btn btn-outline-secondary history__button cancel-btn">依頼をキャンセル</button>
-	                                </div>
-                                {% endif %}
+									<button class="btn btn-warning history__button">ステータスを確認</button>
+								</div>
+								{% if orderinfo.completed_delivery is False %}
+									<div class="row">
+										<button class="btn btn-outline-secondary history__button cancel-btn">依頼をキャンセル
+										</button>
+									</div>
+								{% endif %}
 							</div>
 						</div>
 					</div>
@@ -112,10 +120,23 @@
 {% block javascript %}
 
 	<script type="text/javascript">
+		const modal = document.querySelector('#modal');
 		const cancelBtn = document.querySelector('.cancel-btn');
-        linkClick(cancelBtn, "{% url 'stock:delete_select' orderinfo.pk %}");
+		linkClick(cancelBtn, "{% url 'stock:delete_select' orderinfo.pk %}");
+		tradeCheck();
+		{% for order_item in orderinfo.storage_cart.order_item.all %}
+			$(function() {
+				$('.change-quantity{{ order_item.pk }}').modalForm({formURL: "{% url 'stock:change_quantity' order_item.pk %}"});
+			});
 
-        tradeCheck();
+			$('#modal').on('show.bs.modal', function () {
+				const quantitySelect = document.querySelector('#changeQuantity');
+				quantity(quantitySelect, {{ order_item.storage_item.quantity }}, {{ order_item.quantity }});
+			});
+		{% endfor %}
+		$(`#modal`).on('show.bs.modal', function () {
+			formSubmit();
+		});
 	</script>
 
 {% endblock javascript %}
