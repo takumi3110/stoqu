@@ -163,11 +163,10 @@
 		const next_url = "{% url 'stock:add_order_info' %}"
 		linkClick(confirm, next_url);
 
-		$(function() {
-			$(".create-approve").each(function () {
-				$(this).modalForm({formURL: "{% url 'stock:approve_create' %}"});
-			});
+		$(".create-approve").each(function () {
+			$(this).modalForm({formURL: "{% url 'stock:approve_create' %}"});
 		});
+
 
 		{% if approve is not None %}
 			$(".update-approve").each(function() {
@@ -177,7 +176,7 @@
 
 		const modal = document.querySelector('#modal');
 
-		modal.on('show.bs.modal', function() {
+		$('#modal').on('show.bs.modal', function() {
 			formSubmit();
 		});
 
