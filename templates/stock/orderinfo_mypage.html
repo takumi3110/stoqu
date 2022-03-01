@@ -75,12 +75,7 @@
 															{% endfor %}
 														</p>
 													</a>
-													<p>数量： {{ order_item.quantity }}台
-														<span>
-															<a href="#"
-															   class="change-quantity{{ order_item.pk }}">数量を変更</a>
-														</span>
-													</p>
+													<p>数量： {{ order_item.quantity }}台</p>
 												</div>
 											</div>
 										{% endfor %}
@@ -116,12 +111,6 @@
 		{% for orderinfo in orderinfo_list %}
 			const cancelBtn{{ orderinfo.pk }} = document.querySelector('.cancel-btn{{ orderinfo.pk }}');
 			linkClick(cancelBtn{{ orderinfo.pk }}, "{% url 'stock:delete_select' orderinfo.pk %}");
-			{% for order_item in orderinfo.storage_cart.order_item.all %}
-				const quantityEl{{ order_item.pk }} = document.querySelector('.change-quantity{{ order_item.pk }}');
-				quantityEl{{ order_item.pk }}.each(function () {
-					this.modalForm({formURL: "{% url 'stock:change_quantity' order_item.pk %}"});
-				});
-			{% endfor %}
 		{% endfor %}
 	</script>
 
