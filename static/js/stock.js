@@ -1,12 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const hero = new HeroSlider('.swiper');
+    hero.start();
+    navTitle();
+});
+
+function navTitle() {
     const el = document.querySelector('.navigation__title');
     const str = el.innerHTML.trim().split("");
     el.innerHTML = str.reduce((acc, curr) => {
         curr = curr.replace(/\s+/, '&nbsp;');
         return `${acc}<span class="char">${curr}</span>`;
     }, "");
-    // const modal = document.querySelector('#modal');
-});
+}
 
 function formatDate(date, format) {
     const day = new Date(date);
