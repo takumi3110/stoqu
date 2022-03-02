@@ -59,6 +59,11 @@ class OrderInfoViewSet(viewsets.ModelViewSet):
 	filter_class = OrderInfoFilter
 
 
+@login_required()
+def top_page(request):
+	return render(request, 'top.html')
+
+
 class StorageItemListView(LoginRequiredMixin, ListView):
 	model = StorageItem
 	template_name = 'stock/storage_list.html'
