@@ -9,14 +9,14 @@ class HeroSlider {
 			loop: true,
 			grabCursor: true,
 			effect: 'cube',
+			cubeEffect: {
+				shadow: true,
+				slideShadows: true,
+				shadowOffset: 40,
+				shadowScale: 1.1,
+			},
 			centeredSlides: true,
-			slidesPerView: 1,
 			speed: 1000,
-			// breakpoints: {
-			// 	1024: {
-			// 		slidesPerView: 1,
-			// 	}
-			// }
 		});
 	}
 
