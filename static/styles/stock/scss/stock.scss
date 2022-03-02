@@ -1,7 +1,7 @@
-@import '../module/mixin';
+@import '../../modules/mixin';
+@import '../../modules/variables';
+@import '../../modules/hero-slider';
 @import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
-
-$cBorder: #dfdfdf;
 
 a {
   text-decoration: none;
@@ -64,7 +64,7 @@ a {
   }
 
   &__text {
-    font-size: 15px;
+    font-size: $fontSizeCart;
   }
 }
 
@@ -77,7 +77,7 @@ a {
     position: relative;
 
     & .header-price {
-      font-size: 15px;
+      font-size: $fontSizeCart;
       position: absolute;
       margin-bottom: 0;
       text-align: right;
@@ -101,7 +101,7 @@ a {
     }
 
     &__location {
-      font-size: 15px;
+      font-size: $fontSizeCart;
       margin-bottom: -2px;
       color: green;
     }
