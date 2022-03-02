@@ -15,7 +15,8 @@ router.register(r'approve', views.ApproveViewSet)
 router.register(r'orderInfo', views.OrderInfoViewSet)
 
 urlpatterns = [
-	path('', views.StorageItemListView.as_view(), name='storage_list'),
+	path('', views.top_page, name='top'),
+	path('item_list', views.StorageItemListView.as_view(), name='storage_list'),
 	path('detail/<int:pk>', views.StorageItemDetailView.as_view(), name='storage_detail'),
 	path('get_data/', views.create_storage_data, name='get_data'),
 	path('create/', views.StorageItemCreateView.as_view(), name='storage_create'),
