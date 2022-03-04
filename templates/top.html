@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+	<div class="content">
+		<div class="hero">
+			<div class="swiper">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<img src="media/images/notepc1.jpg" alt="notepc1">
+					</div>
+					<div class="swiper-slide">
+						<img src="media/images/notepc2.jpg" alt="notepc2">
+					</div>
+					<div class="swiper-slide">
+						<img src="media/images/notepc3.jpg" alt="notepc3">
+					</div>
+					<div class="swiper-slide">
+						<img src="media/images/notepc4.jpeg" alt="notepc4">
+					</div>
+				</div>
+			</div>
+		</div>
+		<section class="container select">
+			<div class="row">
+				<div class="card select__card quote">
+					<div class="card-body">
+						<span>見積もり依頼</span>
+						<img src="media/images/quote.jpg" alt="" class="quote">
+					</div>
+				</div>
+				<div class="card select__card stock">
+					<div class="card-body">
+						<span>貯蔵品確認</span>
+						<img src="media/images/stock.jpg" alt="">
+					</div>
+				</div>
+			</div>
+			<i class="fa-solid fa-right"></i>
+			<a href="#" class="select__admin float-end mt-3">
+				<i class="fa-solid fa-arrow-right-long-to-line"></i>
+				管理者の方はこちら
+			</a>
+		</section>
+	</div>
+
+{% endblock content %}
+
+{% block javascript %}
+
+	<script type="text/javascript">
+		const quote = document.querySelector('.quote');
+		const stock = document.querySelector('.stock');
+		const stockUrl = "{% url 'stock:storage_list' %}";
+		linkClick(stock, stockUrl);
+	</script>
+{% endblock javascript %}
