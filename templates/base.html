@@ -25,90 +25,111 @@
 	      crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 <body>
-	<div class="modal fade" tabindex="-1" role="dialog" id="modal" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content"></div>
+	<div class="global-container">
+		<div class="modal fade" tabindex="-1" role="dialog" id="modal" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content"></div>
+			</div>
 		</div>
-	</div>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark navigation">
-		<div class="container-fluid">
-			<a class="navbar-brand navigation__title" href="{% url 'stock:top' %}">STOQU</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
-			        aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbar">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item navigation__item">
-						<a class="nav-link requester-update" href="#">
-							<p class="navigation__text">{{ request.user }} さん</p>
-							<p class="navigation__text">
-								お届け先
-							</p>
-							<i class="fa-solid fa-location-dot"></i>
-							{% if requester.room is not None  %}
-								{{ requester.room }}
-							{% endif %} 
-							<p></p>
-						</a>
-					</li>
-				</ul>
-				<div class="navigation__search">
-					<form class="d-flex">
-						<input class="form-control" type="search" placeholder="Search" aria-label="Search">
-						<button class="btn btn-warning" type="submit">
-							<i class="fa-solid fa-magnifying-glass"></i>
-						</button>
-					</form>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark navigation">
+			<div class="container-fluid">
+				<a class="navbar-brand navigation__title" href="{% url 'stock:top' %}">STOQU</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+				        aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbar">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item navigation__item">
+							<a class="nav-link requester-update" href="#">
+								<p class="navigation__text">{{ request.user }} さん</p>
+								<p class="navigation__text">
+									お届け先
+								</p>
+								<i class="fa-solid fa-location-dot"></i>
+								{% if requester.room is not None  %}
+									{{ requester.room }}
+								{% endif %}
+								<p></p>
+							</a>
+						</li>
+					</ul>
+					<div class="navigation__search">
+						<form class="d-flex">
+							<input class="form-control" type="search" placeholder="Search" aria-label="Search">
+							<button class="btn btn-warning" type="submit">
+								<i class="fa-solid fa-magnifying-glass"></i>
+							</button>
+						</form>
+					</div>
+					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+						<li class="nav-item dropdown navigation__item account-service">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+							   data-bs-toggle="dropdown" aria-expanded="false">
+								<p class="navigation__text">こんにちは、{{ request.user.last_name }}</p>
+								<p class="navigation__text">アカウントサービス</p>
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li><a class="dropdown-item" href="#">マイページ</a></li>
+								{% if user.is_superuser %}
+									<li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Page</a></li>
+									<li><a class="dropdown-item" href="{% url 'stock:get_data' %}">GET DATA</a></li>
+								{% endif %}
+								<li>
+									<hr class="dropdown-divider">
+								</li>
+								<li>
+									<a class="dropdown-item" href="{% url 'admin:logout' %}">
+										<i class="fa-solid fa-right-from-bracket"></i>
+										ログアウト
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="navbar-nav mb-2 mb-lg-0">
+						<li class="nav-item navigation__item">
+							<a class="nav-link" href="{% url 'stock:my_order_info' %}">
+								<p class="navigation__cancel">キャンセルもこちら</p>
+								<p class="navigation__text">注文履歴</p>
+							</a>
+						</li>
+						<li class="nav-item navigation__item">
+							<a class="nav-link" href="{% url 'stock:cart' %}">
+								<span class="navigation__text cart-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+								<span class="navigation__text">カート</span>
+							</a>
+						</li>
+					</ul>
 				</div>
-				<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item dropdown navigation__item account-service">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-						   data-bs-toggle="dropdown" aria-expanded="false">
-							<p class="navigation__text">こんにちは、{{ request.user.last_name }}</p>
-							<p class="navigation__text">アカウントサービス</p>
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="#">マイページ</a></li>
-							{% if user.is_superuser %}
-								<li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Page</a></li>
-								<li><a class="dropdown-item" href="{% url 'stock:get_data' %}">GET DATA</a></li>
-							{% endif %}
-							<li>
-								<hr class="dropdown-divider">
-							</li>
-							<li>
-								<a class="dropdown-item" href="{% url 'admin:logout' %}">
-									<i class="fa-solid fa-right-from-bracket"></i>
-									ログアウト
-								</a>
-							</li>
-						</ul>
+			</div>
+		</nav>
+
+		<div class="page-wrapper chiller-theme">
+			<div class="main-contents">
+				{% block content %}
+				{% endblock %}
+			</div>
+		</div>
+
+		<footer class="footer">
+			<div class="footer__nav">
+				<ul class="footer__ul">
+					<li class="footer__li">
+						<a href="#">マイページ</a>
 					</li>
-				</ul>
-				<ul class="navbar-nav mb-2 mb-lg-0">
-					<li class="nav-item navigation__item">
-						<a class="nav-link" href="{% url 'stock:my_order_info' %}">
-							<p class="navigation__cancel">キャンセルもこちら</p>
-							<p class="navigation__text">注文履歴</p>
-						</a>
+					<li class="footer__li">
+						<a href="#">FAQ</a>
 					</li>
-					<li class="nav-item navigation__item">
-						<a class="nav-link" href="{% url 'stock:cart' %}">
-							<span class="navigation__text cart-icon"><i class="fa-solid fa-cart-shopping"></i></span>
-							<span class="navigation__text">カート</span>
-						</a>
+					<li class="footer__li">
+						<a href="#">お問い合わせ</a>
+					</li>
+					<li class="footer__li">
+						<a href="{% url 'admin:logout' %}">ログアウト</a>
 					</li>
 				</ul>
 			</div>
-		</div>
-	</nav>
-
-	<div class="page-wrapper chiller-theme">
-		<div class="main-contents">
-			{% block content %}
-			{% endblock %}
-		</div>
+		</footer>
 	</div>
 
 	{% bootstrap_javascript %}
@@ -121,9 +142,10 @@
 	        crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
 	        crossorigin="anonymous"></script>
+	<script src="{% static 'js/main.js' %}"></script>
 	<script src="{% static 'js/vendors/jquery.bootstrap.modal.forms.min.js' %}"></script>
 	<script src="{% static 'js/libs/hero-slider.js' %}"></script>
-	<script src="{% static 'js/stock.js' %}"></script>
+	<script src="{% static 'js/stock/stock.js' %}"></script>
 	{% block javascript %}
 	{% endblock %}
 	<script type="text/javascript">
