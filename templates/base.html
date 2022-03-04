@@ -31,9 +31,9 @@
 				<div class="modal-content"></div>
 			</div>
 		</div>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark navigation">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark navigation appear up">
 			<div class="container-fluid">
-				<a class="navbar-brand navigation__title" href="{% url 'stock:top' %}">STOQU</a>
+				<a class="navbar-brand navigation__title item" href="{% url 'stock:top' %}">STOQU</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
 				        aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -112,19 +112,19 @@
 			</div>
 		</div>
 
-		<footer class="footer">
+		<footer class="footer appear up">
 			<div class="footer__nav">
 				<ul class="footer__ul">
-					<li class="footer__li">
+					<li class="footer__li item">
 						<a href="#">マイページ</a>
 					</li>
-					<li class="footer__li">
+					<li class="footer__li item">
 						<a href="#">FAQ</a>
 					</li>
-					<li class="footer__li">
+					<li class="footer__li item">
 						<a href="#">お問い合わせ</a>
 					</li>
-					<li class="footer__li">
+					<li class="footer__li item">
 						<a href="{% url 'admin:logout' %}">ログアウト</a>
 					</li>
 				</ul>
@@ -142,10 +142,12 @@
 	        crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
 	        crossorigin="anonymous"></script>
-	<script src="{% static 'js/main.js' %}"></script>
 	<script src="{% static 'js/vendors/jquery.bootstrap.modal.forms.min.js' %}"></script>
+	<script src="{% static 'js/vendors/scroll-polyfill.js' %}"></script>
+	<script src="{% static 'js/libs/scroll.js' %}"></script>
 	<script src="{% static 'js/libs/hero-slider.js' %}"></script>
 	<script src="{% static 'js/stock/stock.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
 	{% block javascript %}
 	{% endblock %}
 	<script type="text/javascript">

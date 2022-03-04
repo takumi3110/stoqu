@@ -13,6 +13,11 @@ a {
   max-width: $contentMaxWidth;
 }
 
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+
 
 .navigation {
   text-align: center;
@@ -333,6 +338,36 @@ a {
   &__icon {
     &.selected {
       transform: rotate(180deg);
+    }
+  }
+}
+
+.footer {
+  margin-top: 10em;
+  padding: 60px 0;
+  background-color: #212529;
+  font-size: 20px;
+
+  &__nav {
+    @extend .flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+  }
+
+  &__ul {
+    @extend .flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__li {
+    padding: 0;
+    margin: 10px;
+
+    & > a {
+      color: grey;
     }
   }
 }
