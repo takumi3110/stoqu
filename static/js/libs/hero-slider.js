@@ -8,13 +8,15 @@ class HeroSlider {
 		return new Swiper(this.el, {
 			loop: true,
 			grabCursor: true,
-			effect: 'cube',
-			cubeEffect: {
-				shadow: true,
-				slideShadows: true,
-				shadowOffset: 40,
-				shadowScale: 1.1,
-			},
+			effect: 'cover-slide',
+			slidesPerView: 1,
+			// effect: 'cube',
+			// cubeEffect: {
+			// 	shadow: true,
+			// 	slideShadows: true,
+			// 	shadowOffset: 40,
+			// 	shadowScale: 1.1,
+			// },
 			centeredSlides: true,
 			speed: 1000,
 		});
