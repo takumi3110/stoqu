@@ -18,7 +18,8 @@
 	{% endblock %}
 	{% bootstrap_css %}
 	{% bootstrap_javascript %}
-	<link rel="stylesheet" href="{% static 'stock/css/stock.css' %}">
+	<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+	<link rel="stylesheet" href="{% static 'styles/stock/css/stock.css' %}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
 	      integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
 	      crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -31,7 +32,7 @@
 	</div>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark navigation">
 		<div class="container-fluid">
-			<a class="navbar-brand navigation__title" href="{% url 'stock:storage_list' %}">STOQU</a>
+			<a class="navbar-brand navigation__title" href="{% url 'stock:top' %}">STOQU</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
 			        aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -40,7 +41,7 @@
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item navigation__item">
 						<a class="nav-link requester-update" href="#">
-							<p class="navigation__text">{{ requester.user }} さん</p>
+							<p class="navigation__text">{{ request.user }} さん</p>
 							<p class="navigation__text">
 								お届け先
 							</p>
@@ -64,7 +65,7 @@
 					<li class="nav-item dropdown navigation__item account-service">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 						   data-bs-toggle="dropdown" aria-expanded="false">
-							<p class="navigation__text">こんにちは、{{ user.last_name }}</p>
+							<p class="navigation__text">こんにちは、{{ request.user.last_name }}</p>
 							<p class="navigation__text">アカウントサービス</p>
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -111,6 +112,7 @@
 	</div>
 
 	{% bootstrap_javascript %}
+	<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
 	        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
 	        crossorigin="anonymous"></script>
@@ -119,7 +121,8 @@
 	        crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
 	        crossorigin="anonymous"></script>
-	<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+	<script src="{% static 'js/vendors/jquery.bootstrap.modal.forms.min.js' %}"></script>
+	<script src="{% static 'js/libs/hero-slider.js' %}"></script>
 	<script src="{% static 'js/stock.js' %}"></script>
 	{% block javascript %}
 	{% endblock %}
