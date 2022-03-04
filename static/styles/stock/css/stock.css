@@ -34,6 +34,12 @@ a {
   text-decoration: none;
 }
 
+.content-width, .select {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1070px;
+}
+
 .navigation {
   text-align: center;
 }
@@ -66,6 +72,44 @@ a {
 }
 .navigation__search {
   width: 600px;
+}
+
+.select__card {
+  color: gray;
+  justify-content: space-between;
+  width: 300px;
+  height: 300px;
+  border-radius: 5%;
+  margin: 0 auto;
+  position: relative;
+  border: solid orange;
+}
+.select__card img {
+  background-color: orange;
+  width: 80%;
+  height: 50%;
+  top: 50px;
+  margin: 30px 20px;
+}
+.select__card img.quote {
+  transform: rotate(15deg);
+}
+.select__card span {
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+  align-items: center;
+}
+.select__card:hover {
+  cursor: pointer;
+  color: orange;
+  box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, 0.5);
+}
+.select__card:active {
+  transform: scale(0.97);
+}
+.select__admin {
+  font-size: 30px;
 }
 
 .storage__card {

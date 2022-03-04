@@ -7,6 +7,12 @@ a {
   text-decoration: none;
 }
 
+.content-width {
+  width: 90%;
+  margin: 0 auto;
+  max-width: $contentMaxWidth;
+}
+
 
 .navigation {
   text-align: center;
@@ -47,6 +53,49 @@ a {
 
   &__search {
     width: 600px;
+  }
+}
+
+.select {
+  @extend .content-width;
+  &__card {
+    color: gray;
+    justify-content: space-between;
+    width: 300px;
+    height: 300px;
+    border-radius: 5%;
+    margin: 0 auto;
+    position: relative;
+    border: solid orange;
+    & img {
+      background-color: orange;
+      width: 80%;
+      height: 50%;
+      top: 50px;
+      margin: 30px 20px;
+      &.quote {
+        transform: rotate(15deg);
+      }
+    }
+
+    & span {
+      font-size: 40px;
+      font-weight: bold;
+      text-align: center;
+      align-items: center;
+    }
+    &:hover {
+      cursor: pointer;
+      color: orange;
+      box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, .5);
+    }
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  &__admin {
+    font-size: 30px;
   }
 }
 
