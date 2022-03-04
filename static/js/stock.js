@@ -213,4 +213,3 @@ function formSubmit() {
         e => e.disabled = false
     ));
 }
-
