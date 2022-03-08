@@ -44,7 +44,6 @@ class ApproveBSModalForm(BSModalModelForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
         self.fields['requester'].initial = kwargs['request'].user
-    
     # self.fields['requester'].widget.attrs['disabled'] = True
     
     class Meta:
