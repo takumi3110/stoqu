@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+	<a href="#"><i class="fas fa-long-arrow-alt-left"></i>依頼履歴に戻る </a>
+	<div class="container status my-5">
+		<div class="row">
+			<div class="col-10 offset-1">
+				<h2 id="title-text">ステータス確認</h2>
+				<h3 class="mt-5">
+					{{ due_at }}にお届け予定です
+				</h3>
+				<span>※まとめてお渡しできる予定日です。</span>
+				<section class="row status__bar mt-3">
+					<ul class="bar">
+						{% for choice in status_choices %}
+							<li></li>
+						{% endfor %}
+					</ul>
+				</section>
+			</div>
+		</div>
+
+	</div>
+
+{% endblock content %}
+
