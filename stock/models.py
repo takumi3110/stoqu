@@ -4,7 +4,7 @@ from django.utils import timezone
 import datetime
 
 from device.models import PCDetail
-from user.models import *
+from user.models import User, Base
 
 
 class BaseManager(models.Manager):
@@ -311,7 +311,22 @@ class Approve(models.Model):
 
 
 class OrderInfo(models.Model):
+    status_choices = (
+        ('1', '準備中'),
+        ('2', '確保済み'),
+        ('3', 'キッティング中'),
+        ('4', 'キッティング完了'),
+        ('5', '納品済み')
+    )
+    
     objects = BaseManager()
+    
+    status = models.CharField(
+        verbose_name='ステータス',
+        max_length=2,
+        choices=status_choices,
+        default=1
+    )
     
     number = models.CharField(
         verbose_name='受注番号',
@@ -374,12 +389,23 @@ class OrderInfo(models.Model):
         blank=True
     )
     
+    due_at = models.DateField(
+        verbose_name='納品予定日',
+        null=True,
+        blank=True
+    )
+    
     def save(self, *args, **kwargs):
         if not self.id:
             self.ordered_at = timezone.now()
         self.updated_at = timezone.now()
         if self.delivery_at is not None:
             self.completed_delivery = True
+        due = []
+        for item in self.storage_cart.order_item.all():
+            due.append(item.due_at)
+        due.sort()
+        self.due_at = due[-1]
         super(OrderInfo, self).save(*args, **kwargs)
     
     def __str__(self):
