@@ -1,10 +1,21 @@
-@import 'mixin';
+@import '../../modules/mixin';
+@import '../../modules/variables';
+@import '../../modules/hero-slider';
 @import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
-
-$cBorder: #dfdfdf;
 
 a {
   text-decoration: none;
+}
+
+.content-width {
+  width: 90%;
+  margin: 0 auto;
+  max-width: $contentMaxWidth;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -50,6 +61,49 @@ a {
   }
 }
 
+.select {
+  @extend .content-width;
+  &__card {
+    color: gray;
+    justify-content: space-between;
+    width: 300px;
+    height: 300px;
+    border-radius: 5%;
+    margin: 0 auto;
+    position: relative;
+    border: solid orange;
+    & img {
+      background-color: orange;
+      width: 80%;
+      height: 50%;
+      top: 50px;
+      margin: 30px 20px;
+      &.quote {
+        transform: rotate(15deg);
+      }
+    }
+
+    & span {
+      font-size: 40px;
+      font-weight: bold;
+      text-align: center;
+      align-items: center;
+    }
+    &:hover {
+      cursor: pointer;
+      color: orange;
+      box-shadow: 10px 10px 20px 0 rgba(0, 0, 0, .5);
+    }
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  &__admin {
+    font-size: 30px;
+  }
+}
+
 .storage {
   &__card {
     transition: all 0.3s;
@@ -64,7 +118,7 @@ a {
   }
 
   &__text {
-    font-size: 15px;
+    font-size: $fontSizeCart;
   }
 }
 
@@ -77,7 +131,7 @@ a {
     position: relative;
 
     & .header-price {
-      font-size: 15px;
+      font-size: $fontSizeCart;
       position: absolute;
       margin-bottom: 0;
       text-align: right;
@@ -101,7 +155,7 @@ a {
     }
 
     &__location {
-      font-size: 15px;
+      font-size: $fontSizeCart;
       margin-bottom: -2px;
       color: green;
     }
@@ -284,6 +338,36 @@ a {
   &__icon {
     &.selected {
       transform: rotate(180deg);
+    }
+  }
+}
+
+.footer {
+  margin-top: 10em;
+  padding: 60px 0;
+  background-color: #212529;
+  font-size: 20px;
+
+  &__nav {
+    @extend .flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+  }
+
+  &__ul {
+    @extend .flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__li {
+    padding: 0;
+    margin: 10px;
+
+    & > a {
+      color: grey;
     }
   }
 }
