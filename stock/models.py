@@ -378,7 +378,7 @@ class OrderInfo(models.Model):
         if not self.id:
             self.ordered_at = timezone.now()
         self.updated_at = timezone.now()
-        if self.delivery_date is not None:
+        if self.delivery_at is not None:
             self.completed_delivery = True
         super(OrderInfo, self).save(*args, **kwargs)
     
