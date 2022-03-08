@@ -347,6 +347,10 @@ a {
   padding: 60px 0;
   background-color: #212529;
   font-size: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 
   &__nav {
     @extend .flex;
