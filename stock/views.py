@@ -355,9 +355,11 @@ class MyOrderInfoView(LoginRequiredMixin, ListView):
         return qs
 
 
-class OrderInfoView(LoginRequiredMixin, ListView):
+class OrderInfoListView(LoginRequiredMixin, ListView):
     model = OrderInfo
     template_name = 'stock/order_info/list.html'
+    paginate_by = 20
+    ordering = ['-ordered_at']
 
 
 class OrderInfoDetailView(LoginRequiredMixin, DetailView):
