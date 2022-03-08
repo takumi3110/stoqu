@@ -13,7 +13,8 @@ from .models import *
 from device.models import *
 from user.models import *
 from .serializers import *
-from .forms import *
+from .forms import StorageItemBSModalForm, StorageItemUpdateBSModalForm, OptionCreateBSModalForm, ApproveBSModalForm,\
+    OrderInfoBSModalForm
 from .filters import *
 
 
@@ -357,9 +358,21 @@ class MyOrderInfoView(LoginRequiredMixin, ListView):
 
 class OrderInfoListView(LoginRequiredMixin, ListView):
     model = OrderInfo
-    template_name = 'stock/order_info/list.html'
+    template_name = 'stock/order_info/admin/list.html'
     paginate_by = 20
     ordering = ['-ordered_at']
+
+
+class OrderInfoUpdateView(LoginRequiredMixin, BSModalUpdateView):
+    model = OrderInfo
+    template_name = 'snippets/update_modal.html'
+    form_class = OrderInfoBSModalForm
+    success_url = reverse_lazy('stock:order_info_list')
+
+
+class OrderInfoDetailAdminView(LoginRequiredMixin, DetailView):
+    model = OrderInfo
+    template_name = 'stock/order_info/admin/detail.html'
 
 
 class OrderInfoDetailView(LoginRequiredMixin, DetailView):

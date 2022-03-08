@@ -21,38 +21,37 @@
 				<tbody class="order-info__tbody">
 					{% for orderinfo in orderinfo_list %}
 						<tr>
-							<td>{{ orderinfo.ordered_at }}</td>
-							<td>{{ orderinfo.number }}</td>
-							<td>
-								{% if orderinfo.ticket is not None %}
+							<td class="order-info__td detail{{ orderinfo.pk }}">{{ orderinfo.ordered_at }}</td>
+							<td class="order-info__td detail{{ orderinfo.pk }}">{{ orderinfo.number }}</td>
+							{% if orderinfo.ticket is not None %}
+								<td class="order-info__td detail{{ orderinfo.pk }}">
 									{{ orderinfo.ticket }}
-								{% else %}
-									<a href="#" class="order-info{{ orderinfo.pk }}">チケット番号登録</a>
-								{% endif %}
-							</td>
-							<td>
+								</td>
+							{% else %}
+								<td class="order-info__td update{{ orderinfo.pk }}">
+									<a href="#">チケット番号登録</a>
+								</td>
+							{% endif %}
+							<td class="order-info__td detail{{ orderinfo.pk }}">
 								{% for order_item in orderinfo.storage_cart.order_item.all %}
 									<p class="order-info__item">{{ order_item }}</p>
 								{% endfor %}
 							</td>
-							<td>{{ orderinfo.requester }}</td>
-							<td>
-								{% if orderinfo.contact_user is not None %}
+							<td class="order-info__td detail{{ orderinfo.pk }}">{{ orderinfo.requester }}</td>
+							{% if orderinfo.contact_user is not None %}
+								<td class="order-info__td contact-user{{ orderinfo.pk }}">
 									{{ orderinfo.contact_user }}
-								{% else %}
-									<a href="#" class="order-info{{ orderinfo.pk }}">担当者を登録</a>
-								{% endif %}
-							</td>
-							<td>
+								</td>
+							{% else %}
+								<td class="order-info__td update{{ orderinfo.pk }}">
+									<a href="#">担当者を登録</a>
+								</td>
+							{% endif %}
+							<td class="order-info__td detail{{ orderinfo.pk }}">
 								<input type="checkbox" class="form-check-input order-info__check" id="complete" aria-label="{{ orderinfo.pk }}"
 								       {% if orderinfo.completed_delivery %}checked{% endif %} disabled>
-{#								{% if orderinfo.completed_delivery %}#}
-{#									<i class="fa-solid fa-circle-check"></i>#}
-{#								{% else %}#}
-{#									<i class="fa-solid fa-circle-dashed"></i>#}
-{#								{% endif %}#}
 							</td>
-							<td>
+							<td class="order-info__td detail{{ orderinfo.pk }}">
 								{% if orderinfo.delivery_at is not None %}
 									{{ orderinfo.delivery_at }}
 								{% else %}
@@ -71,11 +70,18 @@
 
 {% block javascript %}
 	<script type="text/javascript">
+
 		{% for orderinfo in orderinfo_list %}
-			$('.order-info{{ orderinfo.pk }}').each(function() {
-				$(this).modalForm({formURL: "{% url 'stock:order_info_update' orderinfo.pk %}"});
+			const detail{{ orderinfo.pk }} = document.querySelectorAll('.detail{{ orderinfo.pk }}');
+			const url{{ orderinfo.pk }} = "{% url 'stock:orderinfo_detail_admin' orderinfo.pk %}";
+			detail{{ orderinfo.pk }}.forEach(d => linkClick(d, url{{ orderinfo.pk }}));
+		{% endfor %}
+		{% for orderinfo in orderinfo_list %}
+			$('.update{{ orderinfo.pk }}').each(function() {
+				$(this).modalForm({formURL: "{% url 'stock:orderinfo_update' orderinfo.pk %}"});
 			});
 		{% endfor %}
+
 	</script>
 {% endblock javascript %}
 

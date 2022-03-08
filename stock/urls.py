@@ -32,8 +32,10 @@ urlpatterns = [
 	path('add_orderInfo/', views.add_order_info, name='add_order_info'),
 	path('confirm/<int:pk>', views.ConfirmView.as_view(), name='confirm'),
 	path('my_order_info/', views.MyOrderInfoView.as_view(), name='my_order_info'),
-	path('order_info_list/', views.OrderInfoListView.as_view(), name='order_info_list'),
+	path('order_info_list/', views.OrderInfoListView.as_view(), name='orderinfo_list'),
+	path('order_info_update/<int:pk>', views.OrderInfoUpdateView.as_view(), name='orderinfo_update'),
 	path('order_info_detail/<int:pk>', views.OrderInfoDetailView.as_view(), name='orderinfo_detail'),
+	path('order_info_detail_admin/<int:pk>', views.OrderInfoDetailAdminView.as_view(), name='orderinfo_detail_admin'),
 	path('order_info_delete_select/<int:pk>', views.OrderInfoSelectView.as_view(), name='delete_select'),
 	path('chang_quantity/<int:pk>', views.ChangeQuantity.as_view(), name='change_quantity'),
 ]
