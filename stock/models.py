@@ -368,7 +368,7 @@ class OrderInfo(models.Model):
 		default=False
 	)
 
-	delivery_date = models.DateTimeField(
+	delivery_at = models.DateTimeField(
 		verbose_name='納品日',
 		null=True,
 		blank=True
