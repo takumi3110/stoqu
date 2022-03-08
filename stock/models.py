@@ -4,7 +4,7 @@ from django.utils import timezone
 import datetime
 
 from device.models import PCDetail
-from user.models import User, Base
+from user.models import User, Base, Requester
 
 
 class BaseManager(models.Manager):
