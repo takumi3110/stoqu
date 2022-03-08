@@ -11,10 +11,10 @@
 					{{ due_at }}にお届け予定です
 				</h3>
 				<span>※まとめてお渡しできる予定日です。</span>
-				<section class="row status__bar mt-3">
-					<ul class="bar">
-						{% for choice in status_choices %}
-							<li></li>
+				<section class="row mt-3">
+					<ul class="status__bar">
+						{% for k, value in status_choices.items %}
+							<li class="status{{ k }}">{{ value }}</li>
 						{% endfor %}
 					</ul>
 				</section>
@@ -24,4 +24,18 @@
 	</div>
 
 {% endblock content %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		{% for key in status_choices.keys %}
+			const status{{ key }} = document.querySelector('.status{{ key }}');
+			{% if key <= status %}
+				status{{ key }}.classList.add('active');
+			{% endif %}
+
+		{% endfor %}
+
+	</script>
+
+{% endblock javascript %}
 
