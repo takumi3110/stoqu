@@ -1,4 +1,57 @@
 @import url("https://fonts.googleapis.com/css2?family=Passion+One&display=swap");
+.status__bar {
+  margin: 20px 0;
+  padding: 0;
+  counter-reset: step;
+  z-index: 0;
+  position: relative;
+}
+.status__bar li {
+  list-style-type: none;
+  width: 20%;
+  float: left;
+  font-size: 20px;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  color: #aaa;
+}
+.status__bar li::before {
+  width: 30px;
+  height: 30px;
+  content: counter(step);
+  counter-increment: step;
+  line-height: 30px;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  border-radius: 50%;
+  background-color: #eee;
+}
+.status__bar li::after {
+  content: "";
+  width: 100%;
+  height: 10px;
+  position: absolute;
+  background-color: #eee;
+  top: 10px;
+  left: -50%;
+  z-index: -1;
+}
+.status__bar li:first-child::after {
+  content: none;
+}
+.status__bar li.active {
+  color: green;
+}
+.status__bar li.active::after {
+  background-color: #55b776;
+}
+.status__bar li.active::before {
+  background-color: #55b776;
+  color: #fff;
+}
+
 .swiper {
   width: 100%;
   height: 40vw;
