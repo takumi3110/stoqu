@@ -1,10 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
 
-</body>
-</html>
+{% block content %}
+
+	<div class="container">
+		<section class="row order-info mt-5">
+			<table class="table table-bordered table-hover order-info__table">
+				<thead class="table-light order-info__thead">
+					<tr>
+						<th>依頼日</th>
+						<th>受注番号</th>
+						<th>チケット番号</th>
+						<th>商品</th>
+						<th>依頼者</th>
+						<th>担当者</th>
+						<th>納品済み</th>
+						<th>納品日</th>
+					</tr>
+				</thead>
+				<tbody class="order-info__tbody">
+					{% for orderinfo in orderinfo_list %}
+						<tr>
+							<td>{{ orderinfo.ordered_at }}</td>
+							<td>{{ orderinfo.number }}</td>
+							<td>
+								{% if orderinfo.ticket is not None %}
+									{{ orderinfo.ticket }}
+								{% else %}
+									<a href="#" class="order-info{{ orderinfo.pk }}">チケット番号登録</a>
+								{% endif %}
+							</td>
+							<td>
+								{% for order_item in orderinfo.storage_cart.order_item.all %}
+									<p class="order-info__item">{{ order_item }}</p>
+								{% endfor %}
+							</td>
+							<td>{{ orderinfo.requester }}</td>
+							<td>
+								{% if orderinfo.contact_user is not None %}
+									{{ orderinfo.contact_user }}
+								{% else %}
+									<a href="#" class="order-info{{ orderinfo.pk }}">担当者を登録</a>
+								{% endif %}
+							</td>
+							<td>
+								<input type="checkbox" class="form-check-input order-info__check" id="complete" aria-label="{{ orderinfo.pk }}"
+								       {% if orderinfo.completed_delivery %}checked{% endif %} disabled>
+{#								{% if orderinfo.completed_delivery %}#}
+{#									<i class="fa-solid fa-circle-check"></i>#}
+{#								{% else %}#}
+{#									<i class="fa-solid fa-circle-dashed"></i>#}
+{#								{% endif %}#}
+							</td>
+							<td>
+								{% if orderinfo.delivery_at is not None %}
+									{{ orderinfo.delivery_at }}
+								{% else %}
+									<span>未納品</span>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+
+			</table>
+		</section>
+	</div>
+
+{% endblock content %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		{% for orderinfo in orderinfo_list %}
+			$('.order-info{{ orderinfo.pk }}').each(function() {
+				$(this).modalForm({formURL: "{% url 'stock:order_info_update' orderinfo.pk %}"});
+			});
+		{% endfor %}
+	</script>
+{% endblock javascript %}
+
