@@ -404,6 +404,19 @@ class OrderInfoSelectView(LoginRequiredMixin, DetailView):
         return render(request, 'stock/order_info/delete.html', context)
 
 
+def order_info_status_view(request, pk):
+    order_info = OrderInfo.objects.get(pk=pk)
+    status_choices = order_info.status_choices
+    status = order_info.status
+    due_at = order_info.due_at
+    context = {
+        'due_at': due_at,
+        'status': status,
+        'status_choices': status_choices
+    }
+    return render(request, 'snippets/stock/status_modal.html', context)
+    
+
 class ChangeQuantity(LoginRequiredMixin, TemplateView):
     def get(self, request, **kwargs):
         order_item = OrderItem.objects.get(pk=kwargs['pk'])
