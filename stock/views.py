@@ -406,15 +406,17 @@ class OrderInfoSelectView(LoginRequiredMixin, DetailView):
 
 def order_info_status_view(request, pk):
     order_info = OrderInfo.objects.get(pk=pk)
-    status_choices = order_info.status_choices
-    status = order_info.status
+    status_choices = {}
+    for c in order_info.status_choices:
+        status_choices[int(c[0])] = c[1]
+    status = int(order_info.status)
     due_at = order_info.due_at
     context = {
         'due_at': due_at,
         'status': status,
-        'status_choices': status_choices
+        'status_choices': status_choices,
     }
-    return render(request, 'snippets/stock/status_modal.html', context)
+    return render(request, 'stock/order_info/status.html', context)
     
 
 class ChangeQuantity(LoginRequiredMixin, TemplateView):
