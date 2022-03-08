@@ -37,8 +37,11 @@
 {% block javascript %}
 
 	<script type="text/javascript">
-		const modal = document.querySelector('#modal');
 		tradeCheck();
+		{#$('.status').modalForm({formURL: "{% url 'stock:orderinfo_status' orderinfo.pk %}"});#}
+		const status = document.querySelector('.status');
+		const url = "{% url 'stock:orderinfo_status' orderinfo.pk %}"
+		linkClick(status, url)
 		{% for order_item in orderinfo.storage_cart.order_item.all %}
 			$(function() {
 				$('.change-quantity{{ order_item.pk }}').modalForm({formURL: "{% url 'stock:change_quantity' order_item.pk %}"});
