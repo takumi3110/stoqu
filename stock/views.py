@@ -346,7 +346,7 @@ class ConfirmView(LoginRequiredMixin, TemplateView):
 
 class MyOrderInfoView(LoginRequiredMixin, ListView):
     model = OrderInfo
-    template_name = 'stock/orderinfo_mypage.html'
+    template_name = 'stock/order_info/mypage.html'
     
     def get_queryset(self, *args, **kwargs):
         requester = Requester.objects.get(user=self.request.user)
@@ -355,14 +355,19 @@ class MyOrderInfoView(LoginRequiredMixin, ListView):
         return qs
 
 
+class OrderInfoView(LoginRequiredMixin, ListView):
+    model = OrderInfo
+    template_name = 'stock/order_info/list.html'
+
+
 class OrderInfoDetailView(LoginRequiredMixin, DetailView):
     model = OrderInfo
-    template_name = 'stock/orderinfo_detail.html'
+    template_name = 'stock/order_info/detail.html'
 
 
 class OrderInfoSelectView(LoginRequiredMixin, DetailView):
     model = OrderInfo
-    template_name = 'stock/orderinfo_delete_select.html'
+    template_name = 'stock/order_info/delete_select.html'
     
     @staticmethod
     def post(request, *args, **kwargs):
@@ -381,7 +386,7 @@ class OrderInfoSelectView(LoginRequiredMixin, DetailView):
         if len(order_item) == 0:
             order_info.storage_cart.delete()
             order_info.delete()
-        return render(request, 'stock/orderinfo_delete.html', context)
+        return render(request, 'stock/order_info/delete.html', context)
 
 
 class ChangeQuantity(LoginRequiredMixin, TemplateView):
