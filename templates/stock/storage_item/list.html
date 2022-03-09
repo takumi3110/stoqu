@@ -42,59 +42,11 @@
                 <i class="fas fa-table item-card ms-3"></i>
             </div>
         </div>
-        <div class="row" id="storageTable" style="display: none;">
+        <section class="row" id="storageTable">
             <div class="storage-table">
-                <table class="table table-bordered table-sm table-hover mt-5">
-                    <thead class="table-light">
-                        <tr>
-                            <th>発注番号</th>
-                            <th>カテゴリー</th>
-                            <th>メーカー</th>
-                            <th>モデル名</th>
-                            <th>CPU</th>
-                            <th>メモリ</th>
-                            <th>ストレージ</th>
-                            <th>テンキー</th>
-                            <th>在庫数</th>
-                            <th>金額</th>
-                            <th>在庫拠点</th>
-                            <th>詳細</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for storageitem in storageitem_list %}
-                        <tr id="table{{ storageitem.pk }}" class="storage-item">
-                            <td>{{ storageitem.order_number }}</td>
-                            <td id="category{{ storageitem.pk }}">{{ storageitem.item.pc.get_category_display }}</td>
-                            <td>{{ storageitem.item.pc.maker }}</td>
-                            <td>{{ storageitem.item.pc.name }}</td>
-                            <td>{{ storageitem.item.cpu }}</td>
-                            <td>{{ storageitem.item.memory }}GB</td>
-                            <td>{{ storageitem.item.storage }}</td>
-                            <td>
-	                            <label for="tableNumpad" style="display: none;"></label>
-	                            <input class="form-check-input" type="checkbox" id="tableNumpad" aria-label="{{ storageitem.item.pc.name }}"
-	                                   {% if storageitem.item.numpad %}checked{% endif %}  disabled>
-                            </td>
-                            <td>{{ storageitem.quantity }}</td>
-                            <td>{{ storageitem.total_price | intcomma }}</td>
-                            <td id="base{{ storageitem.pk }}">{{ storageitem.base }}</td>
-                            <td>
-                                <a href="{% url 'stock:storage_detail'  storageitem.pk %}">詳細</a>
-                            </td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="11">在庫PCないです</td>
-                        </tr>
-                    {% endfor %}
-                        <tr id="nonStorage" style="display: none;">
-                            <td colspan="11">在庫ないです</td>
-                        </tr>
-                    </tbody>
-                </table>
+                {% include 'snippets/stock/item_list_table.html' %}
             </div>
-        </div>
+        </section>
         <!-- カード表示 -->
         <section class="row" id="storageCard">
             {% include 'snippets/stock/item_list_card.html' %}
