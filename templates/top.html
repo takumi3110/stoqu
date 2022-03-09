@@ -37,11 +37,11 @@
 					</div>
 				</div>
 			</div>
-			<i class="fa-solid fa-right"></i>
-			<a href="{% url 'stock:orderinfo_list' %}" class="select__admin float-end mt-3">
-				<i class="fa-solid fa-arrow-right-long-to-line"></i>
-				管理者の方はこちら
-			</a>
+{#			<i class="fa-solid fa-right"></i>#}
+{#			<a href="{% url 'stock:orderinfo_list' %}" class="select__admin float-end mt-3">#}
+{#				<i class="fa-solid fa-arrow-right-long-to-line"></i>#}
+{#				管理者の方はこちら#}
+{#			</a>#}
 		</section>
 	</div>
 
@@ -52,7 +52,7 @@
 	<script type="text/javascript">
 		const quote = document.querySelector('.quote');
 		const stock = document.querySelector('.stock');
-		const stockUrl = "{% url 'stock:storage_list' %}";
+		const stockUrl = "{% url 'stock:storage_list_admin' %}";
 		linkClick(stock, stockUrl);
 	</script>
 {% endblock javascript %}
