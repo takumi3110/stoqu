@@ -8,15 +8,10 @@
 {% block content %}
 
     <div class="container my-5">
-        <div class="modal fade" tabindex="-1" role="dialog" id="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content"></div>
-            </div>
-        </div>
         <div class="row mb-3">
             <h2 class="title-text">在庫リスト</h2>
         </div>
-        <div class="row mt-5">
+        <section class="row mt-5">
             <div class="form-group col-2">
             <label>在庫拠点：</label>
             <select title="base" name="base" class="custom-select" id="baseSelect">
@@ -35,14 +30,8 @@
                 <option value="ミニPC">ミニPC</option>
             </select>
             </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-4 item-list">
-                <i class="fas fa-list item-table"></i>
-                <i class="fas fa-table item-card ms-3"></i>
-            </div>
-        </div>
-        <div class="row" id="storageTable" style="display: none;">
+        </section>
+        <section class="row" id="storageTable">
             <div class="storage-table">
                 <table class="table table-bordered table-sm table-hover mt-5">
                     <thead class="table-light">
@@ -94,80 +83,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <!-- カード表示 -->
-        <div class="row" id="storageCard">
-            {% for storageitem in storageitem_list %}
-                <div class="col-4 mt-5 storage" id="card{{ storageitem.pk }}">
-                    <div class="card">
-                        <div class="card-body" id="storageCard{{ storageitem.pk }}">
-                            <div class="storage__card">
-	                            {% if storageitem.item.pc.img.name == '' %}
-	                                <img src="/media/images/no_image_logo.png" alt="noimage" class="image-fluid card-img-cart">
-	                            {% else %}
-	                                <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="image-fluid card-img-cart">
-	                            {% endif %}
-                            </div>
-                            <h5 class="card-title">{{ storageitem.item.pc.maker }}</h5>
-                            <h5 class="card-subtitle">{{ storageitem.item.pc.name }}</h5>
-	                        <div class="row mt-3 storage__text">
-	                            <div class="col-6">
-		                            <div class="row">
-			                            <div class="col-6" id="category{{ storage.pk }}">カテゴリー：</div>
-			                            <div class="col-6">{{ storageitem.item.pc.get_category_display }}</div>
-		                            </div>
-	                            </div>
-	                        </div>
-                            <div class="row storage__text">
-                                <div class="col-6">
-		                            <div class="row">
-			                            <div class="col-6">メモリ：</div>
-			                            <div class="col-6">{{ storageitem.item.memory }} GB</div>
-		                            </div>
-		                            <div class="row">
-			                            <div class="col-6">ストレージ：</div>
-			                            <div class="col-6">{{ storageitem.item.storage }}</div>
-		                            </div>
-		                            <div class="row">
-			                            <div class="col-6"><label for="cardNumpad">テンキー：</label></div>
-			                            <div class="col-6">
-				                            <input class="form-check-input" type="checkbox" id="cardNumpad" aria-label="{{ storage.item.pc.name }}"
-		                                       {% if storageitem.item.numpad %}checked{% endif %} disabled>
-			                            </div>
-		                            </div>
-	                            </div>
-	                            <div class="col-6">
-		                            <div class="row">
-			                            <div class="col-6">在庫数：</div>
-			                            <div class="col-6">{{ storageitem.quantity }}</div>
-		                            </div>
-		                            <div class="row">
-			                            <div class="col-6" id="base{{ storage.pk }}">在庫拠点：</div>
-			                            <div class="col-6">{{ storageitem.base }}</div>
-		                            </div>
-		                            <div class="row">
-			                            <div class="col-6">合計金額：</div>
-			                            <div class="col-6">{{ storageitem.total_price | intcomma}}円</div>
-		                            </div>
-	                            </div>
-	                        </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="{% url 'stock:storage_detail' storageitem.pk %}" class="card-link">
-                                詳細
-                            </a>
-                            <button type="button" class="btn btn-warning float-end" onclick="location.href='{% url "stock:add_item" storageitem.pk %}'">
-                                <i class="fas fa-cart-arrow-down">確保依頼する</i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            {% empty %}
-                <div class="col-12">
-                    なにも登録されてません
-                </div>
-            {% endfor %}
-        </div>
+        </section>
         <div class="row mt-5">
 	        {% include 'pagination.html' %}
         </div>
@@ -181,12 +97,8 @@
     <script type="text/javascript">
         {% for storageitem in storageitem_list %}
             let get_table_{{ storageitem.pk }} = document.querySelector('#table{{ storageitem.pk }}');
-            let get_card_{{ storageitem.pk }} = document.querySelector('#storageCard{{ storageitem.pk }}');
             get_table_{{ storageitem.pk }}.onclick = function() {
                 location.href = '{% url "stock:storage_detail" storageitem.pk %}';
-            }
-            get_card_{{ storageitem.pk }}.onclick = function() {
-                location.href = '{% url "stock:storage_detail" storageitem.pk %}'
             }
         {% endfor %}
 
@@ -203,28 +115,21 @@
                     if (categorySelect === category_val{{ storageitem.pk }}) {
                        if (val === base_val_{{ storageitem.pk }}) {
                             $('#table{{ storageitem.pk }}').show();
-                            $('#card{{ storageitem.pk }}').show();
                         } else if (val === 'all') {
                             $('#table{{ storageitem.pk }}').show();
-                            $('#card{{ storageitem.pk }}').show();
                         } else {
                             $('#table{{ storageitem.pk }}').hide();
-                            $('#card{{ storageitem.pk }}').hide();
                         }
                     } else if (categorySelect === 'all'){
                         if (val === base_val_{{ storageitem.pk }}) {
                             $('#table{{ storageitem.pk }}').show();
-                            $('#card{{ storageitem.pk }}').show();
                         } else if (val === 'all') {
                             $('#table{{ storageitem.pk }}').show();
-                            $('#card{{ storageitem.pk }}').show();
                         } else {
                             $('#table{{ storageitem.pk }}').hide();
-                            $('#card{{ storageitem.pk }}').hide();
                         }
                     } else {
                         $('#table{{ storageitem.pk }}').hide();
-                        $('#card{{ storageitem.pk }}').hide();
                     }
                 {% endfor %}
             });
@@ -242,55 +147,25 @@
                     if (baseSelect === base_val_{{ storageitem.pk }}) {
                         if (val === category_val{{ storageitem.pk }}) {
                             $('#table{{ storageitem.pk }}').show();
-                            $('#card{{ storageitem.pk }}').show();
                         } else if(val === 'all') {
                             $('#table{{ storageitem.pk }}').show();
-                            $('#card{{ storageitem.pk }}').show();
                         }else {
                             $('#table{{ storageitem.pk }}').hide();
-                            $('#card{{ storageitem.pk }}').hide();
                         }
                     } else if (baseSelect === 'all') {
                         if (val === category_val{{ storageitem.pk }}) {
                             $('#table{{ storageitem.pk }}').show();
-                            $('#card{{ storageitem.pk }}').show();
                         } else if(val === 'all') {
                             $('#table{{ storageitem.pk }}').show();
-                            $('#card{{ storageitem.pk }}').show();
                         }else {
                             $('#table{{ storageitem.pk }}').hide();
-                            $('#card{{ storageitem.pk }}').hide();
                         }
                     } else {
                         $('#table{{ storageitem.pk }}').hide();
-                        $('#card{{ storageitem.pk }}').hide();
                     }
                 {% endfor %}
             });
         });
-
-        let listBtn = document.querySelector('.item-table');
-        let cardBtn = document.querySelector('.item-card');
-        let storageTable = document.querySelector('#storageTable');
-        let storageCard = document.querySelector('#storageCard');
-
-        let changeTable = (table, card) => {
-            table.style.display = '';
-            card.style.display = 'none';
-        }
-
-        let changeCard = (table, card) => {
-            table.style.display = 'none';
-            card.style.display = '';
-        }
-
-        listBtn.addEventListener('click', ()=> {
-            changeTable(storageTable, storageCard);
-        }, false);
-
-        cardBtn.addEventListener('click', ()=> {
-            changeCard(storageTable, storageCard);
-        }, false);
 
     </script>
 
