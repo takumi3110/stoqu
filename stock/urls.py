@@ -17,7 +17,9 @@ router.register(r'orderInfo', views.OrderInfoViewSet)
 urlpatterns = [
 	path('', views.top_page, name='top'),
 	path('item_list', views.StorageItemListView.as_view(), name='storage_list'),
+	path('item_list_admin', views.StorageItemAdminListView.as_view(), name='storage_list_admin'),
 	path('detail/<int:pk>', views.StorageItemDetailView.as_view(), name='storage_detail'),
+	path('detail_admin/<int:pk>', views.StorageItemDetailAdminView.as_view(), name='storage_detail_admin'),
 	path('get_data/', views.create_storage_data, name='get_data'),
 	path('create/', views.StorageItemCreateView.as_view(), name='storage_create'),
 	path('update/<int:pk>', views.StorageItemUpdateView.as_view(), name='storage_update'),

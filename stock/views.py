@@ -67,7 +67,20 @@ def top_page(request):
 
 class StorageItemListView(LoginRequiredMixin, ListView):
     model = StorageItem
-    template_name = 'stock/storage_list.html'
+    template_name = 'stock/storage_item/list.html'
+    paginate_by = 30
+    ordering = 'order_number'
+    
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        base = Base.objects.all()
+        context['base_list'] = base
+        return context
+
+
+class StorageItemAdminListView(LoginRequiredMixin, ListView):
+    model = StorageItem
+    template_name = 'stock/storage_item/admin/list.html'
     paginate_by = 30
     ordering = 'order_number'
     
@@ -80,7 +93,12 @@ class StorageItemListView(LoginRequiredMixin, ListView):
 
 class StorageItemDetailView(LoginRequiredMixin, DetailView):
     model = StorageItem
-    template_name = 'stock/storage_detail.html'
+    template_name = 'stock/storage_item/detail.html'
+    
+    
+class StorageItemDetailAdminView(LoginRequiredMixin, DetailView):
+    model = StorageItem
+    template_name = 'stock/storage_item/admin/detail.html'
 
 
 class StorageItemCreateView(LoginRequiredMixin, BSModalCreateView):
