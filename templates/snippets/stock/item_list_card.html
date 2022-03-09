@@ -1,10 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% load humanize %}
+
+{% for storageitem in storageitem_list %}
+    <div class="col-4 mt-5 storage" id="card{{ storageitem.pk }}">
+        <div class="card">
+            <div class="card-body" id="storageCard{{ storageitem.pk }}">
+                <div class="storage__card">
+                    {% if storageitem.item.pc.img.name == '' %}
+                        <img src="/media/images/no_image_logo.png" alt="noimage" class="image-fluid card-img-cart">
+                    {% else %}
+                        <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="image-fluid card-img-cart">
+                    {% endif %}
+                </div>
+                <h5 class="card-title">{{ storageitem.item.pc.maker }}</h5>
+                <h5 class="card-subtitle">{{ storageitem.item.pc.name }}</h5>
+                <div class="row mt-3 storage__text">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-6" id="category{{ storage.pk }}">カテゴリー：</div>
+                            <div class="col-6">{{ storageitem.item.pc.get_category_display }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row storage__text">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-6">メモリ：</div>
+                            <div class="col-6">{{ storageitem.item.memory }} GB</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">ストレージ：</div>
+                            <div class="col-6">{{ storageitem.item.storage }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><label for="cardNumpad">テンキー：</label></div>
+                            <div class="col-6">
+	                            <input class="form-check-input" type="checkbox" id="cardNumpad" aria-label="{{ storage.item.pc.name }}"
+                                   {% if storageitem.item.numpad %}checked{% endif %} disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-6">在庫数：</div>
+                            <div class="col-6">{{ storageitem.quantity }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6" id="base{{ storage.pk }}">在庫拠点：</div>
+                            <div class="col-6">{{ storageitem.base }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">合計金額：</div>
+                            <div class="col-6">{{ storageitem.total_price | intcomma}}円</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'stock:storage_detail' storageitem.pk %}" class="card-link">
+                    詳細
+                </a>
+                <button type="button" class="btn btn-warning float-end" onclick="location.href='{% url "stock:add_item" storageitem.pk %}'">
+                    <i class="fas fa-cart-arrow-down">確保依頼する</i>
+                </button>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <div class="col-12">
+        なにも登録されてません
+    </div>
+{% endfor %}
