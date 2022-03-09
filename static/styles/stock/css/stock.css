@@ -98,6 +98,10 @@ a {
   flex-direction: column;
 }
 
+.border-bottom, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__content .total, .detail__content .option, .detail__content .base, .detail__content .title {
+  border-bottom: thin solid #dfdfdf;
+}
+
 .navigation {
   text-align: center;
 }
@@ -183,9 +187,60 @@ a {
   font-size: 15px;
 }
 
-.cart .bottom-border {
-  border-bottom: thin solid #dfdfdf;
+.detail__img {
+  top: 0;
 }
+.detail__img .sub-img {
+  width: 100%;
+  margin-bottom: 2em;
+}
+.detail__img .main-img {
+  width: 100%;
+  margin: 0px -20px;
+}
+.detail__content .title {
+  color: black;
+  font-size: 40px;
+  margin-bottom: 2rem;
+}
+.detail__content table {
+  font-size: 20px;
+  color: grey;
+}
+.detail__content .base {
+  margin-bottom: 2rem;
+}
+.detail__content .option {
+  color: black;
+  margin-bottom: 2rem;
+}
+.detail__content .option .title {
+  font-weight: bold;
+  font-size: 20px;
+  color: black;
+}
+.detail__content .total {
+  margin-bottom: 2rem;
+}
+.detail__content .total .price {
+  font-size: 25px;
+}
+.detail__content .sub-title {
+  color: grey;
+  text-align: right;
+  width: 150px;
+  font-weight: normal;
+  margin-right: 1px;
+}
+.detail__content .price {
+  color: orangered;
+}
+.detail__content .spec .sub-title {
+  text-align: left;
+  font-weight: bold;
+  color: black;
+}
+
 .cart__header {
   position: relative;
 }
@@ -306,13 +361,6 @@ a {
   font-weight: bold;
 }
 
-.approve-menu {
-  border-bottom: thin solid #dfdfdf;
-}
-
-.approve-card .bottom-border {
-  border-bottom: thin solid #dfdfdf;
-}
 .approve-card .bottom-border:last-child {
   border-bottom: none;
 }
@@ -330,9 +378,6 @@ a {
 }
 .confirm__title {
   color: teal;
-}
-.confirm__address {
-  border-bottom: thin solid #dfdfdf;
 }
 .confirm__address .address {
   font-weight: bold;

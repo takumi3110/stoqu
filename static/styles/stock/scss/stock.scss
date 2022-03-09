@@ -19,6 +19,10 @@ a {
   flex-direction: column;
 }
 
+.border-bottom {
+  border-bottom: thin solid $cBorder;
+}
+
 
 .navigation {
   text-align: center;
@@ -123,9 +127,84 @@ a {
   }
 }
 
+.detail {
+  &__img {
+    top: 0;
+    & .sub-img {
+      width: 100%;
+      margin-bottom: 2em;
+    }
+
+    & .main-img {
+      width: 100%;
+      margin: 0px -20px;
+    }
+  }
+
+  &__content {
+    & .title {
+      color: $cBlack;
+      font-size: 40px;
+      margin-bottom: 2rem;
+      @extend .border-bottom;
+    }
+
+    & table {
+      font-size: 20px;
+      color: grey;
+    }
+
+    & .base {
+      margin-bottom: 2rem;
+      @extend .border-bottom;
+    }
+
+    & .option {
+      color: black;
+      margin-bottom: 2rem;
+      @extend .border-bottom;
+
+      & .title {
+        font-weight: bold;
+        font-size: 20px;
+        color: black;
+      }
+    }
+
+    & .total {
+      margin-bottom: 2rem;
+      @extend .border-bottom;
+      & .price {
+        font-size: 25px;
+      }
+    }
+
+    & .sub-title {
+      color: grey;
+      text-align: right;
+      width: 150px;
+      font-weight: normal;
+      margin-right: 1px;
+    }
+
+    & .price {
+      color: orangered;
+    }
+
+    & .spec {
+      & .sub-title {
+        text-align: left;
+        font-weight: bold;
+        color: black;
+      }
+    }
+  }
+
+}
+
 .cart {
   & .bottom-border {
-    border-bottom: thin solid $cBorder;
+    @extend .border-bottom;
   }
 
   &__header {
@@ -283,12 +362,12 @@ a {
 
 
 .approve-menu {
-  border-bottom: thin solid $cBorder;
+  @extend .border-bottom;
 }
 
 .approve-card {
   & .bottom-border {
-    border-bottom: thin solid $cBorder;
+    @extend .border-bottom;
 
     &:last-child {
       border-bottom: none;
@@ -313,7 +392,7 @@ a {
   }
 
   &__address {
-    border-bottom: thin solid $cBorder;
+    @extend .border-bottom;
 
     & .address {
       font-weight: bold;
