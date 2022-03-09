@@ -98,8 +98,9 @@ a {
   flex-direction: column;
 }
 
-.border-bottom, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__content .total, .detail__content .option, .detail__content .base, .detail__content .title {
+.border-bottom, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__info .sub-title, .detail__info, .detail__content .total, .detail__content .option, .detail__content .base, .detail__content .title, .detail__main {
   border-bottom: thin solid #dfdfdf;
+  margin-bottom: 2rem;
 }
 
 .navigation {
@@ -214,7 +215,7 @@ a {
   color: black;
   margin-bottom: 2rem;
 }
-.detail__content .option .title {
+.detail__content .option .sub-title {
   font-weight: bold;
   font-size: 20px;
   color: black;
@@ -225,7 +226,7 @@ a {
 .detail__content .total .price {
   font-size: 25px;
 }
-.detail__content .sub-title {
+.detail__content .menu {
   color: grey;
   text-align: right;
   width: 150px;
@@ -235,10 +236,36 @@ a {
 .detail__content .price {
   color: orangered;
 }
-.detail__content .spec .sub-title {
+.detail__content .spec .menu {
   text-align: left;
   font-weight: bold;
   color: black;
+}
+.detail__info {
+  font-size: 20px;
+}
+.detail__info .title {
+  font-weight: bold;
+  color: orange;
+  margin-bottom: 1rem;
+}
+.detail__info .sub-title {
+  font-size: 25px;
+}
+.detail__info table {
+  font-size: 20px;
+  padding: 0 2rem;
+}
+.detail__info table th {
+  font-weight: normal;
+  background-color: #f3f3f3;
+  width: 70%;
+}
+.detail__info table td {
+  padding-left: 10px;
+}
+.detail__info table .menu {
+  color: grey;
 }
 
 .cart__header {

@@ -21,6 +21,7 @@ a {
 
 .border-bottom {
   border-bottom: thin solid $cBorder;
+  margin-bottom: 2rem;
 }
 
 
@@ -141,6 +142,10 @@ a {
     }
   }
 
+  &__main {
+    @extend .border-bottom;
+  }
+
   &__content {
     & .title {
       color: $cBlack;
@@ -164,7 +169,7 @@ a {
       margin-bottom: 2rem;
       @extend .border-bottom;
 
-      & .title {
+      & .sub-title {
         font-weight: bold;
         font-size: 20px;
         color: black;
@@ -179,7 +184,7 @@ a {
       }
     }
 
-    & .sub-title {
+    & .menu {
       color: grey;
       text-align: right;
       width: 150px;
@@ -192,10 +197,45 @@ a {
     }
 
     & .spec {
-      & .sub-title {
+      & .menu {
         text-align: left;
         font-weight: bold;
         color: black;
+      }
+    }
+  }
+
+  &__info {
+    @extend .border-bottom;
+    font-size: 20px;
+    & .title {
+      font-weight: bold;
+      //font-size: 20px;
+      color: orange;
+      margin-bottom: 1rem;
+    }
+
+    & .sub-title {
+      font-size: 25px;
+      @extend .border-bottom;
+    }
+
+    & table {
+      font-size: 20px;
+      padding: 0 2rem;
+      & th {
+        font-weight: normal;
+        background-color: #f3f3f3;
+        width: 70%;
+      }
+
+      & td {
+        padding-left: 10px;
+      }
+
+      & .menu {
+        color: grey;
+        //font-size: 20px;
       }
     }
   }
