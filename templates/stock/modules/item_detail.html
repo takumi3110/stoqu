@@ -1,22 +1,18 @@
 {% load humanize %}
 
 <section class="row detail__main">
-	<div class="detail__img col-1">
-		{% if storageitem.item.pc.img.name == '' %}
-	        <img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img">
+	<div class="detail__img  col-1">
+		{% for img in img_url %}
+			<img src="{{ img.url }}" alt="{{ img.name }}" class="sub-img {{ img.name }}">
+		{% empty %}
 			<img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img">
-			<img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img">
-			<img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img">
-			<img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img">
-	    {% else %}
-	        <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="sub-img">
-	    {% endif %}
+		{% endfor %}
 	</div>
 	<div class="detail__img col-5">
 		{% if storageitem.item.pc.img.name == '' %}
-	        <img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img">
+	        <img src="/media/images/no_image_logo.png" alt="noimage" class="main-img">
 	    {% else %}
-	        <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="sub-img">
+	        <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="main-img">
 	    {% endif %}
 	</div>
 	<div class="detail__content col-4">
@@ -249,3 +245,5 @@
 		</table>
 	</div>
 </section>
+
+
