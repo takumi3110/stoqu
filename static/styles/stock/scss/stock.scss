@@ -132,8 +132,13 @@ a {
   &__img {
     top: 0;
     & .sub-img {
+      border: thin solid grey;
       width: 100%;
-      margin-bottom: 2em;
+      margin-bottom: 1em;
+
+      &.active {
+        border: thin solid orange;
+      }
     }
 
     & .main-img {

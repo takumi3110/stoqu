@@ -17,6 +17,8 @@ class Main {
 	}
 
 	_init() {
+		this.hero = new HeroSlider('.swiper');
+		this.selectImg = new SelectImg('.mySwiper', '.mySwiper2');
 		this._paceDone();
 	}
 
@@ -32,7 +34,16 @@ class Main {
 		}
 	}
 
+	_toggleSlideAnimation(el, inview) {
+		if (inview) {
+			this.hero.start();
+		} else {
+			this.hero.stop();
+		}
+	}
+
 	_scrollInit() {
+		this.observers = new ScrollObserver('.swiper', this._toggleSlideAnimation.bind(this), {once: false});
 		this.observers = new ScrollObserver('.appear', this._inviewAnimation);
 		console.log(this.observers);
 	}
