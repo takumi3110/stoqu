@@ -159,9 +159,12 @@ a {
       color: grey;
     }
 
-    & .base {
+    & .total {
       margin-bottom: 2rem;
-      @extend .border-bottom;
+      & .price {
+        font-size: 40px;
+        color: black;
+      }
     }
 
     & .option {
@@ -176,32 +179,26 @@ a {
       }
     }
 
-    & .total {
-      margin-bottom: 2rem;
-      @extend .border-bottom;
-      & .price {
-        font-size: 25px;
-      }
-    }
-
-    & .menu {
-      color: grey;
-      text-align: right;
-      width: 150px;
-      font-weight: normal;
-      margin-right: 1px;
-    }
-
-    & .price {
-      color: orangered;
-    }
-
-    & .spec {
+     & .spec {
       & .menu {
         text-align: left;
         font-weight: bold;
         color: black;
       }
+    }
+
+    & .base {
+      margin-bottom: 2rem;
+      @extend .border-bottom;
+    }
+
+    & .menu {
+      font-weight: normal;
+      width: 10rem;
+    }
+
+    & .price {
+      color: orangered;
     }
   }
 

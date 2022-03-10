@@ -98,7 +98,7 @@ a {
   flex-direction: column;
 }
 
-.border-bottom, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__info .sub-title, .detail__info, .detail__content .total, .detail__content .option, .detail__content .base, .detail__content .title, .detail__main {
+.border-bottom, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__info .sub-title, .detail__info, .detail__content .base, .detail__content .option, .detail__content .title, .detail__main {
   border-bottom: thin solid #dfdfdf;
   margin-bottom: 2rem;
 }
@@ -208,8 +208,12 @@ a {
   font-size: 20px;
   color: grey;
 }
-.detail__content .base {
+.detail__content .total {
   margin-bottom: 2rem;
+}
+.detail__content .total .price {
+  font-size: 40px;
+  color: black;
 }
 .detail__content .option {
   color: black;
@@ -220,26 +224,20 @@ a {
   font-size: 20px;
   color: black;
 }
-.detail__content .total {
-  margin-bottom: 2rem;
-}
-.detail__content .total .price {
-  font-size: 25px;
-}
-.detail__content .menu {
-  color: grey;
-  text-align: right;
-  width: 150px;
-  font-weight: normal;
-  margin-right: 1px;
-}
-.detail__content .price {
-  color: orangered;
-}
 .detail__content .spec .menu {
   text-align: left;
   font-weight: bold;
   color: black;
+}
+.detail__content .base {
+  margin-bottom: 2rem;
+}
+.detail__content .menu {
+  font-weight: normal;
+  width: 10rem;
+}
+.detail__content .price {
+  color: orangered;
 }
 .detail__info {
   font-size: 20px;
