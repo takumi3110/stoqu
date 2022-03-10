@@ -99,6 +99,23 @@ class StorageItemDetailView(LoginRequiredMixin, DetailView):
 class StorageItemDetailAdminView(LoginRequiredMixin, DetailView):
     model = StorageItem
     template_name = 'stock/storage_item/admin/detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(StorageItemDetailAdminView, self).get_context_data(**kwargs)
+        pc = self.object.item.pc
+        img_url = [
+            pc.img,
+            pc.sub_img1,
+            pc.sub_img2,
+            pc.sub_img3,
+            pc.sub_img4,
+            pc.sub_img5
+        ]
+        for url in img_url:
+            if url.name == '':
+                img_url.remove(url)
+        context['img_url'] = img_url
+        return context
 
 
 class StorageItemCreateView(LoginRequiredMixin, BSModalCreateView):
