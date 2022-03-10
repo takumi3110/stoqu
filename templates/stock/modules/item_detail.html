@@ -13,28 +13,22 @@
 	    {% endif %}
 	</div>
 	<div class="detail__img col-5">
-		<img src="/media/images/no_image_logo.png" alt="noimage" class="main-img">
+		{% if storageitem.item.pc.img.name == '' %}
+	        <img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img">
+	    {% else %}
+	        <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="sub-img">
+	    {% endif %}
 	</div>
 	<div class="detail__content col-4">
-		<div class="title">
+		<h1 class="title">
 			<span class="text">
 				{{ storageitem.item.pc }}({{ storageitem.item.cpu.name }}/{{ storageitem.item.memory }}GB/{{ storageitem.item.storage.size }}GB)
 				{{ storageitem.item.pc.model_number }}
 			</span>
-		</div>
-		<div class="base">
-			<table>
-				<tr>
-					<th class="menu">在庫拠点</th>
-					<td>：</td>
-					<td class="text">{{ storageitem.base }}</td>
-				</tr>
-				<tr>
-					<th class="menu">在庫数</th>
-					<td>：</td>
-					<td>{{ storageitem.quantity }}</td>
-				</tr>
-			</table>
+		</h1>
+		<div class="total">
+			<span>￥</span>
+			<span class="price">{{ storageitem.total_price | intcomma }}</span>
 		</div>
 		<div class="option">
 			<span class="sub-title">付属品</span>
@@ -50,24 +44,38 @@
 						<th class="menu">なし</th>
 					</tr>
 				{% endfor %}
-			</table>
-		</div>
-		<div class="total">
-			<table>
 				<tr>
 					<th class="menu">本体価格</th>
 					<td>：</td>
 					<td class="price">￥{{ storageitem.price | intcomma }}</td>
 				</tr>
+
+			</table>
+		</div>
+		<div class="base">
+			<table>
 				<tr>
-					<th class="menu">合計金額</th>
+					<th class="menu">在庫拠点</th>
 					<td>：</td>
-					<td class="price">￥{{ storageitem.total_price | intcomma }}</td>
+					<td class="text">{{ storageitem.base }}</td>
+				</tr>
+				<tr>
+					<th class="menu">在庫数</th>
+					<td>：</td>
+					<td>{{ storageitem.quantity }}</td>
 				</tr>
 			</table>
 		</div>
 		<div class="spec">
 			<table>
+				<tr>
+					<th class="menu">シリーズ</th>
+					<td>{{ storageitem.item.pc.name }}</td>
+				</tr>
+				<tr>
+					<th class="menu">ブランド</th>
+					<td>{{ storageitem.item.pc.maker }}</td>
+				</tr>
 				<tr>
 					<th class="menu">CPU</th>
 					<td>{{ storageitem.item.cpu }}</td>
