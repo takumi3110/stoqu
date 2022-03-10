@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 	new Main();
 });
 
@@ -23,7 +23,6 @@ class Main {
 	_paceDone() {
 		this._scrollInit();
 	}
-
 
 	_inviewAnimation(el, inview) {
 		if (inview) {
