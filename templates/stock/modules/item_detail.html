@@ -2,18 +2,14 @@
 
 <section class="row detail__main">
 	<div class="detail__img  col-1">
-		{% for img in img_url %}
-			<img src="{{ img.url }}" alt="{{ img.name }}" class="sub-img {{ img.name }}">
+		{% for key, img in img_url.items %}
+			<img src="{{ img.url }}" alt="{{ img.name }}" class="sub-img {{ key }}">
 		{% empty %}
-			<img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img">
+			<img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img img0 selected">
 		{% endfor %}
 	</div>
 	<div class="detail__img col-5">
-		{% if storageitem.item.pc.img.name == '' %}
-	        <img src="/media/images/no_image_logo.png" alt="noimage" class="main-img">
-	    {% else %}
-	        <img src="{{ storageitem.item.pc.img.url }}" alt="{{ storageitem.item.pc.name }}" class="main-img">
-	    {% endif %}
+		<div class="main-img"></div>
 	</div>
 	<div class="detail__content col-4">
 		<h1 class="title">
@@ -90,7 +86,13 @@
 				</tr>
 				<tr>
 					<th class="menu">サイズ</th>
-					<td>{{ storageitem.item.size }}インチ</td>
+					<td>
+						{% if storageitem.item.size is not None %}
+							{{ storageitem.item.size }} インチ
+						{% else %}
+							-
+						{% endif %}
+					</td>
 				</tr>
 				<tr>
 					<th class="menu">webカメラ</th>
@@ -145,11 +147,17 @@
 			</tr>
 			<tr>
 				<th class="menu">PCカテゴリー</th>
-				<td>{{ storageitem.item.pc.category }}</td>
+				<td>{{ storageitem.item.pc.get_category_display }}</td>
 			</tr>
 			<tr>
 				<th class="menu">サイズ</th>
-				<td>{{ storageitem.item.size }}</td>
+				<td>
+					{% if storageitem.item.size is not None %}
+						{{ storageitem.item.size }}
+					{% else %}
+						-
+					{% endif %}
+				</td>
 			</tr>
 			<tr>
 				<th class="menu">CPUブランド</th>
@@ -212,15 +220,33 @@
 			</tr>
 			<tr>
 				<th class="menu">USBポート</th>
-				<td>{{ storageitem.item.usb }}</td>
+				<td>
+					{% if storageitem.item.usb %}
+						{{ storageitem.item.usb }}
+					{% else %}
+						なし
+					{% endif %}
+				</td>
 			</tr>
 			<tr>
 				<th class="menu">HDMI</th>
-				<td>{{ storageitem.item.hdmi }}</td>
+				<td>
+					{% if storageitem.item.hdmi %}
+						{{ storageitem.item.hdmi }}
+					{% else %}
+						なし
+					{% endif %}
+				</td>
 			</tr>
 			<tr>
 				<th class="menu">VGA</th>
-				<td>{{ storageitem.item.vga }}</td>
+				<td>
+					{% if storageitem.item.vga %}
+						{{ storageitem.item.vga }}
+					{% else %}
+						なし
+					{% endif %}
+				</td>
 			</tr>
 		</table>
 	</div>
