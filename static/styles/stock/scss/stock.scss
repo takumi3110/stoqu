@@ -136,14 +136,20 @@ a {
       width: 100%;
       margin-bottom: 1em;
 
-      &.active {
-        border: thin solid orange;
+      &.selected {
+        border: medium solid orange;
       }
     }
 
     & .main-img {
-      width: 100%;
-      margin: 0px -20px;
+      position: relative;
+      & .selectedMainImg {
+        width: 100%;
+        margin: 30px -20px;
+        top: 20px;
+        align-items: center;
+        position: absolute;
+      }
     }
   }
 

@@ -1,33 +1,62 @@
 class SelectImg {
-	constructor(el, el2) {
-		this.el = el;
-		this.el2 = el2;
-		this.swiper = this._initSwiper();
-		this.swiper2 = this._thumbSwiper();
+	constructor() {
+		this._init();
 	}
 
-	_initSwiper() {
-		return new Swiper(this.el, {
-			loop: true,
-			spaceBetween: 10,
-			slidesPerView: 1,
-			freeMode: true,
-			watchSlidesProgress: true,
+	_init() {
+		const initImg = document.querySelector('.img0');
+		initImg.classList.add('selected');
+		this._imgClick();
+	}
+
+	_imgClick() {
+		const subImg = document.querySelectorAll('.sub-img');
+		subImg.forEach(el => {
+			const className = '.' + el.classList[1];
+			const subClass = document.querySelector(className);
+			this._addSelected(subImg, subClass);
+			this._addMainImg(subClass);
 		});
 	}
 
-	_thumbSwiper() {
-		return new Swiper(this.el2, {
-			loop: true,
-			spaceBetween: 10,
-			navigation: {
-				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-perv'
-			},
-			thumbs: {
-				swiper: this.swiper
+	_addSelected(els, el) {
+		el.addEventListener('click', function() {
+			els.forEach(el => {
+				if (el.classList.contains('selected')) {
+					el.classList.remove('selected');
+					const selectedImg = document.querySelector('.selectedMainImg');
+					selectedImg.remove();
+				}
+			});
+			if (el.classList.contains('selected') === false) {
+				this.classList.add('selected');
+				const mainImg = document.querySelector('.main-img');
+				const imgElement = document.createElement('img');
+				imgElement.alt = 'main-image';
+				imgElement.src = this.src;
+				imgElement.className = 'selectedMainImg';
+				mainImg.appendChild(imgElement);
 			}
 		});
+	}
+
+	_removeSelected(els) {
+		els.forEach(el => {
+			if (el.classList.contains('selected')) {
+				el.classList.remove('selected');
+			}
+		});
+	}
+
+	_addMainImg(el) {
+		const mainImg = document.querySelector('.main-img');
+		if (el.classList.contains('selected')) {
+			const imgElement = document.createElement('img');
+			imgElement.alt = 'main-image';
+			imgElement.src = el.src;
+			imgElement.className = 'selectedMainImg';
+			mainImg.appendChild(imgElement);
+		}
 	}
 }
 

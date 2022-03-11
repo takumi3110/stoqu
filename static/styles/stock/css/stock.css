@@ -85,43 +85,6 @@ body {
 .swiper.top-swiper .swiper-slide-active > img {
   transform: none;
 }
-.swiper.detail-swiper {
-  width: 100%;
-  height: 100%;
-}
-.swiper .mySwiper2 {
-  height: 80%;
-  width: 100%;
-}
-.swiper .mySwiper {
-  height: 20%;
-  box-sizing: border-box;
-  padding: 10px 0;
-}
-.swiper .mySwiper .detail-swiper__slide {
-  width: 25%;
-  height: 100%;
-  opacity: 0.4;
-}
-.swiper .mySwiper .swiper-slide-thumb-active {
-  opacity: 1;
-}
-.swiper .detail-swiper__slide {
-  width: 25%;
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
-  /* Center slide text vertically */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.swiper .detail-swiper__slide > img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
 a {
   text-decoration: none;
@@ -236,12 +199,18 @@ a {
   width: 100%;
   margin-bottom: 1em;
 }
-.detail__img .sub-img.active {
-  border: thin solid orange;
+.detail__img .sub-img.selected {
+  border: medium solid orange;
 }
 .detail__img .main-img {
+  position: relative;
+}
+.detail__img .main-img .selectedMainImg {
   width: 100%;
-  margin: 0px -20px;
+  margin: 30px -20px;
+  top: 20px;
+  align-items: center;
+  position: absolute;
 }
 .detail__content .title {
   color: black;
