@@ -4,6 +4,8 @@ venv
 diagram
 *__pycache__/
 node_modules
+templates/dummy
+
 *lock
 
 stoqu/settings/hide_settings.py
