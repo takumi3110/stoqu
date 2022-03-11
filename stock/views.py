@@ -103,17 +103,26 @@ class StorageItemDetailAdminView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(StorageItemDetailAdminView, self).get_context_data(**kwargs)
         pc = self.object.item.pc
-        img_url = [
-            pc.img,
-            pc.sub_img1,
-            pc.sub_img2,
-            pc.sub_img3,
-            pc.sub_img4,
-            pc.sub_img5
-        ]
-        for url in img_url:
-            if url.name == '':
-                img_url.remove(url)
+        images = []
+        if pc.img.name != '':
+            images.append(pc.img)
+        if pc.sub_img1.name != '':
+            images.append(pc.sub_img1)
+        if pc.sub_img2.name != '':
+            images.append(pc.sub_img2)
+        if pc.sub_img3.name != '':
+            images.append(pc.sub_img3)
+        if pc.sub_img4.name != '':
+            images.append(pc.sub_img4)
+        if pc.sub_img5.name != '':
+            images.append(pc.sub_img5)
+        for img in images:
+            if img.name is None or img.name == '':
+                images.remove(img)
+        img_url = {}
+        for i, img in enumerate(images):
+            key = 'img' + str(i)
+            img_url[key] = img
         context['img_url'] = img_url
         return context
 
