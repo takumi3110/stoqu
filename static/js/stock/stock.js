@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const hero = new HeroSlider('.swiper');
-    hero.start();
     navTitle();
 });
+
 
 function navTitle() {
     const el = document.querySelector('.navigation__title');

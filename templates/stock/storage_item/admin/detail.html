@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load humanize %}
+{% load extras %}
+
+{% block content %}
+
+	<div class="container detail my-5">
+		{% include 'stock/modules/item_detail.html' %}
+	</div>
+
+{% endblock content %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+    </script>
+
+{% endblock javascript %}

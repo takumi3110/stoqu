@@ -26,9 +26,7 @@ class HeroSlider {
 		options = Object.assign({
 			delay: 4000,
 			disableOnInteraction: false,
-		},
-			options
-		);
+		}, options);
 		this.swiper.params.autoplay = options;
 		this.swiper.autoplay.start();
 	}

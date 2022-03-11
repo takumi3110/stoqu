@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load humanize %}
+{% load extras %}
+
+{% block content %}
+
+   <a href="{% url 'stock:my_order_info' %}"><i class="fas fa-long-arrow-alt-left"></i>依頼履歴に戻る</a>
+	<div class="container order-detail my-5">
+		<div class="row">
+			<div class="col-10 offset-1">
+				<section class="row sub-info">
+					<h2 id="title-text">注文の詳細</h2>
+					<span class="date">注文日 {{ orderinfo.ordered_at }}</span>
+					<span class="number">注文番号 {{ orderinfo.number }}</span>
+				</section>
+				{% include 'snippets/stock/../modules/orderinfo_detail.html' %}
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+{% block javascript %}
+
+	<script type="text/javascript">
+		const modal = document.querySelector('#modal');
+		const cancelBtn = document.querySelector('.cancel-btn');
+		linkClick(cancelBtn, "{% url 'stock:delete_select' orderinfo.pk %}");
+		tradeCheck();
+		{% for order_item in orderinfo.storage_cart.order_item.all %}
+			$(function() {
+				$('.change-quantity{{ order_item.pk }}').modalForm({formURL: "{% url 'stock:change_quantity' order_item.pk %}"});
+			});
+
+			$('#modal').on('show.bs.modal', function () {
+				const quantitySelect = document.querySelector('#changeQuantity');
+				quantity(quantitySelect, {{ order_item.storage_item.quantity }}, {{ order_item.quantity }});
+			});
+		{% endfor %}
+		$(`#modal`).on('show.bs.modal', function () {
+			formSubmit();
+		});
+	</script>
+
+{% endblock javascript %}

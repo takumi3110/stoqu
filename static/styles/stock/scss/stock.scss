@@ -1,5 +1,6 @@
 @import '../../modules/mixin';
 @import '../../modules/variables';
+@import '../../modules/statusbar';
 @import '../../modules/hero-slider';
 @import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
 
@@ -16,6 +17,11 @@ a {
 .flex {
   display: flex;
   flex-direction: column;
+}
+
+.border-bottom {
+  border-bottom: thin solid $cBorder;
+  margin-bottom: 2rem;
 }
 
 
@@ -75,7 +81,7 @@ a {
     & img {
       background-color: orange;
       width: 80%;
-      height: 50%;
+      height: 150px;
       top: 50px;
       margin: 30px 20px;
       &.quote {
@@ -122,9 +128,131 @@ a {
   }
 }
 
+.detail {
+  &__img {
+    top: 0;
+    & .sub-img {
+      border: thin solid grey;
+      width: 100%;
+      margin-bottom: 1em;
+
+      &.selected {
+        border: medium solid orange;
+      }
+    }
+
+    & .main-img {
+      position: relative;
+      & .selectedMainImg {
+        width: 100%;
+        margin: 30px -20px;
+        top: 20px;
+        align-items: center;
+        position: absolute;
+      }
+    }
+  }
+
+  &__main {
+    @extend .border-bottom;
+  }
+
+  &__content {
+    & .title {
+      color: $cBlack;
+      font-size: 40px;
+      margin-bottom: 2rem;
+      @extend .border-bottom;
+    }
+
+    & table {
+      font-size: 20px;
+      color: grey;
+    }
+
+    & .total {
+      margin-bottom: 2rem;
+      & .price {
+        font-size: 40px;
+        color: black;
+      }
+    }
+
+    & .option {
+      color: black;
+      margin-bottom: 2rem;
+      @extend .border-bottom;
+
+      & .sub-title {
+        font-weight: bold;
+        font-size: 20px;
+        color: black;
+      }
+    }
+
+     & .spec {
+      & .menu {
+        text-align: left;
+        font-weight: bold;
+        color: black;
+      }
+    }
+
+    & .base {
+      margin-bottom: 2rem;
+      @extend .border-bottom;
+    }
+
+    & .menu {
+      font-weight: normal;
+      width: 10rem;
+    }
+
+    & .price {
+      color: orangered;
+    }
+  }
+
+  &__info {
+    @extend .border-bottom;
+    font-size: 20px;
+    & .title {
+      font-weight: bold;
+      //font-size: 20px;
+      color: orange;
+      margin-bottom: 1rem;
+    }
+
+    & .sub-title {
+      font-size: 25px;
+      @extend .border-bottom;
+    }
+
+    & table {
+      font-size: 20px;
+      padding: 0 2rem;
+      & th {
+        font-weight: normal;
+        background-color: #f3f3f3;
+        width: 70%;
+      }
+
+      & td {
+        padding-left: 10px;
+      }
+
+      & .menu {
+        color: grey;
+        //font-size: 20px;
+      }
+    }
+  }
+
+}
+
 .cart {
   & .bottom-border {
-    border-bottom: thin solid $cBorder;
+    @extend .border-bottom;
   }
 
   &__header {
@@ -282,12 +410,12 @@ a {
 
 
 .approve-menu {
-  border-bottom: thin solid $cBorder;
+  @extend .border-bottom;
 }
 
 .approve-card {
   & .bottom-border {
-    border-bottom: thin solid $cBorder;
+    @extend .border-bottom;
 
     &:last-child {
       border-bottom: none;
@@ -312,7 +440,7 @@ a {
   }
 
   &__address {
-    border-bottom: thin solid $cBorder;
+    @extend .border-bottom;
 
     & .address {
       font-weight: bold;
@@ -347,6 +475,9 @@ a {
   padding: 60px 0;
   background-color: #212529;
   font-size: 20px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 
   &__nav {
     @extend .flex;

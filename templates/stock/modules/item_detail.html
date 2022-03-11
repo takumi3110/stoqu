@@ -1,0 +1,275 @@
+{% load humanize %}
+
+<section class="row detail__main">
+	<div class="detail__img  col-1">
+		{% for key, img in img_url.items %}
+			<img src="{{ img.url }}" alt="{{ img.name }}" class="sub-img {{ key }}">
+		{% empty %}
+			<img src="/media/images/no_image_logo.png" alt="noimage" class="sub-img img0 selected">
+		{% endfor %}
+	</div>
+	<div class="detail__img col-5">
+		<div class="main-img"></div>
+	</div>
+	<div class="detail__content col-4">
+		<h1 class="title">
+			<span class="text">
+				{{ storageitem.item.pc }}({{ storageitem.item.cpu.name }}/{{ storageitem.item.memory }}GB/{{ storageitem.item.storage.size }}GB)
+				{{ storageitem.item.pc.model_number }}
+			</span>
+		</h1>
+		<div class="total">
+			<span>￥</span>
+			<span class="price">{{ storageitem.total_price | intcomma }}</span>
+		</div>
+		<div class="option">
+			<span class="sub-title">付属品</span>
+			<table>
+				{% for option in storageitem.option.all %}
+					<tr>
+						<th class="menu">{{ option.name }}</th>
+						<td>：</td>
+						<td class="price">￥{{ option.price | intcomma }}</td>
+					</tr>
+				{% empty %}
+					<tr>
+						<th class="menu">なし</th>
+					</tr>
+				{% endfor %}
+				<tr>
+					<th class="menu">本体価格</th>
+					<td>：</td>
+					<td class="price">￥{{ storageitem.price | intcomma }}</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="base">
+			<table>
+				<tr>
+					<th class="menu">在庫拠点</th>
+					<td>：</td>
+					<td class="text">{{ storageitem.base }}</td>
+				</tr>
+				<tr>
+					<th class="menu">在庫数</th>
+					<td>：</td>
+					<td>{{ storageitem.quantity }}</td>
+				</tr>
+			</table>
+		</div>
+		<div class="spec">
+			<table>
+				<tr>
+					<th class="menu">シリーズ</th>
+					<td>{{ storageitem.item.pc.name }}</td>
+				</tr>
+				<tr>
+					<th class="menu">ブランド</th>
+					<td>{{ storageitem.item.pc.maker }}</td>
+				</tr>
+				<tr>
+					<th class="menu">CPU</th>
+					<td>{{ storageitem.item.cpu }}</td>
+				</tr>
+				<tr>
+					<th class="menu">メモリ</th>
+					<td>{{ storageitem.item.memory }}GB</td>
+				</tr>
+				<tr>
+					<th class="menu">ストレージタイプ</th>
+					<td>{{ storageitem.item.storage.get_type_display }}</td>
+				</tr>
+				<tr>
+					<th class="menu">ストレージ容量</th>
+					<td>{{ storageitem.item.storage.size }}GB</td>
+				</tr>
+				<tr>
+					<th class="menu">サイズ</th>
+					<td>
+						{% if storageitem.item.size is not None %}
+							{{ storageitem.item.size }} インチ
+						{% else %}
+							-
+						{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<th class="menu">webカメラ</th>
+					<td>
+						<input type="checkbox" class="form-check-input" id="cameraCheck" aria-label="camera"
+						       {% if storageitem.item.camera %}checked{% endif %} disabled>
+					</td>
+				</tr>
+				<tr>
+					<th class="menu">指紋認証</th>
+					<td>
+						<input type="checkbox" class="form-check-input" id="fingerprintCheck" aria-label="fingerprint"
+						       {% if storageitem.item.fingerprint %}checked{% endif %} disabled>
+					</td>
+				</tr>
+				<tr>
+					<th class="menu">テンキー</th>
+					<td>
+						<input type="checkbox" class="form-check-input" id="numpadCheck" aria-label="numpad"
+						       {% if storageitem.item.numpad %}checked{% endif %} disabled>
+					</td>
+				</tr>
+				<tr>
+					<th class="menu">有線LANポート</th>
+					<td>
+						<input type="checkbox" class="form-check-input" id="lanCheck" aria-label="lan"
+						       {% if storageitem.item.lan %}checked{% endif %} disabled>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</section>
+<section class="row detail__info">
+	<span class="title">商品の情報</span>
+	<div class="col-6 main">
+		<div class="sub-title">
+			<span>詳細情報</span>
+		</div>
+		<table class="table">
+			<tr>
+				<th class="menu">メーカー</th>
+				<td>{{ storageitem.item.pc.maker }}</td>
+			</tr>
+			<tr>
+				<th class="menu">シリーズ</th>
+				<td>{{ storageitem.item.pc.name }}</td>
+			</tr>
+			<tr>
+				<th class="menu">商品モデル番号</th>
+				<td>{{ storageitem.item.pc.model_number }}</td>
+			</tr>
+			<tr>
+				<th class="menu">PCカテゴリー</th>
+				<td>{{ storageitem.item.pc.get_category_display }}</td>
+			</tr>
+			<tr>
+				<th class="menu">サイズ</th>
+				<td>
+					{% if storageitem.item.size is not None %}
+						{{ storageitem.item.size }}
+					{% else %}
+						-
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th class="menu">CPUブランド</th>
+				<td>{{ storageitem.item.cpu.maker }}</td>
+			</tr>
+			<tr>
+				<th class="menu">CPUタイプ</th>
+				<td>{{ storageitem.item.cpu.name }}</td>
+			</tr>
+			<tr>
+				<th class="menu">メモリ容量</th>
+				<td>{{ storageitem.item.memory }}</td>
+			</tr>
+			<tr>
+				<th class="menu">ストレージ容量</th>
+				<td>{{ storageitem.item.storage.size }}</td>
+			</tr>
+			<tr>
+				<th class="menu">ストレージタイプ</th>
+				<td>{{ storageitem.item.storage.type }}</td>
+			</tr>
+			<tr>
+				<th class="menu">webカメラ</th>
+				<td>
+					{% if storageitem.item.camera %}
+						あり
+					{% else %}
+						なし
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th class="menu">指紋認証</th>
+				<td>
+					{% if storageitem.item.fingerprint %}
+						あり
+					{% else %}
+						なし
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th class="menu">テンキー</th>
+				<td>
+					{% if storageitem.item.numpad %}
+						あり
+					{% else %}
+						なし
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th class="menu">有線LANポート</th>
+				<td>{% if storageitem.item.lan %}
+						あり
+					{% else %}
+						なし
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th class="menu">USBポート</th>
+				<td>
+					{% if storageitem.item.usb %}
+						{{ storageitem.item.usb }}
+					{% else %}
+						なし
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th class="menu">HDMI</th>
+				<td>
+					{% if storageitem.item.hdmi %}
+						{{ storageitem.item.hdmi }}
+					{% else %}
+						なし
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th class="menu">VGA</th>
+				<td>
+					{% if storageitem.item.vga %}
+						{{ storageitem.item.vga }}
+					{% else %}
+						なし
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="col-6 register">
+		<div class="sub-title">
+			<span>登録情報</span>
+		</div>
+		<table class="table">
+			<tr>
+				<th class="menu">発注番号</th>
+				<td>{{ storageitem.order_number }}</td>
+			</tr>
+			<tr>
+				<th class="menu">在庫拠点</th>
+				<td>{{ storageitem.base }}</td>
+			</tr>
+			<tr>
+				<th class="menu">登録日</th>
+				<td>{{ storageitem.registration_at }}</td>
+			</tr>
+
+		</table>
+	</div>
+</section>
+
+

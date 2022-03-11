@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+	<div class="container">
+		<section class="row order-info mt-5">
+			<table class="table table-bordered table-hover order-info__table">
+				<thead class="table-light order-info__thead">
+					<tr>
+						<th>依頼日</th>
+						<th>受注番号</th>
+						<th>チケット番号</th>
+						<th>商品</th>
+						<th>依頼者</th>
+						<th>担当者</th>
+						<th>納品済み</th>
+						<th>納品日</th>
+					</tr>
+				</thead>
+				<tbody class="order-info__tbody">
+					{% for orderinfo in orderinfo_list %}
+						<tr>
+							<td class="order-info__td detail{{ orderinfo.pk }}">{{ orderinfo.ordered_at }}</td>
+							<td class="order-info__td detail{{ orderinfo.pk }}">{{ orderinfo.number }}</td>
+							{% if orderinfo.ticket is not None %}
+								<td class="order-info__td detail{{ orderinfo.pk }}">
+									{{ orderinfo.ticket }}
+								</td>
+							{% else %}
+								<td class="order-info__td update{{ orderinfo.pk }}">
+									<a href="#">チケット番号登録</a>
+								</td>
+							{% endif %}
+							<td class="order-info__td detail{{ orderinfo.pk }}">
+								{% for order_item in orderinfo.storage_cart.order_item.all %}
+									<p class="order-info__item">{{ order_item }}</p>
+								{% endfor %}
+							</td>
+							<td class="order-info__td detail{{ orderinfo.pk }}">{{ orderinfo.requester }}</td>
+							{% if orderinfo.contact_user is not None %}
+								<td class="order-info__td contact-user{{ orderinfo.pk }}">
+									{{ orderinfo.contact_user }}
+								</td>
+							{% else %}
+								<td class="order-info__td update{{ orderinfo.pk }}">
+									<a href="#">担当者を登録</a>
+								</td>
+							{% endif %}
+							<td class="order-info__td detail{{ orderinfo.pk }}">
+								<input type="checkbox" class="form-check-input order-info__check" id="complete" aria-label="{{ orderinfo.pk }}"
+								       {% if orderinfo.completed_delivery %}checked{% endif %} disabled>
+							</td>
+							<td class="order-info__td detail{{ orderinfo.pk }}">
+								{% if orderinfo.delivery_at is not None %}
+									{{ orderinfo.delivery_at }}
+								{% else %}
+									<span>未納品</span>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+
+			</table>
+		</section>
+	</div>
+
+{% endblock content %}
+
+{% block javascript %}
+	<script type="text/javascript">
+
+		{% for orderinfo in orderinfo_list %}
+			const detail{{ orderinfo.pk }} = document.querySelectorAll('.detail{{ orderinfo.pk }}');
+			const url{{ orderinfo.pk }} = "{% url 'stock:orderinfo_detail_admin' orderinfo.pk %}";
+			detail{{ orderinfo.pk }}.forEach(d => linkClick(d, url{{ orderinfo.pk }}));
+		{% endfor %}
+		{% for orderinfo in orderinfo_list %}
+			$('.update{{ orderinfo.pk }}').each(function() {
+				$(this).modalForm({formURL: "{% url 'stock:orderinfo_update' orderinfo.pk %}"});
+			});
+		{% endfor %}
+
+	</script>
+{% endblock javascript %}
+

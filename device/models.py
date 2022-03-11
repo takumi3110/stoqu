@@ -82,9 +82,39 @@ class PC(models.Model):
 		null=True,
 		blank=True
 	)
-
+	
 	img = models.ImageField(
-		upload_to='images/',
+		upload_to='images/pc/',
+		null=True,
+		blank=True
+	)
+	
+	sub_img1 = models.ImageField(
+		upload_to='images/pc/',
+		null=True,
+		blank=True
+	)
+	
+	sub_img2 = models.ImageField(
+		upload_to='images/pc/',
+		null=True,
+		blank=True
+	)
+	
+	sub_img3 = models.ImageField(
+		upload_to='images/pc/',
+		null=True,
+		blank=True
+	)
+	
+	sub_img4 = models.ImageField(
+		upload_to='images/pc/',
+		null=True,
+		blank=True
+	)
+	
+	sub_img5 = models.ImageField(
+		upload_to='images/pc/',
 		null=True,
 		blank=True
 	)

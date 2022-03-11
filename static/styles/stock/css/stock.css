@@ -1,15 +1,71 @@
 @import url("https://fonts.googleapis.com/css2?family=Passion+One&display=swap");
-.swiper {
+.status__bar {
+  margin: 20px 0;
+  padding: 0;
+  counter-reset: step;
+  z-index: 0;
+  position: relative;
+}
+.status__bar li {
+  list-style-type: none;
+  width: 20%;
+  float: left;
+  font-size: 20px;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  color: #aaa;
+}
+.status__bar li::before {
+  width: 30px;
+  height: 30px;
+  content: counter(step);
+  counter-increment: step;
+  line-height: 30px;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  border-radius: 50%;
+  background-color: #eee;
+}
+.status__bar li::after {
+  content: "";
   width: 100%;
-  height: 40vw;
-  transition: opacity 0.6s ease, transform 0.3s ease;
+  height: 10px;
+  position: absolute;
+  background-color: #eee;
+  top: 10px;
+  left: -50%;
+  z-index: -1;
+}
+.status__bar li:first-child::after {
+  content: none;
+}
+.status__bar li.active {
+  color: green;
+}
+.status__bar li.active::after {
+  background-color: #55b776;
+}
+.status__bar li.active::before {
+  background-color: #55b776;
+  color: #fff;
 }
 
-.swiper-slide {
+body {
+  position: relative;
+}
+
+.swiper.top-swiper {
+  width: 100%;
+  height: 30vw;
+  transition: opacity 0.6s ease, transform 0.3s ease;
+}
+.swiper.top-swiper .swiper-slide {
   height: 500px;
   overflow: hidden;
 }
-.swiper-slide > img {
+.swiper.top-swiper .swiper-slide > img {
   width: 100%;
   height: 100%;
   max-width: 100%;
@@ -17,7 +73,7 @@
   transform: scale(1.3);
   transition: transform 1.9s ease;
 }
-.swiper-slide::after {
+.swiper.top-swiper .swiper-slide::after {
   content: "";
   position: absolute;
   top: 0;
@@ -26,7 +82,7 @@
   height: 100%;
   background-color: rgba(0, 61, 125, 0.1);
 }
-.swiper-slide-active > img {
+.swiper.top-swiper .swiper-slide-active > img {
   transform: none;
 }
 
@@ -43,6 +99,11 @@ a {
 .flex, .footer__ul, .footer__nav {
   display: flex;
   flex-direction: column;
+}
+
+.border-bottom, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__info .sub-title, .detail__info, .detail__content .base, .detail__content .option, .detail__content .title, .detail__main {
+  border-bottom: thin solid #dfdfdf;
+  margin-bottom: 2rem;
 }
 
 .navigation {
@@ -92,7 +153,7 @@ a {
 .select__card img {
   background-color: orange;
   width: 80%;
-  height: 50%;
+  height: 150px;
   top: 50px;
   margin: 30px 20px;
 }
@@ -130,9 +191,94 @@ a {
   font-size: 15px;
 }
 
-.cart .bottom-border {
-  border-bottom: thin solid #dfdfdf;
+.detail__img {
+  top: 0;
 }
+.detail__img .sub-img {
+  border: thin solid grey;
+  width: 100%;
+  margin-bottom: 1em;
+}
+.detail__img .sub-img.selected {
+  border: medium solid orange;
+}
+.detail__img .main-img {
+  position: relative;
+}
+.detail__img .main-img .selectedMainImg {
+  width: 100%;
+  margin: 30px -20px;
+  top: 20px;
+  align-items: center;
+  position: absolute;
+}
+.detail__content .title {
+  color: black;
+  font-size: 40px;
+  margin-bottom: 2rem;
+}
+.detail__content table {
+  font-size: 20px;
+  color: grey;
+}
+.detail__content .total {
+  margin-bottom: 2rem;
+}
+.detail__content .total .price {
+  font-size: 40px;
+  color: black;
+}
+.detail__content .option {
+  color: black;
+  margin-bottom: 2rem;
+}
+.detail__content .option .sub-title {
+  font-weight: bold;
+  font-size: 20px;
+  color: black;
+}
+.detail__content .spec .menu {
+  text-align: left;
+  font-weight: bold;
+  color: black;
+}
+.detail__content .base {
+  margin-bottom: 2rem;
+}
+.detail__content .menu {
+  font-weight: normal;
+  width: 10rem;
+}
+.detail__content .price {
+  color: orangered;
+}
+.detail__info {
+  font-size: 20px;
+}
+.detail__info .title {
+  font-weight: bold;
+  color: orange;
+  margin-bottom: 1rem;
+}
+.detail__info .sub-title {
+  font-size: 25px;
+}
+.detail__info table {
+  font-size: 20px;
+  padding: 0 2rem;
+}
+.detail__info table th {
+  font-weight: normal;
+  background-color: #f3f3f3;
+  width: 70%;
+}
+.detail__info table td {
+  padding-left: 10px;
+}
+.detail__info table .menu {
+  color: grey;
+}
+
 .cart__header {
   position: relative;
 }
@@ -253,13 +399,6 @@ a {
   font-weight: bold;
 }
 
-.approve-menu {
-  border-bottom: thin solid #dfdfdf;
-}
-
-.approve-card .bottom-border {
-  border-bottom: thin solid #dfdfdf;
-}
 .approve-card .bottom-border:last-child {
   border-bottom: none;
 }
@@ -277,9 +416,6 @@ a {
 }
 .confirm__title {
   color: teal;
-}
-.confirm__address {
-  border-bottom: thin solid #dfdfdf;
 }
 .confirm__address .address {
   font-weight: bold;
@@ -305,6 +441,9 @@ a {
   padding: 60px 0;
   background-color: #212529;
   font-size: 20px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 .footer__nav {
   justify-content: space-between;
