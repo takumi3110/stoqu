@@ -4,6 +4,6 @@ from . import views
 
 app_name = 'quote'
 
-url_patterns = [
+urlpatterns = [
     path('', views.genre_select, name='genre')
 ]
