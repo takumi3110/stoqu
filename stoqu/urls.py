@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/v1/stock/', include(stock_router.urls)),
     path('api/v1/user/', include(user_router.urls)),
     path('', include('stock.urls')),
+    path('quote/', include('quote.urls')),
     path('device/', include('device.urls')),
     path('user/', include('user.urls'))
 ]
