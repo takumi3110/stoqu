@@ -51,8 +51,10 @@
 
 	<script type="text/javascript">
 		const quote = document.querySelector('.quote');
+		const quoteUrl = "{% url 'quote:genre' %}";
 		const stock = document.querySelector('.stock');
 		const stockUrl = "{% url 'stock:storage_list_admin' %}";
 		linkClick(stock, stockUrl);
+		linkClick(quote, quoteUrl);
 	</script>
 {% endblock javascript %}
