@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+	<div class="container">
+        <div class="row">
+            <nav>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">ホーム</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'main:ambiguous_top' %}">見積もり作成TOP</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        カテゴリ選択
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="container mt-3">
+        <div class="row page-title">
+            <h2 class="title-text">カテゴリ選択</h2>
+        </div>
+    </div>
+    <section class="container mt-5">
+        <div class="row col-md-6 offset-md-3 mt-5">
+            <P>依頼したい商品を選択してください</P>
+            <button type="button" class="btn btn-block btn-outline-success">PC</button>
+            <button type="button" class="btn  btn-block btn-outline-success">モニター</button>
+            <button type="button" class="btn btn-block btn-outline-success">周辺機器</button>
+            <button type="button" class="btn  btn-block btn-outline-success">ライセンス品はこちら</button>
+        </div>
+    </section>
+
+{% endblock content %}
