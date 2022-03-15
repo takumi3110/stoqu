@@ -1,15 +1,15 @@
-<div class="row category">
+<div class="row pc-category order__input">
 	<label for="pcCategory" class="col-2">カテゴリー：</label>
 	<div class="col-9">
 		<select name="pc-category" id="pcCategory" class="form-select" aria-label="category select">
-			<option selected>カテゴリーを選択してください</option>
+			<option selected class="default-select">---カテゴリーを選択してください---</option>
 			<option value="note">ノートPC</option>
 			<option value="desktop">デスクトップPC</option>
 			<option value="mini">ミニPC</option>
 		</select>
 	</div>
 </div>
-<div class="row ten-key mt-3">
+<div class="row ten-key order__input">
 	<span class="col-2">テンキー：</span>
 	<div class="col-9 form-check form-check-inline">
 		<div class="form-check form-check-inline">
@@ -22,22 +22,22 @@
         </div>
 	</div>
 </div>
-<div class="row maker mt-3">
+<div class="row pc-maker order__input">
 	<label for="maker" class="col-2">メーカー：</label>
 	<div class="col-9">
 		<select name="maker" id="maker" class="form-select" aria-label="maker select">
-			<option selected>メーカーを選択してください</option>
+			<option selected class="default-select">---メーカーを選択してください---</option>
 			<option value="none">こだわりなし</option>
 			<option value="hp">HP</option>
 			<option value="lenovo">Lenovo</option>
 		</select>
 	</div>
 </div>
-<div class="row spec mt-3">
+<div class="row pc-spec order__input">
 	<label for="spec" class="col-2">スペック：</label>
 	<div class="col-9">
 		<select name="spec" id="spec" class="form-select" aria-label="spec select">
-			<option selected>スペックを選択してください</option>
+			<option selected class="default-select">---スペックを選択してください---</option>
 			<option value="normal">標準</option>
 			<option value="plus">標準＋</option>
 			<option value="high">ハイスペック</option>
