@@ -1,5 +1,24 @@
+.genre__select {
+  margin-top: 1.5rem;
+  color: grey;
+}
+.genre__select:hover {
+  background-color: orange;
+  color: black;
+  cursor: pointer;
+}
+
 .order__input {
   margin-top: 1.5rem;
+}
+.order__input .default-select {
+  color: lightgrey;
+}
+.order .ten-key {
+  opacity: 1;
+}
+.order .ten-key.hidden {
+  opacity: 0;
 }
 
 /*# sourceMappingURL=quote.css.map */

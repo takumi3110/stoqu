@@ -1,5 +1,27 @@
+.genre {
+  &__select {
+    margin-top: 1.5rem;
+    color: grey;
+    &:hover {
+      background-color: orange;
+      color: black;
+      cursor: pointer;
+    }
+  }
+}
+
 .order {
   &__input {
     margin-top: 1.5rem;
+
+    & .default-select {
+      color: lightgrey;
+    }
+  }
+  & .ten-key {
+    opacity: 1;
+    &.hidden {
+      opacity: 0;
+    }
   }
 }
