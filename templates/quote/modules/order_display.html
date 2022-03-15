@@ -1,8 +1,9 @@
 <div class="row display-maker order__input">
 	<label for="displayMaker" class="col-2">メーカー：</label>
 	<div class="col-9">
-		<select name="display-maker" id="displayMaker" class="form-select" aria-label="maker select">
-			<option selected class="default-select">---メーカーを選択してください---</option>
+		<select name="display-maker" id="displayMaker" class="form-select"
+		        aria-label="maker select" required>
+			<option class="default-select" selected disabled value="">---メーカーを選択してください---</option>
 			<option value="none">こだわりなし</option>
 			<option value="dell">DELL</option>
 			<option value="io">アイ・オー・データ</option>
@@ -14,8 +15,9 @@
 <div class="row display-spec order__input">
 	<label for="displaySpec" class="col-2">スペック：</label>
 	<div class="col-9">
-		<select name="display-spec" id="displaySpec" class="form-select" aria-label="spec select">
-			<option selected class="default-select">---スペックを選択してください---</option>
+		<select name="display-spec" id="displaySpec" class="form-select"
+		        aria-label="spec select" required>
+			<option class="default-select" selected disabled value="">---スペックを選択してください---</option>
 			<option value="normal">FHD（標準）</option>
 			<option value="wqhd">WQHD（高画質）</option>
 			<option value="4k">4K</option>
@@ -25,8 +27,9 @@
 <div class="row display-size order__input">
 	<label for="displaySize" class="col-2">サイズ：</label>
 	<div class="col-9">
-		<select name="display-size" id="displaySize" class="form-select" aria-label="size select">
-			<option selected class="default-select">---サイズを選択してください---</option>
+		<select name="display-size" id="displaySize" class="form-select"
+		        aria-label="size select" required>
+			<option class="default-select" selected disabled value="">---サイズを選択してください---</option>
 			<option value="21">21インチ</option>
 			<option value="23">23インチ</option>
 			<option value="27">27インチ</option>

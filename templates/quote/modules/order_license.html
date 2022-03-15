@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<div class="form-group row col-md-8 offset-2">
+    <label for="name" class="col-sm-3 col-form-label">商品名：</label>
+    <div class="col-sm-9">
+        <select id="name" name="name" class="form-control">
+            {% for license in license_list %}
+                <option value="{{ license.name }}">{{ license.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
