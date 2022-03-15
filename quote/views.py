@@ -9,3 +9,9 @@ def genre_select(request):
     return render(request, 'quote/genre.html')
 
 
+@login_required()
+def quote_order(request, **kwargs):
+    context = {
+        'genre': kwargs['genre']
+    }
+    return render(request, 'quote/order.html', context)
