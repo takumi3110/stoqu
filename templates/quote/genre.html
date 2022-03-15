@@ -8,10 +8,7 @@
             <nav>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="#">ホーム</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="#">見積もり作成TOP</a>
+                        <a href="{% url 'stock:top' %}">ホーム</a>
                     </li>
                     <li class="breadcrumb-item">
                         カテゴリ選択
@@ -24,16 +21,15 @@
         <div class="row page-title">
             <h2 class="title-text">カテゴリ選択</h2>
         </div>
-    </div>
-    <section class="container mt-5">
-        <div class="row col-md-6 offset-md-3 mt-5">
+        <section class="row col-6 mt-5 genre">
             <P>依頼したい商品を選択してください</P>
-	        <a href="{% url 'quote:order' 'pc' %}" class="btn btn-block btn-outline-warning">PC</a>
-	        <a href="{% url 'quote:order' 'display' %}" class="btn btn-block btn-outline-warning">ディスプレイ</a>
-	        <a href="{% url 'quote:order' 'others' %}" class="btn btn-block btn-outline-warning">周辺機器k</a>
-	        <a href="{% url 'quote:order' 'license' %}" class="btn btn-block btn-outline-warning">ライセンス品</a>
-        </div>
-    </section>
+	        <a href="{% url 'quote:order' 'pc' %}" class="btn btn-block btn-outline-warning genre__select">PC</a>
+	        <a href="{% url 'quote:order' 'display' %}" class="btn btn-block btn-outline-warning genre__select">ディスプレイ</a>
+	        <a href="{% url 'quote:order' 'others' %}" class="btn btn-block btn-outline-warning genre__select">周辺機器k</a>
+	        <a href="{% url 'quote:order' 'license' %}" class="btn btn-block btn-outline-warning genre__select">ライセンス品</a>
+	        <div class="genre__img"></div>
+        </section>
+    </div>
 
 {% endblock content %}
 
