@@ -15,10 +15,7 @@
   color: lightgrey;
 }
 .order .ten-key {
-  opacity: 1;
-}
-.order .ten-key.hidden {
-  opacity: 0;
+  display: none;
 }
 
 /*# sourceMappingURL=quote.css.map */
