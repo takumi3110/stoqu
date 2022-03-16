@@ -18,7 +18,6 @@ class Main {
 
 	_init() {
 		this.hero = new HeroSlider('.swiper');
-		this.selectImg = new SelectImg();
 		this._paceDone();
 	}
 

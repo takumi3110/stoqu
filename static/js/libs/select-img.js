@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', function(){
+	new SelectImg();
+})
+
 class SelectImg {
 	constructor() {
 		this._init();
