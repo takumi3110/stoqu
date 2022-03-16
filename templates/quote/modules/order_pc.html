@@ -1,7 +1,7 @@
 <div class="row pc-category order__input">
 	<label for="pcCategory" class="col-2">カテゴリー：</label>
 	<div class="col-9">
-		<select name="pc-category" id="pcCategory" class="form-select"
+		<select name="category" id="pcCategory" class="form-select"
 		        aria-label="category select" required>
 			<option class="default-select" selected disabled value="">---カテゴリーを選択してください---</option>
 			<option value="note">ノートPC</option>
@@ -10,7 +10,7 @@
 		</select>
 	</div>
 </div>
-<div class="row ten-key order__input hidden">
+<div class="row ten-key order__input">
 	<span class="col-2">テンキー：</span>
 	<div class="col-9 form-check form-check-inline">
 		<div class="form-check form-check-inline">
@@ -45,4 +45,42 @@
 			<option value="high">ハイスペック</option>
 		</select>
 	</div>
+	<div class="col-10 offset-2 spec-detail">
+
+		<div class="row order__input">
+			<span>※お好みのスペックに変更できます</span>
+			<label for="detailCpu" class="col-auto col-form-label">CPU：</label>
+			<div class="col-auto">
+				<select name="cpu" id="detailCpu" class="form-select"
+			        aria-label="cpu select" required>
+					<option value="i3">Core i3</option>
+					<option value="i5">Core i5</option>
+					<option value="i7">Core i7</option>
+				</select>
+			</div>
+		</div>
+		<div class="row order__input">
+			<label for="detailMemory" class="col-auto col-form-label">メモリ：</label>
+			<div class="col-2">
+				<input type="number" class="form-control" name="memory" id="detailMemory" required>
+			</div>
+			<div class="col-auto">
+				<span>GB</span>
+			</div>
+		</div>
+		<div class="row order__input">
+			<label for="detailStorage" class="col-auto col-form-label">ストレージ容量：</label>
+			<div class="col-2">
+				<input type="number" class="form-control" name="storage" id="detailStorage" required>
+			</div>
+			<div class="col-auto">
+				<span>GB</span>
+			</div>
+		</div>
+		<div class="row order__input">
+			<span class="col-auto">ストレージタイプ：</span>
+			<span class="col-3">SSD</span>
+		</div>
+	</div>
 </div>
+

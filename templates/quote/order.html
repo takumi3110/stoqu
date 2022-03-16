@@ -49,8 +49,7 @@
 {% endblock content %}
 
 {% block javascript %}
-	<script src="{% static 'js/quote/quote.js' %}"></script>
-	<script type="text/javascript">
-
-	</script>
+	{% if genre == 'pc'%}
+		<script src="{% static 'js/quote/quote.js' %}"></script>
+	{% endif %}
 {% endblock javascript %}
