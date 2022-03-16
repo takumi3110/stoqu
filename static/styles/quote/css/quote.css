@@ -17,5 +17,8 @@
 .order .ten-key {
   display: none;
 }
+.order .spec-detail {
+  display: none;
+}
 
 /*# sourceMappingURL=quote.css.map */
