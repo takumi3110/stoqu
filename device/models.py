@@ -2,14 +2,14 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 type_choice = (
-	('1', 'SSD'),
-	('2', 'HDD')
+	(1, 'SSD'),
+	(2, 'HDD')
 )
 
 category_choice = (
-	('1', 'ノートPC'),
-	('2', 'デスクトップPC'),
-	('3', 'ミニPC')
+	('note', 'ノートPC'),
+	('desktop', 'デスクトップPC'),
+	('mini', 'ミニPC')
 )
 
 
@@ -44,7 +44,7 @@ class Storage(models.Model):
 		verbose_name='タイプ',
 		max_length=6,
 		choices=type_choice,
-		default='1'
+		default=1
 	)
 
 	size = models.PositiveSmallIntegerField(
@@ -62,7 +62,7 @@ class Storage(models.Model):
 class PC(models.Model):
 	category = models.CharField(
 		verbose_name='カテゴリー',
-		max_length=6,
+		max_length=8,
 		choices=category_choice,
 	)
 
