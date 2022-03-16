@@ -228,10 +228,10 @@ class PCDetail(models.Model):
 				self.memory = 16
 			else:
 				self.memory = 8
-		if self.pc.category == '1':
+		if self.pc.category == 'note':
 			self.camera = True
 			self.fingerprint = True
-			if self.size > 15:
+			if self.size < 15:
 				self.numpad = False
 			else:
 				self.numpad = True
