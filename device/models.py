@@ -30,6 +30,11 @@ class CPU(models.Model):
 			MaxValueValidator(99)
 		]
 	)
+	
+	latest = models.BooleanField(
+		verbose_name='最新',
+		default=False
+	)
 
 	def __str__(self):
 		return f'{self.maker} {self.name} 第{self.gen}世代'
