@@ -14,11 +14,11 @@
 	<span class="col-2">テンキー：</span>
 	<div class="col-9 form-check form-check-inline">
 		<div class="form-check form-check-inline">
-            <input type="radio" id="true" name="ten_key" class="form-check-input" value="True">
+            <input type="radio" id="true" name="ten_key" class="form-check-input" value="あり">
             <label class="form-check-label" for="true">あり</label>
         </div>
         <div class=" form-check form-check-inline">
-            <input type="radio" id="false" name="ten_key" class="form-check-input" value="False" checked>
+            <input type="radio" id="false" name="ten_key" class="form-check-input" value="なし" checked>
             <label class="form-check-label" for="false">なし</label>
         </div>
 	</div>
@@ -30,8 +30,9 @@
 		        aria-label="maker select" required>
 			<option class="default-select" selected disabled value="">---メーカーを選択してください---</option>
 			<option value="none">こだわりなし</option>
-			<option value="hp">HP</option>
-			<option value="lenovo">Lenovo</option>
+			<option value="HP">HP</option>
+			<option value="Lenovo">Lenovo</option>
+			<option value="DELL">DELL</option>
 		</select>
 	</div>
 </div>
@@ -45,8 +46,9 @@
 			<option value="high">ハイスペック</option>
 		</select>
 	</div>
-	<div class="col-10 offset-2 spec-detail">
-
+</div>
+<div class="row spec-detail">
+	<div class="col-5 offset-2">
 		<div class="row order__input">
 			<span>※お好みのスペックに変更できます</span>
 			<label for="detailCpu" class="col-auto col-form-label">CPU：</label>
@@ -61,7 +63,7 @@
 		</div>
 		<div class="row order__input">
 			<label for="detailMemory" class="col-auto col-form-label">メモリ：</label>
-			<div class="col-2">
+			<div class="col-3">
 				<input type="number" class="form-control" name="memory" id="detailMemory" required>
 			</div>
 			<div class="col-auto">
@@ -70,7 +72,7 @@
 		</div>
 		<div class="row order__input">
 			<label for="detailStorage" class="col-auto col-form-label">ストレージ容量：</label>
-			<div class="col-2">
+			<div class="col-3">
 				<input type="number" class="form-control" name="storage" id="detailStorage" required>
 			</div>
 			<div class="col-auto">
