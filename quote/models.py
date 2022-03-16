@@ -140,6 +140,12 @@ class QuoteItem(models.Model):
         default=False
     )
     
+    worker = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='見積もり作成者',
+    )
+    
     def save(self, *args, **kwargs):
         if not self.id:
             self.registration_at = timezone.now()
