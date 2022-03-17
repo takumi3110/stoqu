@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from .models import Item, QuoteItem
 from device.models import PC, PCDetail, Storage, CPU
@@ -95,7 +95,7 @@ def quote_order(request, **kwargs):
             last_item = quote_item_filter.last()
             for quote in quote_item_filter:
                 if item[0] == quote.item:
-                    quote.quantity += quantity
+                    quote.quantity += int(quantity)
                 else:
                     QuoteItem.objects.create(
                         number=last_item.number + 1,
@@ -113,6 +113,16 @@ def quote_order(request, **kwargs):
             )
         new_quote_item = QuoteItem.objects.filter(worker=request.user, ordered=False, delivered=False)
         context['quoteitem_list'] = new_quote_item
-        return render(request, 'quote/cart.html', context)
+        return redirect('quote:item_list')
     else:
         return render(request, 'quote/order.html', context)
+
+
+class QuoteItemList(LoginRequiredMixin, ListView):
+    model = QuoteItem
+    template_name = 'quote/cart.html'
+    
+    def get_queryset(self, *args, **kwargs):
+        queryset = super(QuoteItemList, self).get_queryset()
+        qs = queryset.filter(worker=self.request.user, ordered=False)
+        return qs
