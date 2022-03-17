@@ -2,6 +2,59 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-	{{ quoteitem_list }}
+	<div class="container my-5">
+		<div class="row page-title">
+			<h2 class="title-text">作成予定アイテム</h2>
+		</div>
+		<div class="row mt-5">
+			<a href="{% url 'quote:genre' %}">
+				<i class="fas fa-long-arrow-alt-left"></i>カテゴリー選択に戻る
+			</a>
+			<div class="col-9">
+				<div class="card">
+					<div class="card-body cart">
+						<div class="row bottom-border cart__header">
+							<span class="cart__title">選択中</span>
+						</div>
+						{% for quoteitem in quoteitem_list %}
+							<div class="row bottom-border mt-3 cart__item">
+								<p class="cart__item__name">{{ quoteitem.item.maker }}：{{ quoteitem.item.name }}</p>
+								<div class="col-7">
+									<span>{{ quoteitem.item.spec }}</span>
+								</div>
+								<div class="col-3 cart__item__menu">
+									<label for="quantity{{ quoteitem.pk }}">数量：</label>
+									<select name="" id="quantity{{ quoteitem.pk }}"></select>
+									<a href="#">
+										削除
+									</a>
+								</div>
+							</div>
+						{% endfor %}
+						<div class="row cart__footer">
+							<span class="cart__total__title">個のアイテム</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-3">
+				<div class="card cart__total">
+					<div class="card-body">
+						<div class="row">
+							<span class="cart__total__title">
+								個のアイテム
+							</span>
+						</div>
+						<div class="row">
+							<button type="button" class="btn btn-sm btn-warning">
+								次に進む
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
 
 {% endblock content %}
