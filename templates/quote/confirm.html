@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+	<div class="container my-5">
+		<div class="row page-title">
+			<h2 class="title-text">選択アイテム確認</h2>
+		</div>
+		<section class="requester row col-9 mt3 d-flex flex-column">
+			<div class="row requester__info">
+				<div class="col-3">
+					<span class="menu">1：依頼者情報</span>
+				</div>
+				<div class="col-7">
+					<form action="#" method="post">
+						{% csrf_token %}
+						<div class="row">
+							<span class="name"></span>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+{% endblock content %}
