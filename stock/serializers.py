@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import *
+from .models import Option, StorageItem, KittingPlan, OrderItem, StorageCart, Approve, OrderInfo
 from device.serializer import PCDetailSerializer
 from user.serializers import BaseSerializer
 
