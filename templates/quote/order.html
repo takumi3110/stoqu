@@ -51,5 +51,8 @@
 {% block javascript %}
 	{% if genre == 'pc'%}
 		<script src="{% static 'js/quote/quote.js' %}"></script>
+		<script type="text/javascript">
+			new category();
+		</script>
 	{% endif %}
 {% endblock javascript %}
