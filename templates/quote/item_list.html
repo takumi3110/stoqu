@@ -18,13 +18,18 @@
 						</div>
 						{% for quoteitem in quoteitem_list %}
 							<div class="row bottom-border mt-3 cart__item">
-								<p class="cart__item__name">{{ quoteitem.item.maker }}：{{ quoteitem.item.name }}</p>
+								<p class="cart__item__name">{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }}</p>
 								<div class="col-7">
 									<span>{{ quoteitem.item.spec }}</span>
 								</div>
 								<div class="col-3 cart__item__menu">
 									<label for="quantity{{ quoteitem.pk }}">数量：</label>
-									<select name="" id="quantity{{ quoteitem.pk }}"></select>
+									<select name="" id="quantity{{ quoteitem.pk }}">
+										{% for q in quantity %}
+											<option value="{{ q }}" class="cart__item__quantity"
+											        {% if q == quoteitem.quantity %}selected{% endif %}>{{ q }}</option>
+										{% endfor %}
+									</select>
 									<a href="#">
 										削除
 									</a>
