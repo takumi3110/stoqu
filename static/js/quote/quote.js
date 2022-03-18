@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-	new category();
+	// new category();
 })
 
 class category {
@@ -53,22 +53,34 @@ class category {
 			}
 		});
 	}
-
-	_normalSpec() {
-		this.cpu.value = 'i5';
-		this.memory.value = 8;
-		this.storage.value = 128;
-	}
-
-	_normalPlusSpec() {
-		this.cpu.value = 'i5';
-		this.memory.value = 16;
-		this.storage.value = 128;
-	}
-
-	_highSpec() {
-		this.cpu.value = 'i7';
-		this.memory.value = 16;
-		this.storage.value = 256;
-	}
 }
+
+function change_quantity(el, data, pk) {
+	el.addEventListener('change', function() {
+		const url = 'http://127.0.0.1:8000/api/v1/quote/quoteItem/' + pk + '/';
+		data.quantity = this.value;
+		const init = makePutInit(data);
+		fetch(url, init)
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw Error();
+				}
+			})
+			.then(data => {
+				console.log(data.quantity);
+			});
+	});
+}
+
+//
+// function over_ten(el) {
+// 	const new_input = document.createElement('input');
+// 	new_input.type = 'number';
+// 	new_input.name = 'quantity';
+// 	new_input.required = true;
+// 	new_input.min = '1';
+// 	new_input.classList.add('form-control')
+//
+// }
