@@ -3,8 +3,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView
 
+from rest_framework import viewsets
+
 from .models import Item, QuoteItem
 from device.models import PC, PCDetail, Storage, CPU
+from .serializers import QuoteItemSerializer
+from .filters import QuoteItemFilter
+
+
+class QuoteItemViewSet(viewsets.ModelViewSet):
+    queryset = QuoteItem.objects.all()
+    serializer_class = QuoteItemSerializer
+    filter_class = QuoteItemFilter
 
 
 def get_pc(category, maker, cpu, memory, storage):
@@ -120,9 +130,27 @@ def quote_order(request, **kwargs):
 
 class QuoteItemList(LoginRequiredMixin, ListView):
     model = QuoteItem
-    template_name = 'quote/cart.html'
+    template_name = 'quote/item_list.html'
     
     def get_queryset(self, *args, **kwargs):
         queryset = super(QuoteItemList, self).get_queryset()
         qs = queryset.filter(worker=self.request.user, ordered=False)
         return qs
+    
+    def get_context_data(self, *args, object_list=None, **kwargs):
+        context = super(QuoteItemList, self).get_context_data(*args, **kwargs)
+        quote_item = QuoteItem.objects.filter(worker=self.request.user, ordered=False)
+        count = len(quote_item)
+        context['count'] = count
+        quantity = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, '10+']
+        context['quantity'] = quantity
+        return context
+
+
+@login_required()
+def delete_quote_item(request, pk):
+    quote_item = QuoteItem.objects.get(pk=pk)
+    quote_item.delete()
+    return redirect('quote:item_list')
+
+
