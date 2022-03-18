@@ -96,9 +96,13 @@
 							</a>
 						</li>
 						<li class="nav-item navigation__item">
-							<a class="nav-link" href="{% url 'stock:cart' %}">
+{#							<a class="nav-link" href="{% url 'stock:cart' %}">#}
+{#								<span class="navigation__text cart-icon"><i class="fa-solid fa-cart-shopping"></i></span>#}
+{#								<span class="navigation__text">カート</span>#}
+{#							</a>#}
+							<a class="nav-link" href="{% url 'quote:item_list' %}">
+								<p class="navigation__text">見積もりカート</p>
 								<span class="navigation__text cart-icon"><i class="fa-solid fa-cart-shopping"></i></span>
-								<span class="navigation__text">カート</span>
 							</a>
 						</li>
 					</ul>
@@ -147,6 +151,7 @@
 	<script src="{% static 'js/vendors/scroll-polyfill.js' %}"></script>
 	<script src="{% static 'js/libs/scroll.js' %}"></script>
 	<script src="{% static 'js/libs/hero-slider.js' %}"></script>
+	<script src="{% static 'js/modules/functions.js' %}"></script>
 	<script src="{% static 'js/stock/stock.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
 	{% block javascript %}
