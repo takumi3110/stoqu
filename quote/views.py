@@ -82,14 +82,20 @@ def quote_order(request, **kwargs):
             else:
                 spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\n'.format(cpu, memory, storage)
         elif genre == 'display':
-            genre = 'ディスプレイ'
+            genre = 'モニター'
             size = request.POST['size']
-            if spec == 'normal':
-                spec_text = 'FHD\n{}インチ\nワイドモニター'.format(size)
-            elif spec == 'wqhd':
-                spec_text = 'WQHD\n{}インチ\nワイドモニター'.format(size)
-            elif spec == '4k':
-                spec_text = '4k\n{}インチ\nワイドモニター'.format(size)
+            detail = ''
+            if 'hdmi' in request.POST.keys():
+                hdmi = request.POST['hdmi'] + '\n'
+                detail += hdmi
+            if 'vga' in request.POST.keys():
+                vga = request.POST['vga'] + '\n'
+                detail += vga
+            if 'dp' in request.POST.keys():
+                dp = request.POST['dp'] + '\n'
+                detail += dp
+            name = '{}インチモニター'.format(size)
+            spec_text = '{}\n{}インチ\nワイドモニター\n{}'.format(spec, size, detail)
         elif genre == 'others':
             genre = '周辺機器'
             name = request.POST['name']
@@ -100,20 +106,21 @@ def quote_order(request, **kwargs):
             name=name,
             spec=spec_text
         )
+        item_filter = QuoteItem.objects.filter(item=item[0], worker=request.user, ordered=False, delivered=False)
         quote_item_filter = QuoteItem.objects.filter(worker=request.user, ordered=False, delivered=False)
         if quote_item_filter:
             last_item = quote_item_filter.last()
-            for quote in quote_item_filter:
-                if item[0] == quote.item:
-                    quote.quantity += int(quantity)
-                else:
-                    QuoteItem.objects.create(
-                        number=last_item.number + 1,
-                        item=item[0],
-                        quantity=quantity,
-                        worker=request.user
-                    )
-                quote.save()
+            if item_filter:
+                for item in item_filter:
+                    item.quantity += int(quantity)
+                    item.save()
+            else:
+                QuoteItem.objects.create(
+                    number=last_item.number + 1,
+                    item=item[0],
+                    quantity=quantity,
+                    worker=request.user
+                )
         else:
             QuoteItem.objects.create(
                 number=1,
@@ -122,6 +129,9 @@ def quote_order(request, **kwargs):
                 worker=request.user
             )
         new_quote_item = QuoteItem.objects.filter(worker=request.user, ordered=False, delivered=False)
+        for i, quote_item in enumerate(new_quote_item):
+            quote_item.number = i + 1
+            quote_item.save()
         context['quoteitem_list'] = new_quote_item
         return redirect('quote:item_list')
     else:
@@ -142,7 +152,8 @@ class QuoteItemList(LoginRequiredMixin, ListView):
         quote_item = QuoteItem.objects.filter(worker=self.request.user, ordered=False)
         count = len(quote_item)
         context['count'] = count
-        quantity = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, '10+']
+        # quantity = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, '10+']
+        quantity = [i for i in range(100)]
         context['quantity'] = quantity
         return context
 
@@ -151,6 +162,10 @@ class QuoteItemList(LoginRequiredMixin, ListView):
 def delete_quote_item(request, pk):
     quote_item = QuoteItem.objects.get(pk=pk)
     quote_item.delete()
+    quote_item_filter = QuoteItem.objects.filter(worker=request.user, ordered=False, delivered=False)
+    for i, item in enumerate(quote_item_filter):
+        item.number = i + 1
+        item.save()
     return redirect('quote:item_list')
 
 
