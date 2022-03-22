@@ -11,13 +11,13 @@
 	</div>
 </div>
 <div class="row ten-key order__input">
-	<span class="col-2">テンキー：</span>
-	<div class="col-9 form-check form-check-inline">
+	<span class="col-2 offset-2">テンキー：</span>
+	<div class="col-5 form-check form-check-inline">
 		<div class="form-check form-check-inline">
             <input type="radio" id="true" name="ten_key" class="form-check-input" value="あり">
             <label class="form-check-label" for="true">あり</label>
         </div>
-        <div class=" form-check form-check-inline">
+        <div class="form-check form-check-inline">
             <input type="radio" id="false" name="ten_key" class="form-check-input" value="なし" checked>
             <label class="form-check-label" for="false">なし</label>
         </div>
@@ -83,6 +83,30 @@
 			<span class="col-auto">ストレージタイプ：</span>
 			<span class="col-3">SSD</span>
 		</div>
+	</div>
+</div>
+<div class="row lanscope order__input">
+	<span class="col-2">Lanscope：</span>
+	<div class="col-9">
+		<div class="form-check form-check-inline">
+			<input type="radio" id="lanscope_true" class="form-check-input" name="lanscope" value="true" checked>
+			<label for="lanscope_true" class="form-check-label">あり</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input type="radio" id="lanscope_false" class="form-check-input" name="lanscope" value="false">
+			<label for="lanscope_false" class="form-check-label">なし</label>
+		</div>
+	</div>
+</div>
+<div class="row office order__input">
+	<label for="office" class="col-2">Office：</label>
+	<div class="col-9">
+		<select name="office" id="office" class="form-select" required>
+			<option value="" class="default-select" selected disabled>---Officeを選択してください---</option>
+			<option value="none">なし</option>
+			<option value="Pro">プロ</option>
+			<option value="Standard">スタンダード</option>
+		</select>
 	</div>
 </div>
 
