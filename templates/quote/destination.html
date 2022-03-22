@@ -1,10 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+	<div class="container my-5">
+		<div class="row page-title">
+			<h2 class="title-text">見積もり依頼先登録</h2>
+		</div>
+		<div class="row mt-5">
+			<a href="{% url 'quote:genre' %}">
+				<i class="fa-solid fa-arrow-circle-left"></i>カテゴリー選択に戻る
+			</a>
+			<div class="col-9">
+				<div class="card">
+					<div class="card-body cart">
+						<div class="row bottom-border cart__header">
+							<span class="cart__title">選択中アイテム</span>
+							<div class="apply form-check form-check-inline">
+								<input type="checkbox" id="apply" class="form-check-input all-apply" name="apply" value="true">
+								<label for="apply">全てに適用する</label>
+							</div>
+						</div>
+						{% for quoteitem in quoteitem_list %}
+							<div class="row bottom-border mt-3 cart__item">
+								<div class="col-7">
+									<p class="cart__item__name">{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }}</p>
+									<span>{{ quoteitem.item.spec }}</span>
+								</div>
+								<div class="col-3 apply apply__destination">
+									{% for destination in destination_list %}
+										<input type="checkbox" id="destination{{ destination.pk }}-{{ quoteitem.pk }}" class="destination form-check-input"
+										       name="destination{{ destination.pk }}-{{ quoteitem.pk }}">
+										<label for="destination{{ destination.pk }}-{{ quoteitem.pk }}">{{ destination }}</label>
+									{% endfor %}
+								</div>
+							</div>
+						{% endfor %}
+						<div class="row cart__footer">
+							<span class="cart__total__title">{{ count }}個のアイテム</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-3">
+				<div class="card cart__total">
+					<div class="card-body">
+						<div class="row">
+							<span class="cart__total__title">
+								{{ count }}個のアイテム
+							</span>
+						</div>
+						<div class="row my-3">
+							<button type="button" class="btn btn-sm btn-warning">
+								次に進む
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+{% block javascript %}
+	<script src="{% static 'js/quote/quote.js' %}"></script>
+	<script type="text/javascript">
+		{% for destination in destination_list %}
+			all_apply("{{ destination.pk }}");
+		{% endfor %}
+	</script>
+{% endblock javascript %}
