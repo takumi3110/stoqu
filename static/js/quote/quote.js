@@ -20,6 +20,7 @@ class category {
 	_changeCategory() {
 		const tenKey = document.querySelector('.ten-key');
 		const selectedCategory = this.selectedCategory;
+		tenKey.style.display = 'none';
 		selectedCategory.addEventListener('change', function() {
 			if (this.value === 'note') {
 				tenKey.style.display = 'block';
