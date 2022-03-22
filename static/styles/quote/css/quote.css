@@ -18,4 +18,16 @@
   display: none;
 }
 
+.apply {
+  text-align: right;
+  font-size: 20px;
+}
+.apply .form-check,
+.apply .form-check-input {
+  float: none;
+}
+.apply__destination > label {
+  margin-right: 1rem;
+}
+
 /*# sourceMappingURL=quote.css.map */
