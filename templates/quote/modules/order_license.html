@@ -1,10 +1,18 @@
-<div class="form-group row col-md-8 offset-2">
-    <label for="name" class="col-sm-3 col-form-label">商品名：</label>
+<div class="row order__input">
+    <label for="inputMaker" class="col-2 col-form-label">メーカー：</label>
     <div class="col-sm-9">
-        <select id="name" name="name" class="form-control">
-            {% for license in license_list %}
-                <option value="{{ license.name }}">{{ license.name }}</option>
-            {% endfor %}
-        </select>
+        <input type="text" id="inputMaker" name="maker" class="form-control" required>
+    </div>
+</div>
+<div class="row order__input">
+    <label for="inputName" class="col-2 col-form-label">商品名：</label>
+    <div class="col-sm-9">
+        <input type="text" id="inputName" name="name" class="form-control" required>
+    </div>
+</div>
+<div class="row order__input">
+    <label for="inputSpec" class="col-2 col-form-label">仕様/型番：</label>
+    <div class="col-sm-9">
+        <textarea id="inputSpec" name="spec" class="form-control" rows="2" placeholder="分かればご記入ください"></textarea>
     </div>
 </div>
