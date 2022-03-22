@@ -75,6 +75,22 @@ function change_quantity(el, data, pk) {
 	});
 }
 
+function all_apply(pk) {
+	const allApply = document.querySelector('.all-apply');
+	const destinationInput = document.querySelectorAll('.destination');
+	const destinationId = 'destination' + pk;
+	allApply.addEventListener('change', function() {
+		if (allApply.checked) {
+			console.log('checked');
+
+			destinationInput.id = destinationId;
+
+		} else {
+			console.log('none');
+		}
+	});
+}
+
 //
 // function over_ten(el) {
 // 	const new_input = document.createElement('input');
