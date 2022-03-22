@@ -34,6 +34,37 @@ def get_pc(category, maker, cpu, memory, storage):
     return result
 
 
+def create_quote_item(genre, maker, name, quantity, worker, spec=None):
+    item = Item.objects.get_or_create(
+        genre=genre,
+        maker=maker,
+        name=name,
+        spec=spec
+    )
+    item_filter = QuoteItem.objects.filter(item=item[0], worker=worker, ordered=False)
+    quote_item_filter = QuoteItem.objects.filter(worker=worker, ordered=False)
+    if quote_item_filter:
+        last_item = quote_item_filter.last()
+        if item_filter:
+            for item in item_filter:
+                item.quantity += int(quantity)
+                item.save()
+        else:
+            QuoteItem.objects.create(
+                number=last_item.number + 1,
+                item=item[0],
+                quantity=quantity,
+                worker=worker
+            )
+    else:
+        QuoteItem.objects.create(
+            number=1,
+            item=item[0],
+            quantity=quantity,
+            worker=worker
+        )
+
+
 @login_required()
 def genre_select(request):
     return render(request, 'quote/genre.html')
@@ -49,12 +80,15 @@ def quote_order(request, **kwargs):
         maker = request.POST['maker']
         spec = request.POST['spec']
         quantity = request.POST['quantity']
-        if maker == 'none':
+        worker = request.user
+        if maker == 'none' or maker == '':
             maker = 'メーカー問わず'
         if genre == 'pc':
             category = request.POST['category']
             ten_key = request.POST['ten_key']
             cpu = request.POST['cpu']
+            lanscope = request.POST['lanscope']
+            office = request.POST['office']
             if cpu == 'i3':
                 cpu = 'Core i3'
             elif cpu == 'i5':
@@ -81,6 +115,16 @@ def quote_order(request, **kwargs):
                     .format(cpu, memory, storage, ten_key)
             else:
                 spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\n'.format(cpu, memory, storage)
+            if lanscope == 'true':
+                license_name = 'Lanscope'
+                license_maker = 'ソフトクリエイト'
+                license_genre = 'License'
+                create_quote_item(license_genre, license_maker, license_name, quantity, worker)
+            elif office != 'none':
+                license_name = 'Office'
+                license_maker = 'Microsoft'
+                license_genre = 'License'
+                create_quote_item(license_genre, license_maker, license_name, quantity, worker)
         elif genre == 'display':
             genre = 'モニター'
             size = request.POST['size']
@@ -100,35 +144,12 @@ def quote_order(request, **kwargs):
             genre = '周辺機器'
             name = request.POST['name']
             spec_text = spec
-        item = Item.objects.get_or_create(
-            genre=genre,
-            maker=maker,
-            name=name,
-            spec=spec_text
-        )
-        item_filter = QuoteItem.objects.filter(item=item[0], worker=request.user, ordered=False)
-        quote_item_filter = QuoteItem.objects.filter(worker=request.user, ordered=False)
-        if quote_item_filter:
-            last_item = quote_item_filter.last()
-            if item_filter:
-                for item in item_filter:
-                    item.quantity += int(quantity)
-                    item.save()
-            else:
-                QuoteItem.objects.create(
-                    number=last_item.number + 1,
-                    item=item[0],
-                    quantity=quantity,
-                    worker=request.user
-                )
-        else:
-            QuoteItem.objects.create(
-                number=1,
-                item=item[0],
-                quantity=quantity,
-                worker=request.user
-            )
-        new_quote_item = QuoteItem.objects.filter(worker=request.user, ordered=False)
+        elif genre == 'license':
+            genre = 'License'
+            name = request.POST['name']
+            spec_text = spec
+        create_quote_item(genre, maker, name, quantity, worker, spec=spec_text)
+        new_quote_item = QuoteItem.objects.filter(worker=worker, ordered=False)
         for i, quote_item in enumerate(new_quote_item):
             quote_item.number = i + 1
             quote_item.save()
