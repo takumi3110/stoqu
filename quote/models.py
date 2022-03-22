@@ -23,7 +23,9 @@ class Item(models.Model):
     )
     
     spec = models.TextField(
-        verbose_name='仕様'
+        verbose_name='仕様',
+        null=True,
+        blank=True
     )
     
     image = models.ImageField(
