@@ -112,32 +112,9 @@ class QuoteItem(models.Model):
         blank=True
     )
     
-    ordered_at = models.DateTimeField(
-        verbose_name='依頼日',
-        null=True,
-        blank=True
-    )
-    
     ordered = models.BooleanField(
         verbose_name='見積もり依頼済み',
         default=False,
-    )
-    
-    arrived_at = models.DateTimeField(
-        verbose_name='見積もり到着日',
-        null=True,
-        blank=True
-    )
-    
-    delivery_at = models.DateField(
-        verbose_name='見積もり提供日',
-        null=True,
-        blank=True
-    )
-    
-    delivered = models.BooleanField(
-        verbose_name='見積もり提供済み',
-        default=False
     )
     
     worker = models.ForeignKey(
@@ -170,6 +147,29 @@ class OrderItem(models.Model):
         QuoteItem,
         on_delete=models.CASCADE,
         verbose_name='見積もりアイテム'
+    )
+
+    ordered_at = models.DateTimeField(
+        verbose_name='依頼日',
+        null=True,
+        blank=True
+    )
+
+    arrived_at = models.DateTimeField(
+        verbose_name='見積もり到着日',
+        null=True,
+        blank=True
+    )
+
+    delivery_at = models.DateField(
+        verbose_name='見積もり提供日',
+        null=True,
+        blank=True
+    )
+
+    delivered = models.BooleanField(
+        verbose_name='見積もり提供済み',
+        default=False
     )
     
     def __str__(self):

@@ -23,18 +23,18 @@ class QuoteRequesterAdmin(admin.ModelAdmin):
 
 @admin.register(QuoteItem)
 class QuoteItemAdmin(admin.ModelAdmin):
-    list_display = ('number', 'item', 'quantity', 'ordered_at', 'arrived_at', 'delivery_at')
-    list_display_links = ('number', 'item', 'quantity', 'ordered_at', 'arrived_at', 'delivery_at')
-    list_filter = ('number', 'item', 'quantity', 'ordered', 'delivered')
+    list_display = ('number', 'item', 'quantity')
+    list_display_links = ('number', 'item', 'quantity')
+    list_filter = ('number', 'item', 'quantity', 'ordered')
     search_fields = ('number', 'item__name', 'quantity')
     actions_on_bottom = True
 
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('destination', 'quote_item')
-    list_display_links = ('destination', 'quote_item')
-    list_filter = ('destination',)
+    list_display = ('destination', 'quote_item', 'ordered_at', 'arrived_at', 'delivery_at')
+    list_display_links = ('destination', 'quote_item', 'ordered_at', 'arrived_at', 'delivery_at')
+    list_filter = ('destination', 'delivered')
     search_fields = ('destination__name', 'quote_item_item__name')
     actions_on_bottom = True
 
