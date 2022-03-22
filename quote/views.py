@@ -190,11 +190,12 @@ def delete_quote_item(request, pk):
 
 
 @login_required()
-def add_requester(request):
-    requester = QuoteRequester.objects.all()
+def add_destination(request):
+    destination = Destination.objects.all()
     quoteitem_list = QuoteItem.objects.filter(worker=request.user, ordered=False)
     context = {
-        requester: requester,
-        quoteitem_list: quoteitem_list
+        'destination_list': destination,
+        'quoteitem_list': quoteitem_list,
+        'count': len(quoteitem_list)
     }
-    return render(request, 'quote/confirm.html', context)
+    return render(request, 'quote/destination.html', context)
