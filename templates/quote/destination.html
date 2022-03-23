@@ -8,59 +8,61 @@
 			<h2 class="title-text">見積もり依頼先登録</h2>
 		</div>
 		<form action="#" method="post">
-		<div class="row mt-5">
-			<a href="{% url 'quote:genre' %}">
-				<i class="fa-solid fa-arrow-circle-left"></i>カテゴリー選択に戻る
-			</a>
-			<div class="col-9">
-				<div class="card">
-					<div class="card-body cart">
-						<div class="row bottom-border cart__header">
-							<span class="cart__title">選択中アイテム</span>
-							<div class="apply form-check form-check-inline">
-								<input type="checkbox" id="apply" class="form-check-input all-apply" name="apply" value="true">
-								<label for="apply">全てに適用する</label>
-							</div>
-							<a href="#" class="add-destination">依頼先を追加する</a>
-						</div>
-						{% for quoteitem in quoteitem_list %}
-							<div class="row bottom-border mt-3 cart__item">
-								<div class="col-5">
-									<p class="cart__item__name">{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }}</p>
-									<span>{{ quoteitem.item.spec }}</span>
+			{% csrf_token %}
+			<div class="row mt-5">
+				<a href="{% url 'quote:genre' %}">
+					<i class="fa-solid fa-arrow-circle-left"></i>
+					カテゴリー選択に戻る
+				</a>
+				<section class="cart col-9">
+					<div class="card">
+						<div class="card-body">
+							<div class="row bottom-border cart__header">
+								<span class="cart__title">選択中アイテム</span>
+								<div class="apply form-check form-check-inline">
+									<input type="checkbox" id="apply" class="form-check-input all-apply" name="apply" value="true">
+									<label for="apply">全てに適用する</label>
 								</div>
-								<div class="col-7 apply apply__destination">
-									{% for destination in destination_list %}
-										<input type="checkbox" id="destination{{ destination.pk }}-{{ quoteitem.pk }}" class="destination form-check-input"
-										       name="destination{{ destination.pk }}-{{ quoteitem.pk }}">
-										<label for="destination{{ destination.pk }}-{{ quoteitem.pk }}">{{ destination }}</label>
-									{% endfor %}
-								</div>
+								<a href="#" class="add-destination">依頼先を追加する</a>
 							</div>
-						{% endfor %}
-						<div class="row cart__footer">
-							<span class="cart__total__title">{{ count }}個のアイテム</span>
+							{% for quoteitem in quoteitem_list %}
+								<div class="row bottom-border mt-3 cart__item">
+									<div class="col-5">
+										<p class="cart__item__name">{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }}</p>
+										<span>{{ quoteitem.item.spec }}</span>
+									</div>
+									<div class="col-7 apply apply__destination">
+										{% for destination in destination_list %}
+											<input type="checkbox" id="destination{{ destination.pk }}-{{ quoteitem.pk }}" class="destination form-check-input"
+											       name="{{ destination.pk }}" value="{{ quoteitem.pk }}">
+											<label for="destination{{ destination.pk }}-{{ quoteitem.pk }}">{{ destination }}</label>
+										{% endfor %}
+									</div>
+								</div>
+							{% endfor %}
+							<div class="row cart__footer">
+								<span class="cart__total__title">{{ count }}個のアイテム</span>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-			<div class="col-3">
-				<div class="card cart__total">
-					<div class="card-body">
-						<div class="row">
-							<span class="cart__total__title">
-								{{ count }}個のアイテム
-							</span>
-						</div>
-						<div class="row my-3">
-							<button type="submit" class="btn btn-sm btn-warning">
-								次に進む
-							</button>
+				</section>
+				<section class="total col-3">
+					<div class="card cart__total">
+						<div class="card-body">
+							<div class="row">
+								<span class="cart__total__title">
+									{{ count }}個のアイテム
+								</span>
+							</div>
+							<div class="row my-3">
+								<button type="submit" class="btn btn-sm btn-warning">
+									次に進む
+								</button>
+							</div>
 						</div>
 					</div>
-				</div>
+				</section>
 			</div>
-		</div>
 		</form>
 	</div>
 
