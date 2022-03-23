@@ -82,7 +82,7 @@ class QuoteRequester(models.Model):
     )
     
     def __str__(self):
-        return self.last_name, self.first_name
+        return f'{self.last_name} {self.first_name}'
     
     class Meta:
         verbose_name = '依頼者'
@@ -175,7 +175,7 @@ class OrderItem(models.Model):
     )
     
     def __str__(self):
-        return self.destination, self.quote_item
+        return f'{self.quote_item.item.name} {self.destination.name}'
     
     class Meta:
         verbose_name = '依頼アイテム'
@@ -209,8 +209,8 @@ class Cart(models.Model):
         default=False,
     )
     
-    def __stt__(self):
-        return self.requester.user.screenname
+    def __str__(self):
+        return self.worker.screenname
     
     class Meta:
         verbose_name = 'カート'
