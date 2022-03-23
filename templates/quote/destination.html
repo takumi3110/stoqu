@@ -7,6 +7,7 @@
 		<div class="row page-title">
 			<h2 class="title-text">見積もり依頼先登録</h2>
 		</div>
+		<form action="#" method="post">
 		<div class="row mt-5">
 			<a href="{% url 'quote:genre' %}">
 				<i class="fa-solid fa-arrow-circle-left"></i>カテゴリー選択に戻る
@@ -20,14 +21,15 @@
 								<input type="checkbox" id="apply" class="form-check-input all-apply" name="apply" value="true">
 								<label for="apply">全てに適用する</label>
 							</div>
+							<a href="#" class="add-destination">依頼先を追加する</a>
 						</div>
 						{% for quoteitem in quoteitem_list %}
 							<div class="row bottom-border mt-3 cart__item">
-								<div class="col-7">
+								<div class="col-5">
 									<p class="cart__item__name">{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }}</p>
 									<span>{{ quoteitem.item.spec }}</span>
 								</div>
-								<div class="col-3 apply apply__destination">
+								<div class="col-7 apply apply__destination">
 									{% for destination in destination_list %}
 										<input type="checkbox" id="destination{{ destination.pk }}-{{ quoteitem.pk }}" class="destination form-check-input"
 										       name="destination{{ destination.pk }}-{{ quoteitem.pk }}">
@@ -51,7 +53,7 @@
 							</span>
 						</div>
 						<div class="row my-3">
-							<button type="button" class="btn btn-sm btn-warning">
+							<button type="submit" class="btn btn-sm btn-warning">
 								次に進む
 							</button>
 						</div>
@@ -59,6 +61,7 @@
 				</div>
 			</div>
 		</div>
+		</form>
 	</div>
 
 {% endblock content %}
@@ -66,6 +69,9 @@
 {% block javascript %}
 	<script src="{% static 'js/quote/quote.js' %}"></script>
 	<script type="text/javascript">
+		const addDestination = document.querySelector('.add-destination');
+		const url = '{% url "quote:add_destination" %}';
+		modal_form(addDestination, url)
 		{% for destination in destination_list %}
 			all_apply("{{ destination.pk }}");
 		{% endfor %}
