@@ -188,7 +188,9 @@ class Cart(models.Model):
     requester = models.ForeignKey(
         QuoteRequester,
         on_delete=models.CASCADE,
-        verbose_name='依頼者'
+        verbose_name='依頼者',
+        null=True,
+        blank=True
     )
     
     worker = models.ForeignKey(
@@ -240,25 +242,15 @@ class OrderInfo(models.Model):
     
     ticket = models.CharField(
         verbose_name='チケット番号',
-        max_length=50
+        max_length=50,
+        null=True,
+        blank=True
     )
     
     cart = models.ForeignKey(
         Cart,
         on_delete=models.CASCADE,
         verbose_name='カート'
-    )
-    
-    worker = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='依頼作成者'
-    )
-    
-    requester = models.ForeignKey(
-        QuoteRequester,
-        on_delete=models.CASCADE,
-        verbose_name='依頼者'
     )
     
     registration_at = models.DateTimeField(

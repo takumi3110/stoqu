@@ -51,10 +51,10 @@ class CartAdmin(admin.ModelAdmin):
 
 @admin.register(OrderInfo)
 class OrderInfoAdmin(admin.ModelAdmin):
-    list_display = ('status', 'number', 'ticket', 'worker', 'requester', 'registration_at', 'updated_at', 'finished')
-    list_display_links = ('status', 'number', 'ticket', 'worker', 'requester', 'registration_at', 'updated_at', 'finished')
-    list_filter = ('status', 'worker', 'requester', 'finished')
-    search_fields = ('status', 'number', 'ticket', 'worker__screenname', 'requester__first_name')
+    list_display = ('status', 'number', 'ticket', 'registration_at', 'updated_at', 'finished')
+    list_display_links = ('status', 'number', 'ticket', 'registration_at', 'updated_at', 'finished')
+    list_filter = ('status', 'finished')
+    search_fields = ('status', 'number', 'ticket')
     actions_on_bottom = True
 
 
