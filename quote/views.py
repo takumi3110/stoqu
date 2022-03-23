@@ -2,13 +2,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView
+from django.urls import reverse_lazy
 
 from rest_framework import viewsets
+from bootstrap_modal_forms.generic import BSModalCreateView
 
 from .models import Item, QuoteItem, Destination, QuoteRequester
 from device.models import PC, PCDetail, Storage, CPU
 from .serializers import QuoteItemSerializer
 from .filters import QuoteItemFilter
+from .forms import DestinationCreateBSModalForm
 
 
 class QuoteItemViewSet(viewsets.ModelViewSet):
@@ -190,7 +193,9 @@ def delete_quote_item(request, pk):
 
 
 @login_required()
-def add_destination(request):
+def register_destination(request):
+    if request.method == 'post':
+        return redirect('quote:register_destination')
     destination = Destination.objects.all()
     quoteitem_list = QuoteItem.objects.filter(worker=request.user, ordered=False)
     context = {
@@ -199,3 +204,15 @@ def add_destination(request):
         'count': len(quoteitem_list)
     }
     return render(request, 'quote/destination.html', context)
+
+
+class AddDestination(LoginRequiredMixin, BSModalCreateView):
+    model = Destination
+    template_name = 'snippets/create_modal.html'
+    form_class = DestinationCreateBSModalForm
+    success_url = reverse_lazy('quote:register_destination')
+
+
+@login_required()
+def add_requester(request):
+    return render(request, 'quote/confirm.html')
