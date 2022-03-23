@@ -82,9 +82,9 @@ function all_apply(pk) {
 	allApply.addEventListener('change', function() {
 		if (allApply.checked) {
 			console.log('checked');
-
-			destinationInput.id = destinationId;
-
+			// for(let input of destinationInput) {
+			// 	input.id = destinationId;
+			// }
 		} else {
 			console.log('none');
 		}
@@ -101,3 +101,9 @@ function all_apply(pk) {
 // 	new_input.classList.add('form-control')
 //
 // }
+
+function modal_form(el, url) {
+	$(el).each(function() {
+		$(this).modalForm({formURL: url});
+	});
+}
