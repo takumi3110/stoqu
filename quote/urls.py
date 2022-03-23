@@ -14,5 +14,6 @@ urlpatterns = [
     path('item_list/', views.QuoteItemList.as_view(), name='item_list'),
     path('delete_item/<int:pk>', views.delete_quote_item, name='delete_item'),
     path('register_destination/', views.register_destination, name='register_destination'),
-    path('add_destination/', views.AddDestination.as_view(), name='add_destination')
+    path('add_destination/', views.AddDestination.as_view(), name='add_destination'),
+    path('add_requester/', views.add_requester, name='add_requester')
 ]

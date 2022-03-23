@@ -7,11 +7,13 @@ from django.urls import reverse_lazy
 from rest_framework import viewsets
 from bootstrap_modal_forms.generic import BSModalCreateView
 
-from .models import Item, QuoteItem, Destination, QuoteRequester
+from .models import Item, QuoteItem, Destination, QuoteRequester, OrderItem, Cart, OrderInfo
 from device.models import PC, PCDetail, Storage, CPU
 from .serializers import QuoteItemSerializer
 from .filters import QuoteItemFilter
 from .forms import DestinationCreateBSModalForm
+
+import datetime
 
 
 class QuoteItemViewSet(viewsets.ModelViewSet):
@@ -194,12 +196,26 @@ def delete_quote_item(request, pk):
 
 @login_required()
 def register_destination(request):
-    if request.method == 'post':
-        return redirect('quote:register_destination')
-    destination = Destination.objects.all()
+    destination_list = Destination.objects.all()
     quoteitem_list = QuoteItem.objects.filter(worker=request.user, ordered=False)
+    if request.method == 'POST':
+        post_name_list = [destination.pk for destination in destination_list]
+        cart = Cart.objects.get_or_create(worker=request.user, ordered=False)
+        for post_name in post_name_list:
+            if str(post_name) in request.POST:
+                id_get_list = request.POST.getlist(str(post_name))
+                for get_id in id_get_list:
+                    quote_item = QuoteItem.objects.get(pk=get_id)
+                    order_item = OrderItem.objects.get_or_create(
+                        destination_id=post_name,
+                        quote_item=quote_item,
+                        delivered=False
+                    )
+                    cart[0].order_item.add(order_item[0])
+        cart[0].save()
+        return redirect('quote:add_requester')
     context = {
-        'destination_list': destination,
+        'destination_list': destination_list,
         'quoteitem_list': quoteitem_list,
         'count': len(quoteitem_list)
     }
@@ -215,4 +231,43 @@ class AddDestination(LoginRequiredMixin, BSModalCreateView):
 
 @login_required()
 def add_requester(request):
-    return render(request, 'quote/confirm.html')
+    if request.method == 'POST':
+        cart = Cart.objects.get(worker=request.user, ordered=False)
+        last_name = request.POST['lastName']
+        first_name = request.POST['firstName']
+        team = request.POST['team']
+        addressee = request.POST['addressee']
+        ticket = request.POST['ticket']
+        today = datetime.date.today().strftime('%Y%m%d')
+        requester = QuoteRequester.objects.get_or_create(
+            last_name=last_name,
+            first_name=first_name,
+            team=team,
+            addressee=addressee
+        )
+        cart.requester = requester[0]
+        cart.save()
+        order_info_last = OrderInfo.objects.all().last()
+        branch = 1
+        if order_info_last is not None:
+            old_number = order_info_last.number
+            if today in old_number:
+                old_branch = old_number.split('-')[1]
+                branch += int(old_branch)
+        number = today + '-' + str(branch)
+        order_info = OrderInfo.objects.get_or_create(
+            status=1,
+            number=number,
+            ticket=ticket,
+            cart=cart,
+        )
+        context = {
+            'orderinfo': order_info[0]
+        }
+        return render(request, 'quote/confirm.html', context)
+    quoteitem_list = QuoteItem.objects.filter(worker=request.user, ordered=False)
+    context = {
+        'quoteitem_list': quoteitem_list,
+        'count': len(quoteitem_list)
+    }
+    return render(request, 'quote/requester.html', context)
