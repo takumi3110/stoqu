@@ -1,10 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+	<div class="container my-5">
+		<div class="row page-title">
+			<h2 class="title-text">依頼者登録</h2>
+		</div>
+		<form action="#" method="post">
+			{% csrf_token %}
+			<div class="row mt-5">
+				<a href="{% url 'quote:genre' %}">
+					<i class="fa-solid fa-arrow-circle-left"></i>カテゴリー選択に戻る
+				</a>
+				<section class="requester col-8 mt-3">
+					<div class="row border-bottom">
+						<div class="col-3">
+							<span class="menu">１：依頼者情報入力</span>
+						</div>
+						<div class="col-8 offset-1">
+							<div class="row">
+								<label for="lastName" class="col-3 col-form-label">姓：</label>
+								<div class="col-7">
+									<input type="text" id="lastName" class="form-control" name="lastName" required>
+								</div>
+							</div>
+							<div class="row requester__input">
+								<label for="firstName" class="col-3 col-form-label">名：</label>
+								<div class="col-7">
+									<input type="text" id="firstName" class="form-control" name="firstName" required>
+								</div>
+							</div>
+							<div class="row requester__input">
+								<label for="team" class="col-3 col-form-label">所属チーム：</label>
+								<div class="col-7">
+									<input type="text" id="team" class="form-control" name="team" required>
+								</div>
+							</div>
+							<div class="row requester__input">
+								<label for="addressee" class="col-3 col-form-label">宛名：</label>
+								<div class="col-7">
+									<input type="text" id="addressee" class="form-control" name="addressee" required>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row border-bottom">
+						<div class="col-3">
+							<span class="menu">２：チケット番号入力</span>
+						</div>
+						<div class="col-8 offset-1">
+							<div class="row">
+								<label for="ticket" class="col-3 col-form-label">チケット番号：</label>
+								<div class="col-7">
+									<input type="number" id="ticket" class="col-9 form-control" name="ticket" required>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-3">
+							<span class="menu">３：選択アイテム</span>
+						</div>
+					</div>
+					<div class="card my-3">
+						<div class="card-body">
+							{% for quoteitem in quoteitem_list %}
+								<div class="row border-bottom requester__item">
+									<p class="requester__item__name">
+										{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }} × {{ quoteitem.quantity }}
+									</p>
+									<span>{{ quoteitem.item.spec }}</span>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+					<a href="{% url 'quote:genre' %}">
+						<i class="fa-solid fa-arrow-circle-left"></i>カテゴリー選択に戻る
+					</a>
+				</section>
+				<section class="result col-3 offset-1">
+					<div class="card">
+						<div class="card-body">
+							<div class="row result__header">
+								<span class="result__total__title">
+									{{ count }}個のアイテム
+								</span>
+							</div>
+							<div class="row my-3">
+								<button type="submit" class="btn btn-sm btn-warning">
+									確定する
+								</button>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</form>
+	</div>
+
+{% endblock content %}
