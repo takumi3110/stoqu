@@ -28,16 +28,6 @@ class Item(models.Model):
         blank=True
     )
     
-    image = models.ImageField(
-        null=True,
-        blank=True
-    )
-    
-    url = models.URLField(
-        null=True,
-        blank=True
-    )
-    
     def __str__(self):
         return f'{self.maker}:{self.name}'
     
@@ -208,6 +198,15 @@ class Cart(models.Model):
         verbose_name='依頼済み',
         default=False,
     )
+    
+    def save(self, *args, **kwargs):
+        if self.ordered:
+            for order_item in self.order_item.all():
+                order_item.ordered_at = timezone.now()
+                order_item.quote_item.ordered = True
+                order_item.quote_item.save()
+                order_item.save()
+        super(Cart, self).save(*args, **kwargs)
     
     def __str__(self):
         return self.worker.screenname
