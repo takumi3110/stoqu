@@ -16,12 +16,16 @@
 							<span>受注番号：{{ orderinfo.number }}</span>
 							<span>チケット番号：{{ orderinfo.ticket }}</span>
 						</div>
-						<a href="#">
-							見積もり履歴一覧へ
-							<i class="fas fa-angle-double-right"></i>
-						</a>
 					</div>
-					<a href="#" class="btn btn-danger mt-3">PDFをダウンロードする</a>
+					<a href="#" class="mt-3">
+						<span>
+							見積もり履歴一覧へ<i class="fas fa-angle-double-right"></i>
+						</span>
+					</a>
+					<div class="row mt-3">
+						<a href="#" class="btn btn-danger col-2">PDFをダウンロードする</a>
+					</div>
+
 				</div>
 			</div>
 		</section>
@@ -40,7 +44,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="confirm__footer row mt-3">
+		<section class="confirm__footer mt-3">
 			<a href="{% url 'stock:top' %}">
 				<i class="fa-solid fa-arrow-circle-left"></i>
 				TOPに戻る
