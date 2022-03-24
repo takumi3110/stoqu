@@ -83,3 +83,9 @@
     top: 100px;
   }
 }
+
+.confirm__icon {
+  &.selected {
+    transform: rotate(180deg);
+  }
+}
