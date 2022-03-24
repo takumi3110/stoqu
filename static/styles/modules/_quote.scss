@@ -76,3 +76,10 @@
   }
 
 }
+
+.result {
+  & .card{
+    position: sticky;
+    top: 100px;
+  }
+}
