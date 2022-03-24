@@ -40,7 +40,8 @@
 							<div class="row requester__input">
 								<label for="addressee" class="col-3 col-form-label">宛名：</label>
 								<div class="col-7">
-									<input type="text" id="addressee" class="form-control" name="addressee" required>
+									<input type="text" id="addressee" class="form-control" name="addressee"
+									       placeholder="例：株式会社○○" required>
 								</div>
 							</div>
 						</div>
@@ -73,6 +74,11 @@
 									<span>{{ quoteitem.item.spec }}</span>
 								</div>
 							{% endfor %}
+							<div class="row">
+								<span class="requester__footer">
+									{{ count }}個のアイテム
+								</span>
+							</div>
 						</div>
 					</div>
 					<a href="{% url 'quote:genre' %}">
