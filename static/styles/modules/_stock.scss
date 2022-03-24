@@ -4,9 +4,7 @@
 @import 'hero-slider';
 @import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
 
-a {
-  text-decoration: none;
-}
+
 
 .content-width {
   width: 90%;
@@ -270,7 +268,7 @@ a {
 
   &__title {
     font-size: 30px;
-    font-width: bold;
+    font-weight: bold;
   }
 
   &__image {
