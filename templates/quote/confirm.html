@@ -3,37 +3,44 @@
 
 {% block content %}
 
-	<div class="container confirm my-5">
-		<section class="row confirm__header">
+	<div class="container my-5">
+		<section class="confirm__header row">
 			<div class="card">
 				<div class="card-body">
-					<h4 class="confirm__title">
-						<i class="fas fa-check-circle"></i>
-						見積もり依頼を登録しました。
-					</h4>
-					<div class="row confirm__number">
-						<span>受注番号：{{ orderinfo.number }}</span>
-						<span>チケット番号：{{ orderinfo.ticket }}</span>
-					</div>
 					<div class="row">
+						<h4 class="confirm__title">
+							<i class="fas fa-check-circle"></i>
+							見積もり依頼を登録しました。
+						</h4>
+						<div class="confirm__header__info row mt-3">
+							<span>受注番号：{{ orderinfo.number }}</span>
+							<span>チケット番号：{{ orderinfo.ticket }}</span>
+						</div>
 						<a href="#">
 							見積もり履歴一覧へ
 							<i class="fas fa-angle-double-right"></i>
 						</a>
-						<a href="#" class="btn btn-warning">PDFをダウンロードする</a>
+					</div>
+					<a href="#" class="btn btn-danger mt-3">PDFをダウンロードする</a>
+				</div>
+			</div>
+		</section>
+		<section class="confirm__content row mt-3">
+			<div class="card">
+				<div class="card-body">
+					<span class="confirm__content__title">以下の内容で作成しました</span>
+					<a href="#">展開する<i class="fa-solid fa-angle-down confirm__icon"></i></a>
+					<div class="confirm__content__main row mt-3">
+						{% for quoteitem in quoteitem_list %}
+							<span class="confirm__item__name">
+								{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }} × {{ quoteitem.quantity }}
+							</span>
+						{% endfor %}
 					</div>
 				</div>
 			</div>
 		</section>
-		<section class="row confirm__content">
-			<span>以下の内容で作成しました</span>
-			<div class="card">
-				<div class="card-body">
-
-				</div>
-			</div>
-		</section>
-		<section class="row confirm__footer">
+		<section class="confirm__footer row mt-3">
 			<a href="{% url 'stock:top' %}">
 				<i class="fa-solid fa-arrow-circle-left"></i>
 				TOPに戻る
