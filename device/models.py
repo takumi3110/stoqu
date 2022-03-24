@@ -123,6 +123,11 @@ class PC(models.Model):
 		null=True,
 		blank=True
 	)
+	
+	url = models.URLField(
+		null=True,
+		blank=True
+	)
 
 	def __str__(self):
 		return f'{self.maker} {self.name}'
