@@ -123,6 +123,33 @@ body {
   text-align: right;
 }
 
+.requester .menu {
+  font-size: 20px;
+  font-weight: bold;
+}
+.requester__input {
+  margin-top: 1.5rem;
+}
+.requester__title {
+  font-size: 30px;
+  font-weight: bold;
+}
+.requester__item__name {
+  font-size: 25px;
+  font-weight: bold;
+}
+.requester__footer {
+  text-align: right;
+}
+.requester__total__title {
+  font-size: 20px;
+}
+
+.result .card {
+  position: sticky;
+  top: 100px;
+}
+
 .status__bar {
   margin: 20px 0;
   padding: 0;
@@ -210,10 +237,6 @@ body {
   transform: none;
 }
 
-a {
-  text-decoration: none;
-}
-
 .content-width, .select {
   width: 90%;
   margin: 0 auto;
@@ -228,6 +251,7 @@ a {
 .border-bottom, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__info .sub-title, .detail__info, .detail__content .base, .detail__content .option, .detail__content .title, .detail__main {
   border-bottom: thin solid #dfdfdf;
   margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
 }
 
 .navigation {
@@ -415,7 +439,7 @@ a {
 }
 .cart__title {
   font-size: 30px;
-  font-width: bold;
+  font-weight: bold;
 }
 .cart__image {
   width: 100%;
@@ -558,6 +582,10 @@ a {
 
 .order-detail__icon.selected {
   transform: rotate(180deg);
+}
+
+a {
+  text-decoration: none;
 }
 
 .footer {
