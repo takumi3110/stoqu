@@ -206,10 +206,17 @@ class Cart(models.Model):
                 order_item.quote_item.ordered = True
                 order_item.quote_item.save()
                 order_item.save()
+        else:
+            for order_item in self.order_item.all():
+                order_item.ordered_at = None
+                order_item.quote_item.ordered = False
+                order_item.quote_item.save()
+                order_item.save()
         super(Cart, self).save(*args, **kwargs)
     
     def __str__(self):
-        return self.worker.screenname
+        count = len(self.order_item.all())
+        return f'{self.worker.screenname}({count}個のアイテム)'
     
     class Meta:
         verbose_name = 'カート'
