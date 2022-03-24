@@ -45,7 +45,34 @@
 }
 
 .requester {
+  & .menu {
+    font-size: 20px;
+    font-weight: bold;
+  }
   &__input {
     margin-top: 1.5rem;
   }
+
+  &__title {
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  &__item {
+    &__name {
+      font-size: 25px;
+      font-weight: bold;
+    }
+  }
+
+  &__footer {
+    text-align: right;
+  }
+
+  &__total {
+    &__title {
+      font-size: 20px;
+    }
+  }
+
 }
