@@ -150,6 +150,18 @@ body {
   top: 100px;
 }
 
+.confirm__content .header .title {
+  font-size: 20px;
+  margin-right: 2rem;
+}
+.confirm__content .header .allow.selected {
+  transform: rotate(180deg);
+}
+.confirm__content .main .bottom-border:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 .status__bar {
   margin: 20px 0;
   padding: 0;
@@ -246,12 +258,6 @@ body {
 .flex, .footer__ul, .footer__nav {
   display: flex;
   flex-direction: column;
-}
-
-.border-bottom, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__info .sub-title, .detail__info, .detail__content .base, .detail__content .option, .detail__content .title, .detail__main {
-  border-bottom: thin solid #dfdfdf;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
 }
 
 .navigation {
@@ -559,9 +565,6 @@ body {
   color: orangered;
 }
 
-.confirm {
-  background-color: lightslategrey;
-}
 .confirm__title {
   color: teal;
 }
@@ -586,6 +589,12 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.border-bottom, .confirm__content .header, .confirm__content .main .bottom-border, .detail__main, .detail__content .title, .detail__content .option, .detail__content .base, .detail__info, .detail__info .sub-title, .cart .bottom-border, .approve-menu, .approve-card .bottom-border, .confirm__address {
+  border-bottom: thin solid #dfdfdf;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
 }
 
 .footer {

@@ -15,12 +15,6 @@
   flex-direction: column;
 }
 
-.border-bottom {
-  border-bottom: thin solid $cBorder;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-}
-
 
 .navigation {
   text-align: center;
@@ -430,7 +424,7 @@
 }
 
 .confirm {
-  background-color: lightslategrey;
+  //background-color: lightslategrey;
 
   &__title {
     color: teal;
