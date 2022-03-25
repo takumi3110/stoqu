@@ -31,7 +31,7 @@ class category {
 	}
 
 	_changeSpec() {
-		const category = this.selectedCategory;
+		// const category = this.selectedCategory;
 		const selectedSpec = document.querySelector('#spec');
 		const spec = document.querySelector('.spec-detail');
 		const cpu = this.cpu;
@@ -51,6 +51,38 @@ class category {
 				cpu.value = 'i7';
 				memory.value = 16;
 				storage.value = 256;
+			}
+		});
+	}
+}
+
+class clickAllow {
+	constructor() {
+		this.open = document.querySelector('.open');
+		this.allow = document.querySelector('.allow');
+		this.main = document.querySelector('.main');
+		this._init();
+	}
+
+	_init() {
+		this._click();
+	}
+
+	_click() {
+		const open = this.open;
+		const allow = this.allow;
+		const main = this.main;
+		const text = open.innerHTML
+		const newText = '閉じる<i class="fa-solid fa-angle-down allow selected"></i>'
+		open.addEventListener('click', function() {
+			if (main.classList.contains('toggle')) {
+				this.innerHTML = newText;
+				allow.classList.add('selected');
+				main.classList.remove('toggle');
+			} else {
+				this.innerHTML = text;
+				allow.classList.remove('selected');
+				main.classList.add('toggle');
 			}
 		});
 	}
