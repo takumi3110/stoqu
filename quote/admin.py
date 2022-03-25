@@ -45,7 +45,7 @@ class CartAdmin(admin.ModelAdmin):
     list_display_links = ('requester', 'worker', 'ordered')
     list_filter = ('requester', 'worker', 'ordered')
     search_fields = ('requester', 'worker')
-    filter_horizontal = ['order_item']
+    filter_horizontal = ['quote_item']
     actions_on_bottom = True 
 
 
