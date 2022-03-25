@@ -94,20 +94,32 @@
         margin-right: 2rem;
       }
 
-      & .allow {
-        &.selected {
-          transform: rotate(180deg);
+      & .open {
+        &:hover {
+          cursor: pointer;
+        }
+        & .allow {
+          &.selected {
+            transform: rotate(180deg);
+          }
         }
       }
     }
 
     & .main {
+      max-height: 100vh;
+      transition: all 1s;
       & .bottom-border {
         @extend .border-bottom;
         &:last-child {
           border-bottom: none;
           padding-bottom: 0;
         }
+      }
+
+      &.toggle {
+        max-height: 0;
+        opacity: 0;
       }
     }
   }
