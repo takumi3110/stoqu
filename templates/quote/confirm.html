@@ -3,53 +3,71 @@
 
 {% block content %}
 
-	<div class="container my-5">
-		<section class="confirm__header row">
-			<div class="card">
-				<div class="card-body">
-					<div class="row">
-						<h4 class="confirm__title">
-							<i class="fas fa-check-circle"></i>
-							見積もり依頼を登録しました。
-						</h4>
-						<div class="confirm__header__info row mt-3">
-							<span>受注番号：{{ orderinfo.number }}</span>
-							<span>チケット番号：{{ orderinfo.ticket }}</span>
+	<div class="container my-5 confirm">
+		<div class="row">
+			<div class="col-8 offset-2">
+				<section class="confirm__header row">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="confirm__title">
+								<i class="fas fa-check-circle"></i>
+								見積もり依頼を登録しました。
+							</h4>
+							<div class="confirm__header__info row mt-3">
+								<span>受注番号：{{ orderinfo.number }}</span>
+								<span>チケット番号：{{ orderinfo.ticket }}</span>
+							</div>
+							<div class="row mt-3">
+								<div class="col-6">
+									<a href="#">
+										<span>
+											見積もり履歴一覧へ<i class="fas fa-angle-double-right"></i>
+										</span>
+									</a>
+								</div>
+								<div class="col-3 offset-3">
+									<a href="{% url 'quote:create_pdf' orderinfo.pk %}" class="btn btn-danger">PDFをダウンロードする</a>
+								</div>
+							</div>
 						</div>
 					</div>
-					<a href="#" class="mt-3">
-						<span>
-							見積もり履歴一覧へ<i class="fas fa-angle-double-right"></i>
-						</span>
+				</section>
+				<section class="confirm__content row mt-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="header">
+								<span class="title">以下の内容で作成しました</span>
+								<a href="#">展開する<i class="fa-solid fa-angle-down allow"></i></a>
+							</div>
+							<div class="main mt-3">
+								{% for quoteitem in quoteitem_list %}
+									<div class="row bottom-border">
+										<div class="col-4">
+											<span class="confirm__item__name">
+												{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }}
+											</span>
+										</div>
+										<div class="col-5">
+											<span>{{ quoteitem.item.spec }}</span>
+										</div>
+										<div class="col-3">
+											<span>数量：{{ quoteitem.quantity }}</span>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</section>
+				<section class="confirm__footer mt-3">
+					<a href="{% url 'stock:top' %}">
+						<i class="fa-solid fa-arrow-circle-left"></i>
+						TOPに戻る
 					</a>
-					<div class="row mt-3">
-						<a href="#" class="btn btn-danger col-2">PDFをダウンロードする</a>
-					</div>
+				</section>
+			</div>
+		</div>
 
-				</div>
-			</div>
-		</section>
-		<section class="confirm__content row mt-3">
-			<div class="card">
-				<div class="card-body">
-					<span class="confirm__content__title">以下の内容で作成しました</span>
-					<a href="#">展開する<i class="fa-solid fa-angle-down confirm__icon"></i></a>
-					<div class="confirm__content__main row mt-3">
-						{% for quoteitem in quoteitem_list %}
-							<span class="confirm__item__name">
-								{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }} × {{ quoteitem.quantity }}
-							</span>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-		</section>
-		<section class="confirm__footer mt-3">
-			<a href="{% url 'stock:top' %}">
-				<i class="fa-solid fa-arrow-circle-left"></i>
-				TOPに戻る
-			</a>
-		</section>
 	</div>
 
 
