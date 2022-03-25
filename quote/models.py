@@ -121,7 +121,7 @@ class QuoteItem(models.Model):
         super(QuoteItem, self).save(*args, **kwargs)
     
     def __str__(self):
-        return f'{self.item.name}:{self.quantity}'
+        return f'{self.item.maker} {self.item.name}:{self.quantity}'
     
     class Meta:
         verbose_name = '見積もりアイテム'
@@ -140,29 +140,54 @@ class OrderItem(models.Model):
         on_delete=models.CASCADE,
         verbose_name='見積もりアイテム'
     )
-
+    
+    ordered = models.BooleanField(
+        verbose_name='見積もり依頼済み',
+        default=False,
+    )
+    
     ordered_at = models.DateTimeField(
         verbose_name='依頼日',
         null=True,
         blank=True
     )
-
+    
+    arrived = models.BooleanField(
+        verbose_name='見積もり到着済み',
+        default=False
+    )
+    
     arrived_at = models.DateTimeField(
         verbose_name='見積もり到着日',
         null=True,
         blank=True
     )
-
+    
+    delivered = models.BooleanField(
+        verbose_name='見積もり提供済み',
+        default=False
+    )
+    
     delivery_at = models.DateField(
         verbose_name='見積もり提供日',
         null=True,
         blank=True
     )
-
-    delivered = models.BooleanField(
-        verbose_name='見積もり提供済み',
-        default=False
-    )
+    
+    def save(self, *args, **kwargs):
+        if self.ordered:
+            self.ordered_at = timezone.now()
+        else:
+            self.ordered_at = None
+        if self.arrived:
+            self.arrived_at = timezone.now()
+        else:
+            self.arrived_at = None
+        if self.delivered:
+            self.delivery_at = timezone.now()
+        else:
+            self.delivery_at = None
+        super(OrderItem, self).save(*args, **kwargs)
     
     def __str__(self):
         return f'{self.quote_item.item.name} {self.destination.name}'
@@ -189,8 +214,8 @@ class Cart(models.Model):
         verbose_name='依頼作成者'
     )
     
-    order_item = models.ManyToManyField(
-        OrderItem,
+    quote_item = models.ManyToManyField(
+        QuoteItem,
         verbose_name='依頼アイテム'
     )
     
@@ -199,23 +224,8 @@ class Cart(models.Model):
         default=False,
     )
     
-    def save(self, *args, **kwargs):
-        if self.ordered:
-            for order_item in self.order_item.all():
-                order_item.ordered_at = timezone.now()
-                order_item.quote_item.ordered = True
-                order_item.quote_item.save()
-                order_item.save()
-        else:
-            for order_item in self.order_item.all():
-                order_item.ordered_at = None
-                order_item.quote_item.ordered = False
-                order_item.quote_item.save()
-                order_item.save()
-        super(Cart, self).save(*args, **kwargs)
-    
     def __str__(self):
-        count = len(self.order_item.all())
+        count = len(self.quote_item.all())
         return f'{self.worker.screenname}({count}個のアイテム)'
     
     class Meta:
@@ -282,10 +292,10 @@ class OrderInfo(models.Model):
         else:
             if self.finished is False:
                 finish = 0
-                for order_item in self.cart.order_item.all():
-                    if order_item.delivered:
+                for quote_item in self.cart.quote_item.all():
+                    if quote_item.delivered:
                         finish += 1
-                if finish == len(self.cart.order_item.all()):
+                if finish == len(self.cart.quote_item.all()):
                     self.finished = True
         self.updated_at = timezone.now()
         super(OrderInfo, self).save(*args, **kwargs)
