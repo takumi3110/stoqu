@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView
 from django.urls import reverse_lazy
+from django.views import View
+from django.http import HttpResponse
 
 from rest_framework import viewsets
 from bootstrap_modal_forms.generic import BSModalCreateView
@@ -13,6 +15,13 @@ from .serializers import QuoteItemSerializer
 from .filters import QuoteItemFilter
 from .forms import DestinationCreateBSModalForm
 
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.units import mm
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfgen import canvas
+from reportlab.platypus import Table, TableStyle
 import datetime
 
 
@@ -116,13 +125,13 @@ def quote_order(request, **kwargs):
                 genre = 'ミニPC'
                 name = 'ミニPC'
             if category == 'note':
-                spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\nテンキー:{}\n指紋認証:あり'\
+                spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\nテンキー:{}\n指紋認証:あり' \
                     .format(cpu, memory, storage, ten_key)
             else:
                 spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\n'.format(cpu, memory, storage)
             if lanscope == 'true':
-                license_name = 'Lanscope'
-                license_maker = 'ソフトクリエイト'
+                license_name = 'Lanscope Cat'
+                license_maker = 'Lanscope'
                 license_genre = 'License'
                 create_quote_item(license_genre, license_maker, license_name, quantity, worker)
             elif office != 'none':
@@ -144,7 +153,7 @@ def quote_order(request, **kwargs):
                 dp = request.POST['dp'] + '\n'
                 detail += dp
             name = '{}インチモニター'.format(size)
-            spec_text = '{}\n{}インチ\nワイドモニター\n{}'.format(spec, size, detail)
+            spec_text = '{}\n{}インチ\nワイドモニター\nノングレア\n{}'.format(spec, size, detail)
         elif genre == 'others':
             genre = '周辺機器'
             name = request.POST['name']
@@ -206,12 +215,14 @@ def register_destination(request):
                 id_get_list = request.POST.getlist(str(post_name))
                 for get_id in id_get_list:
                     quote_item = QuoteItem.objects.get(pk=get_id)
-                    order_item = OrderItem.objects.get_or_create(
+                    OrderItem.objects.update_or_create(
                         destination_id=post_name,
                         quote_item=quote_item,
+                        ordered=False,
+                        arrived=False,
                         delivered=False
                     )
-                    cart[0].order_item.add(order_item[0])
+                    cart[0].quote_item.add(quote_item)
         cart[0].save()
         return redirect('quote:add_requester')
     context = {
@@ -247,7 +258,7 @@ def add_requester(request):
             addressee=addressee
         )
         cart.requester = requester[0]
-        cart.ordered = True
+        # cart.ordered = True
         # cart.save()
         order_info_all = OrderInfo.objects.all()
         order_info_last = order_info_all.last()
@@ -276,3 +287,126 @@ def add_requester(request):
         'count': len(quoteitem_list)
     }
     return render(request, 'quote/requester.html', context)
+
+
+def create_pdf_data(order_item, order_info):
+    genre = order_item.item.genre
+    spec = order_item.item.spec
+    ticket = str(order_info.ticket) + '-' + str(order_item)
+    return {}
+
+
+def create_row_heights(length):
+    heights = []
+    if length == 0:
+        heights.append(20 * mm)
+    else:
+        size = length * 6
+        heights.append(size * mm)
+    return heights
+
+
+class PDFBaseView(View):
+    def get(self, request, *args, **kwargs):
+        title = '■プレステージ・インターナショナル　秋田BPOキャンパス　見積依頼'
+        font_name = 'HeiseiKakuGo-W5'
+        is_bottomup = False
+        response = HttpResponse(status=200, content_type='application/pdf')
+        # 日本語が使えるゴシック体のフォントを設定
+        pdfmetrics.registerFont(UnicodeCIDFont(font_name))
+        size = landscape(A4)
+        # pdfを描く場所を作成。位置を決める原点は左上にする。(bottomup)デフォルトは左下
+        doc = canvas.Canvas(response, pagesize=size, bottomup=is_bottomup)
+        # pdfのタイトルを設定
+        doc.setTitle(title)
+        # フォントを設定
+        doc.setFont(font_name, 10)
+        # pdf上にもタイトルとしてしようしたクラス名を表示する
+        doc.drawString(10 * mm, 15 * mm, title)
+        # 即ダウンロードしたいときはattachmentをつける
+        # response['Content-Disposition'] = 'filename="{}"'.format(filename)
+        header = ['管理番号', '機器', 'メーカー', '型式', '数量', '仕様/構成', '宛名']
+        filename = self.pdf_draw(doc, kwargs['pk'], header)
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+        return response
+
+
+class CreatePdf(PDFBaseView):
+    def create_pdf_style(self, doc, data, row_heights):
+        top = 5 * mm
+        left = 20 * mm
+        heights = tuple(row_heights)
+        widths = (30 * mm, 25 * mm, 25 * mm, 50 * mm, 15 * mm, 50 * mm, 80 * mm)
+        table = Table(data, colWidths=widths, rowHeights=heights)
+        table.setStyle(TableStyle([
+            ('FONT', (0, 0), (-1, -1), self.font_name, 10),
+            ('BOX', (0, 0), (-1, -1), 1, colors.black),
+            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, -1), (-1, -1), colors.lightblue),
+            ('BACKGROUND', (0, 0), (0, -2), colors.lightyellow)
+        ]))
+        table.wrapOn(doc, top, left)
+        table.drawOn(doc, top, left)
+    
+    def pdf_draw(self, doc, pk, header):
+        data = [header]
+        order_item = OrderItem.objects.get(pk=pk)
+        order_info = OrderInfo.objects.get(cart__order_item=order_item)
+        pdf_data = create_pdf_data(order_item, order_info)
+        order = pdf_data['order']
+        length = pdf_data['length']
+        data.append(order)
+        data.reverse()
+        row_heights = [10 * mm]
+        for h in create_row_heights(length):
+            row_heights.append(h)
+        row_heights.reverse()
+        create_pdf_style(self, doc, data, row_heights)
+        filename = order[0] + '_見積作成依頼書.pdf'
+        doc.save()
+        return filename
+
+
+class AllCreatePdf(PDFBaseView):
+    def create_pdf_style(self, doc, data, row_heights):
+        top = 5 * mm
+        left = 20 * mm
+        heights = tuple(row_heights)
+        widths = (30 * mm, 25 * mm, 25 * mm, 50 * mm, 15 * mm, 50 * mm, 80 * mm)
+        table = Table(data, colWidths=widths, rowHeights=heights)
+        table.setStyle(TableStyle([
+            ('FONT', (0, 0), (-1, -1), self.font_name, 10),
+            ('BOX', (0, 0), (-1, -1), 1, colors.black),
+            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, -1), (-1, -1), colors.lightblue),
+            ('BACKGROUND', (0, 0), (0, -2), colors.lightyellow)
+        ]))
+        table.wrapOn(doc, top, left)
+        table.drawOn(doc, top, left)
+    
+    def pdf_draw(self, doc, pk, header):
+        data = []
+        row_heights = [10 * mm]
+        order_info = OrderInfo.objects.get(pk=pk)
+        quote_item_list = order_info.cart.quote_item.all()
+        order_info.cart.ordered = True
+        order_info.cart.save()
+        for quote_item in quote_item_list:
+            order_item = OrderItem.objects.get(quote_item=quote_item)
+            order_item.ordered = True
+            order_item.save()
+            pdf_data = create_pdf_data(quote_item, order_info)
+            order = pdf_data['order']
+            length = pdf_data['length']
+            data.append(order)
+            for h in create_row_heights(length):
+                row_heights.append(h)
+        data.insert(0, header)
+        data.reverse()
+        row_heights.reverse()
+        create_pdf_style(self, doc, data, row_heights)
+        filename = str(order_info.ticket) + '_見積作成依頼書.pdf'
+        doc.save()
+        return filename
