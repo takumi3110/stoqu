@@ -84,8 +84,33 @@
   }
 }
 
-.confirm__icon {
-  &.selected {
-    transform: rotate(180deg);
+.confirm {
+
+  &__content {
+    & .header {
+      @extend .border-bottom;
+      & .title {
+        font-size: 20px;
+        margin-right: 2rem;
+      }
+
+      & .allow {
+        &.selected {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    & .main {
+      & .bottom-border {
+        @extend .border-bottom;
+        &:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+      }
+    }
   }
+
 }
+
