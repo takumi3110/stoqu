@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load static %}
 
 {% block content %}
 
@@ -37,13 +38,13 @@
 						<div class="card-body">
 							<div class="header">
 								<span class="title">以下の内容で作成しました</span>
-								<a href="#">展開する<i class="fa-solid fa-angle-down allow"></i></a>
+								<a href="#" class="open">展開する<i class="fa-solid fa-angle-down allow"></i></a>
 							</div>
-							<div class="main mt-3">
+							<div class="main toggle mt-3">
 								{% for quoteitem in quoteitem_list %}
-									<div class="row bottom-border">
+									<div class="row bottom-border item">
 										<div class="col-4">
-											<span class="confirm__item__name">
+											<span>
 												{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }}
 											</span>
 										</div>
@@ -67,8 +68,13 @@
 				</section>
 			</div>
 		</div>
-
 	</div>
 
-
 {% endblock content %}
+
+{% block javascript %}
+	<script src="{% static 'js/quote/quote.js' %}"></script>
+	<script type="text/javascript">
+		new clickAllow();
+	</script>
+{% endblock javascript %}
