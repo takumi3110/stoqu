@@ -297,6 +297,12 @@ class OrderInfo(models.Model):
         default=False
     )
     
+    finished_at = models.DateTimeField(
+        verbose_name='完了日',
+        null=True,
+        blank=True
+    )
+    
     def save(self, *args, **kwargs):
         if not self.id:
             self.registration_at = timezone.now()
@@ -308,6 +314,8 @@ class OrderInfo(models.Model):
                         finish += 1
                 if finish == len(self.cart.quote_item.all()):
                     self.finished = True
+        if self.finished:
+            self.finished_at = timezone.now()
         self.updated_at = timezone.now()
         super(OrderInfo, self).save(*args, **kwargs)
     
