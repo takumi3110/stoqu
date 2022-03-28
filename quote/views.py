@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.urls import reverse_lazy
 from django.views import View
 from django.http import HttpResponse
@@ -291,17 +291,38 @@ def add_requester(request):
 
 class OrderInfoView(LoginRequiredMixin, ListView):
     model = OrderInfo
-    template_name = 'quote/order_info.html'
+    template_name = 'quote/orderinfo.html'
 
 
 class OrderInfoMyView(LoginRequiredMixin, ListView):
     model = OrderInfo
-    template_name = 'quote/order_info_my.html'
+    template_name = 'quote/orderinfo_my.html'
     
     def get_queryset(self, *args, **kwargs):
         queryset = super(OrderInfoMyView, self).get_queryset()
         qs = queryset.filter(cart__worker=self.request.user).order_by('-pk')
         return qs
+
+
+class OrderInfoDetailView(LoginRequiredMixin, DetailView):
+    model = OrderInfo
+    template_name = 'quote/orderinfo_detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(OrderInfoDetailView, self).get_context_data(**kwargs)
+        quote_item_list = context['orderinfo'].cart.quote_item.all()
+        orderitem_list = []
+        orderitem_dict = {}
+        for quote_item in quote_item_list:
+            order_item_filter = OrderItem.objects.filter(quote_item=quote_item)
+            orderitem_dict[quote_item.item] =[]
+            for order_item in order_item_filter:
+                orderitem_list.append(order_item)
+                orderitem_dict[quote_item.item].append(order_item)
+        
+        # context['orderitem_list'] = orderitem_list
+        context['orderitem_dict'] = orderitem_dict
+        return context
 
 
 def create_pdf_data(order_item, order_info):
