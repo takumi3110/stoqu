@@ -289,6 +289,11 @@ def add_requester(request):
     return render(request, 'quote/requester.html', context)
 
 
+class OrderInfoView(LoginRequiredMixin, ListView):
+    model = OrderInfo
+    template_name = 'quote/order_info.html'
+
+
 class OrderInfoMyView(LoginRequiredMixin, ListView):
     model = OrderInfo
     template_name = 'quote/order_info_my.html'

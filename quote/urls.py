@@ -17,5 +17,6 @@ urlpatterns = [
     path('add_destination/', views.AddDestination.as_view(), name='add_destination'),
     path('add_requester/', views.add_requester, name='add_requester'),
     path('create_pdf/<int:pk>', views.AllCreatePdf.as_view(), name='create_pdf'),
+    path('orderinfo/', views.OrderInfoView.as_view(), name='orderinfo'),
     path('mypage/', views.OrderInfoMyView.as_view(), name='mypage')
 ]
