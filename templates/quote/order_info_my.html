@@ -5,64 +5,14 @@
 {% block content %}
 
 	<div class="row my-5 mx-3 myOrder">
-		<a href="">
+		<a href="{% url 'stock:top' %}">
+			<i class="fa-solid fa-arrow-circle-left"></i>
+			TOPに戻る
+		</a>
+		<a href="{% url 'quote:orderinfo' %}">
 			<i class="fa-solid fa-backward"></i>
 			全体表示へ
 		</a>
-
-		<div class="table-responsive">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>完了</th>
-						<th>ステータス</th>
-						<th>受注番号</th>
-						<th>チケット番号</th>
-						<th>依頼者</th>
-						<th>作成者</th>
-						<th>入力日</th>
-						<th>依頼済み</th>
-						<th>依頼日</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-				{% for orderinfo in orderinfo_list %}
-					<tr>
-						<td>
-							{% if orderinfo.finished %}
-								<i class="fas fa-check-circle"></i>
-							{% else %}
-								<input type="checkbox" id="finished" class="form-check-input" name="finished">
-								<label for="finished"></label>
-							{% endif %}
-						</td>
-						<td>{{ orderinfo.get_status_display }}</td>
-						<td>{{ orderinfo.number }}</td>
-						<td>{{ orderinfo.ticket }}</td>
-						<td>{{ orderinfo.cart.requester }}</td>
-						<td>{{ orderinfo.cart.worker }}</td>
-						<td>{{ orderinfo.cart.input_at }}</td>
-						<td>
-							{% if orderinfo.cart.ordered %}
-								<i class="fas fa-check-circle"></i>
-							{% else %}
-								<input type="checkbox" id="ordered" class="form-check-input" name="ordered">
-								<label for="ordered"></label>
-							{% endif %} 
-						</td>
-						<td>{{ orderinfo.registration_at }}</td>
-						<td>
-							<a href="" class="detail">
-								<i class="fa-solid fa-caret-right"></i>
-								詳細ページへ
-							</a>
-						</td>
-					</tr>
-				{% endfor %}
-
-				</tbody>
-			</table>
-		</div>
+		{% include 'quote/modules/orderinfo_list.html' %}
 	</div>
 {% endblock content %}
