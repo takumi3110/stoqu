@@ -289,6 +289,16 @@ def add_requester(request):
     return render(request, 'quote/requester.html', context)
 
 
+class OrderInfoMyView(LoginRequiredMixin, ListView):
+    model = OrderInfo
+    template_name = 'quote/order_info_my.html'
+    
+    def get_queryset(self, *args, **kwargs):
+        queryset = super(OrderInfoMyView, self).get_queryset()
+        qs = queryset.filter(cart__worker=self.request.user).order_by('-pk')
+        return qs
+
+
 def create_pdf_data(order_item, order_info):
     genre = order_item.item.genre
     spec = order_item.item.spec
