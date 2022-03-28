@@ -1,3 +1,5 @@
+@import '../modules/variables';
+
 .genre {
   &__select {
     margin-top: 1.5rem;
@@ -124,5 +126,79 @@
     }
   }
 
+}
+
+.info-detail {
+  font-size: 20px;
+  @extend .border-bottom;
+  & .main {
+    & .sub-title {
+      font-size: 25px;
+      @extend .border-bottom;
+    }
+
+    & table {
+      padding: 0 2rem;
+
+      & th {
+        font-weight: normal;
+        background-color: #f3f3f3;
+        width: 50%;
+      }
+
+      & td {
+        padding-left: 10px;
+      }
+
+      & .menu {
+        color: grey;
+      }
+    }
+  }
+
+  & .item {
+    & .title {
+      font-weight: bold;
+      color: orange;
+      @extend .border-bottom;
+    }
+    &__header {
+      background-color: #f3f3f3;
+      font-weight: bold;
+      height: 3rem;
+      align-items: center;
+      text-align: center;
+      @extend .border-bottom;
+    }
+
+    &__content {
+      @extend .border-bottom;
+
+      & .name {
+        align-items: center;
+
+      }
+
+      & .row {
+        @extend .border-bottom;
+        height: 50%;
+        &:last-child {
+          border: none;
+        }
+      }
+
+      & .destination {
+        border-left: thin solid $cBorder;
+      }
+
+      & .check {
+        text-align: center;
+        & .checked {
+          color: green;
+          text-align: left;
+        }
+      }
+    }
+  }
 }
 
