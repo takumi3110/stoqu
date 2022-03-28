@@ -1,10 +1,198 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+
+	<a href="{% url 'quote:mypage' %}">
+		<i class="fa-solid fa-arrow-circle-left"></i>
+		<span>一覧に戻る</span>
+	</a>
+	<div class="container info-detail my-5">
+		<div class="row">
+			<div class="col-12">
+				<h2 class="title-text">詳細ページ</h2>
+				<section class="status row mt-3">
+					<ul class="status__bar">
+						<li class="status">{{ orderinfo.get_status_display }}</li>
+					</ul>
+				</section>
+				<section class="main row mt-5">
+					<div class="col-6">
+						<div class="sub-title">
+							<span>詳細情報</span>
+						</div>
+						<table class="table">
+							<tr>
+								<th class="menu">受注番号</th>
+								<td>{{ orderinfo.number }}</td>
+							</tr>
+							<tr>
+								<th class="menu">チケット番号</th>
+								<td>{{ orderinfo.ticket }}</td>
+							</tr>
+							<tr>
+								<th class="menu">依頼者</th>
+								<td>{{ orderinfo.cart.requester }}</td>
+							</tr>
+							<tr>
+								<th class="menu">宛名</th>
+								<td>{{ orderinfo.cart.requester.addressee }}</td>
+							</tr>
+							<tr>
+								<th class="menu">作成者</th>
+								<td>{{ orderinfo.cart.worker }}</td>
+							</tr>
+						</table>
+					</div>
+					<div class="col-5 offset-1">
+						<div class="sub-title">
+							<span>登録情報</span>
+						</div>
+						<table class="table">
+							<tr>
+								<th class="menu">入力日</th>
+								<td>{{ orderinfo.cart.input_at }}</td>
+							</tr>
+							<tr>
+								<th class="menu">依頼日</th>
+								<td>
+									{% if orderinfo.registration_at is not None %}
+										{{ orderinfo.registration_at }}
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								<th class="menu">更新日</th>
+								<td>
+									{% if orderinfo.updated_at is not None %}
+										{{ orderinfo.updated_at }}
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								<th class="menu">完了日</th>
+								<td>
+									{% if orderinfo.finished %}
+										{{ orderinfo.finished_at }}
+									{% endif %}
+								</td>
+							</tr>
+						</table>
+					</div>
+				</section>
+				<section class="item row mt-5">
+					<span class="title">依頼の情報</span>
+					<div class="item__header row mt-3">
+						<div class="col-3">商品</div>
+						<div class="col-9">
+							<div class="row">
+								<div class="col-3">依頼先</div>
+								<div class="col-3">依頼済み</div>
+								<div class="col-3">到着済み</div>
+								<div class="col-3">提供済み</div>
+							</div>
+						</div>
+
+					</div>
+					{% for quoteitem, orderitem_list in orderitem_dict.items %}
+						<div class="item__content row">
+							<div class="name col-3">{{ quoteitem }}</div>
+							<div class="destination col-9">
+								{% for orderitem in orderitem_list %}
+									<div class="row">
+										<div class="col-3">{{ orderitem.destination }}</div>
+										<div class="col-3 check">
+											{% if orderitem.ordered %}
+												<i class="fas fa-check-circle checked"></i>
+												<span>{{ orderitem.ordered_at }}</span>
+											{% else %}
+												<input type="checkbox" id="ordered" class="form-check-input" name="ordered">
+												<label for="ordered"></label>
+											{% endif %}
+										</div>
+										<div class="col-3 check">
+											{% if orderitem.arrived %}
+												<i class="fas fa-check-circle"></i>
+												<span>{{ orderitem.arrived_at }}</span>
+											{% else %}
+												<input type="checkbox" id="arrived" class="form-check-input" name="arrived">
+												<label for="arrived"></label>
+											{% endif %}
+										</div>
+										<div class="col-3 check">
+											{% if orderitem.delivered %}
+												<i class="fas fa-check-circle"></i>
+												<span>{{ orderitem.delivery_at }}</span>
+											{% else %}
+												<input type="checkbox" id="delivered" class="form-check-input" name="delivered">
+												<label for="delivered"></label>
+											{% endif %}
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+{#							<div class="destination col-2">#}
+{#								{% for orderitem in orderitem_list %}#}
+{#									<div class="destination__name row">#}
+{#										{{ orderitem.destination }}#}
+{#									</div>#}
+{#								{% endfor %}#}
+{#							</div>#}
+{#							<div class="col-2">#}
+{#								{% for orderitem in orderitem_list %}#}
+{#									<div class="row">#}
+{#										{% if orderitem.ordered %}#}
+{#											<i class="fas fa-check-circle checked"></i>#}
+{#											{{ orderitem.ordered_at }}#}
+{#										{% else %}#}
+{#											<input type="checkbox" id="ordered" class="check form-check-input" name="ordered">#}
+{#											<label for="ordered"></label>#}
+{#										{% endif %}#}
+{#									</div>#}
+{#								{% endfor %}#}
+{#							</div>#}
+{#							<div class="col-2">#}
+{#								{% for orderitem in orderitem_list %}#}
+{#									<div class="row">#}
+{#										{% if orderitem.arrived %}#}
+{#											<i class="fas fa-check-circle"></i>#}
+{#											{{ orderitem.arrived_at }}#}
+{#										{% else %}#}
+{#											<input type="checkbox" id="arrived" class="check form-check-input" name="arrived">#}
+{#											<label for="arrived"></label>#}
+{#										{% endif %}#}
+{#									</div>#}
+{#								{% endfor %}#}
+{#							</div>#}
+{#							<div class="col-2">#}
+{#								{% for orderitem in orderitem_list %}#}
+{#									<div class="row">#}
+{#										{% if orderitem.delivered %}#}
+{#											<i class="fas fa-check-circle"></i>#}
+{#											{{ orderitem.delivery_at }}#}
+{#										{% else %}#}
+{#											<input type="checkbox" id="delivered" class="check form-check-input" name="delivered">#}
+{#											<label for="delivered"></label>#}
+{#										{% endif %}#}
+{#									</div>#}
+{#								{% endfor %}#}
+{#							</div>#}
+{#							<div class="col-1">#}
+{#								<a href="#" class="btn btn-danger">PDF</a>#}
+{#							</div>#}
+
+						</div>
+					{% endfor %}
+
+				</section>
+				<a href="{% url 'quote:mypage' %}">
+					<i class="fa-solid fa-arrow-circle-left"></i>
+					<span>一覧に戻る</span>
+				</a>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock content %}
