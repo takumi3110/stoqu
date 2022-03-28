@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+
+	<div class="row my-5 mx-3 myOrder">
+		<a href="{% url 'stock:top' %}">
+			<i class="fa-solid fa-arrow-circle-left"></i>
+			TOPに戻る
+		</a>
+		<a href="{% url 'quote:mypage' %}">
+			個人表示へ
+			<i class="fa-solid fa-forward"></i>
+		</a>
+
+		{% include 'quote/modules/orderinfo_list.html' %}
+	</div>
+{% endblock content %}
