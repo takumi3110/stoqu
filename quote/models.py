@@ -219,10 +219,21 @@ class Cart(models.Model):
         verbose_name='依頼アイテム'
     )
     
+    input_at = models.DateTimeField(
+        verbose_name='入力日',
+        null=True,
+        blank=True
+    )
+    
     ordered = models.BooleanField(
         verbose_name='依頼済み',
         default=False,
     )
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.input_at = timezone.now()
+        super(Cart, self).save(*args, **kwargs)
     
     def __str__(self):
         count = len(self.quote_item.all())
