@@ -34,6 +34,7 @@
 				<td>
 					{% if orderinfo.cart.ordered %}
 						<i class="fas fa-check-circle"></i>
+{#						<i class="fa-regular fa-circle-check"></i>#}
 					{% else %}
 						<input type="checkbox" id="ordered" class="form-check-input" name="ordered">
 						<label for="ordered"></label>
@@ -41,7 +42,7 @@
 				</td>
 				<td>{{ orderinfo.registration_at }}</td>
 				<td>
-					<a href="" class="detail">
+					<a href="{% url 'quote:orderinfo_detail' orderinfo.pk %}" class="detail">
 						<i class="fa-solid fa-caret-right"></i>
 						詳細ページへ
 					</a>
