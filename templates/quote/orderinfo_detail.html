@@ -14,7 +14,9 @@
 				<h2 class="title-text">詳細ページ</h2>
 				<section class="status row mt-3">
 					<ul class="status__bar">
-						<li class="status">{{ orderinfo.get_status_display }}</li>
+						{% for k, v in status.items %}
+							<li class="status{{ k }}">{{ value }}</li>
+						{% endfor %}
 					</ul>
 				</section>
 				<section class="main row mt-5">
@@ -194,5 +196,16 @@
 		</div>
 	</div>
 
-
 {% endblock content %}
+
+{% block javascript %}
+	<script src="{% static 'js/quote/quote.js' %}"></script>
+	<script type="text/javascript">
+		{% for key in status.keys %}
+			const status{{ key }} = document.querySelector('.status{{ key }}');
+			{% if key <= active_status %}
+				status{{ key }}.classList.add('active');
+			{% endif %}
+		{% endfor %}
+	</script>
+{% endblock javascript %}

@@ -319,9 +319,12 @@ class OrderInfoDetailView(LoginRequiredMixin, DetailView):
             for order_item in order_item_filter:
                 orderitem_list.append(order_item)
                 orderitem_dict[quote_item.item].append(order_item)
-        
-        # context['orderitem_list'] = orderitem_list
+        status = {}
+        for choice in context['orderinfo'].status_choice:
+            status[int(choice[0])] = choice[1]
         context['orderitem_dict'] = orderitem_dict
+        context['status'] = status
+        context['active_status'] = int(context['orderinfo'].status)
         return context
 
 
