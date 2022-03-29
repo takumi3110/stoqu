@@ -246,8 +246,8 @@ class Cart(models.Model):
 
 class OrderInfo(models.Model):
     status_choice = (
-        ('1', '新規依頼'),
-        ('2', '未対応'),
+        ('1', '新規作成'),
+        ('2', '依頼済み'),
         ('3', '作成依頼中'),
         ('4', '見積もり到着'),
         ('5', '提供完了')
