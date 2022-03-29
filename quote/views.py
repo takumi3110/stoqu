@@ -328,11 +328,21 @@ class OrderInfoDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-def create_pdf_data(order_item, order_info):
-    genre = order_item.item.genre
-    spec = order_item.item.spec
-    ticket = str(order_info.ticket) + '-' + str(order_item)
-    return {}
+def create_pdf_data(quote_item, order_info):
+    number = quote_item.number
+    ticket = str(order_info.ticket) + '-' + str(number)
+    genre = quote_item.item.genre
+    maker = quote_item.item.maker
+    name = quote_item.item.name
+    quantity = quote_item.quantity
+    spec = quote_item.item.spec
+    addressee = order_info.cart.requester
+    order = [ticket, genre, maker, name, quantity, spec, addressee]
+    pdf_data = {
+        'order': order,
+        'length': len(spec)
+    }
+    return pdf_data
 
 
 def create_row_heights(length):
@@ -344,6 +354,12 @@ def create_row_heights(length):
         heights.append(size * mm)
     return heights
 
+
+def create_col_width(length):
+    # (30 * mm, 25 * mm, 25 * mm, 50 * mm, 15 * mm, 50 * mm, 80 * mm)
+    width = []
+    return width
+    
 
 class PDFBaseView(View):
     def get(self, request, *args, **kwargs):
