@@ -88,6 +88,74 @@ class clickAllow {
 	}
 }
 
+class checkBoxObserver {
+	constructor() {
+		this.orderedCheckBox = document.querySelectorAll('.ordered');
+		this.arrivedCheckBox = document.querySelectorAll('.arrived');
+		this.deliveredCheckBox = document.querySelectorAll('.delivered');
+		this._init();
+	}
+
+	_init() {
+		const orderedCheckBox = this.orderedCheckBox;
+		this._checked();
+	}
+
+	_checked(els) {
+		els.forEach(el => {
+			if (el.checked) {
+
+			}
+		})
+	}
+
+	_post(el) {
+
+	}
+
+}
+
+function get_request(url) {
+	let getInit = GetInit();
+	return fetch(url, getInit)
+		.then(response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw Error();
+			}
+		})
+		.then(data => {
+			console.log(data)
+		})
+}
+
+function ordered_check(data, pk) {
+	const els = document.querySelectorAll('.ordered');
+	const url = 'http://127.0.0.1:8000/api/v1/quote/orderItem/' + pk + '/';
+	els.forEach(el => {
+		el.addEventListener('change', function() {
+			if (el.checked) {
+				data.ordered = true;
+				const init = makePutInit(data);
+				fetch(url, init)
+					.then(response => {
+						if (response.ok) {
+							return response.json();
+						} else {
+							throw Error();
+						}
+					})
+					.then(data => {
+						console.log(data.ordered);
+					})
+			}
+		});
+	});
+}
+
+
+
 function change_quantity(el, data, pk) {
 	el.addEventListener('change', function() {
 		const url = 'http://127.0.0.1:8000/api/v1/quote/quoteItem/' + pk + '/';
@@ -123,16 +191,6 @@ function all_apply(pk) {
 	});
 }
 
-//
-// function over_ten(el) {
-// 	const new_input = document.createElement('input');
-// 	new_input.type = 'number';
-// 	new_input.name = 'quantity';
-// 	new_input.required = true;
-// 	new_input.min = '1';
-// 	new_input.classList.add('form-control')
-//
-// }
 
 function modal_form(el, url) {
 	$(el).each(function() {

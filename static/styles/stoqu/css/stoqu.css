@@ -154,12 +154,74 @@ body {
   font-size: 20px;
   margin-right: 2rem;
 }
-.confirm__content .header .allow.selected {
+.confirm__content .header .open:hover {
+  cursor: pointer;
+}
+.confirm__content .header .open .allow.selected {
   transform: rotate(180deg);
+}
+.confirm__content .main {
+  max-height: 100vh;
+  transition: all 1s;
 }
 .confirm__content .main .bottom-border:last-child {
   border-bottom: none;
   padding-bottom: 0;
+}
+.confirm__content .main.toggle {
+  max-height: 0;
+  opacity: 0;
+}
+
+.info-detail {
+  font-size: 20px;
+}
+.info-detail .main .sub-title {
+  font-size: 25px;
+}
+.info-detail .main table {
+  padding: 0 2rem;
+}
+.info-detail .main table th {
+  font-weight: normal;
+  background-color: #f3f3f3;
+  width: 50%;
+}
+.info-detail .main table td {
+  padding-left: 10px;
+}
+.info-detail .main table .menu {
+  color: grey;
+}
+.info-detail .item .title {
+  font-weight: bold;
+  color: orange;
+}
+.info-detail .item__header {
+  background-color: #f3f3f3;
+  font-weight: bold;
+  height: 3rem;
+  align-items: center;
+  text-align: center;
+}
+.info-detail .item__content .name {
+  align-items: center;
+}
+.info-detail .item__content .row {
+  height: 50%;
+}
+.info-detail .item__content .row:last-child {
+  border: none;
+}
+.info-detail .item__content .destination {
+  border-left: thin solid #dfdfdf;
+}
+.info-detail .item__content .check {
+  text-align: center;
+}
+.info-detail .item__content .check .checked {
+  color: green;
+  text-align: left;
 }
 
 .status__bar {
@@ -591,7 +653,7 @@ a {
   text-decoration: none;
 }
 
-.border-bottom, .confirm__content .header, .confirm__content .main .bottom-border, .detail__main, .detail__content .title, .detail__content .option, .detail__content .base, .detail__info, .detail__info .sub-title, .cart .bottom-border, .approve-menu, .approve-card .bottom-border, .confirm__address {
+.border-bottom, .confirm__content .header, .confirm__content .main .bottom-border, .info-detail, .info-detail .main .sub-title, .info-detail .item .title, .info-detail .item__header, .info-detail .item__content, .info-detail .item__content .row, .detail__main, .detail__content .title, .detail__content .option, .detail__content .base, .detail__info, .detail__info .sub-title, .cart .bottom-border, .approve-menu, .approve-card .bottom-border, .confirm__address {
   border-bottom: thin solid #dfdfdf;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
