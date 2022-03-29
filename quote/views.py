@@ -40,7 +40,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 class OrderInfoViewSet(viewsets.ModelViewSet):
     queryset = OrderInfo.objects.all()
     serializer_class = OrderInfoSerializer
-    filter_backends = OrderInfoFilter
+    filter_class = OrderInfoFilter
 
 
 def get_pc(category, maker, cpu, memory, storage):
