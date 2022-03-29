@@ -82,6 +82,11 @@
 							</tr>
 						</table>
 					</div>
+					<div class="post-orderinfo" style="display: none">
+						<div class="pk">{{ orderinfo.pk }}</div>
+						<div class="number">{{ orderinfo.number }}</div>
+						<div class="ticket">{{ orderinfo.ticket }}</div>
+					</div>
 				</section>
 				<section class="item row mt-5">
 					<span class="title">依頼の情報</span>
@@ -99,94 +104,52 @@
 					</div>
 					{% for quoteitem, orderitem_list in orderitem_dict.items %}
 						<div class="item__content row">
-							<div class="name col-3">{{ quoteitem }}</div>
+							<div class="name col-3">
+								<p>{{ quoteitem.item.maker }}：{{ quoteitem.item.name }}</p>
+								<p>数量：{{ quoteitem.quantity }}</p>
+							</div>
 							<div class="destination col-9">
 								{% for orderitem in orderitem_list %}
 									<div class="row">
 										<div class="col-3">{{ orderitem.destination }}</div>
 										<div class="col-3 check">
-											{% if orderitem.ordered %}
-												<i class="fas fa-check-circle checked"></i>
-												<span>{{ orderitem.ordered_at }}</span>
-											{% else %}
-												<input type="checkbox" id="ordered" class="form-check-input" name="ordered">
-												<label for="ordered"></label>
-											{% endif %}
+											<input type="checkbox" id="ordered" class="ordered form-check-input" name="ordered"
+											{% if orderitem.ordered %}disabled checked{% endif %}>
+											<label for="ordered">
+												{% if orderitem.ordered %}
+													{{ orderitem.ordered_at }}
+												{% endif %}
+											</label>
 										</div>
 										<div class="col-3 check">
-											{% if orderitem.arrived %}
-												<i class="fas fa-check-circle"></i>
-												<span>{{ orderitem.arrived_at }}</span>
-											{% else %}
-												<input type="checkbox" id="arrived" class="form-check-input" name="arrived">
-												<label for="arrived"></label>
-											{% endif %}
+											<input type="checkbox" id="arrived" class="arrived form-check-input" name="arrived"
+											{% if orderitem.arrived %}disabled checked{% endif %}>
+											<label for="arrived">
+												{% if orderitem.arrived %}
+													{{ orderitem.arrived_at }}
+												{% endif %}
+											</label>
 										</div>
 										<div class="col-3 check">
-											{% if orderitem.delivered %}
-												<i class="fas fa-check-circle"></i>
-												<span>{{ orderitem.delivery_at }}</span>
-											{% else %}
-												<input type="checkbox" id="delivered" class="form-check-input" name="delivered">
-												<label for="delivered"></label>
-											{% endif %}
+											<input type="checkbox" id="delivered" class="delivered form-check-input" name="delivered"
+											{% if orderitem.delivered %}disabled checked{% endif %}>
+											<label for="delivered">
+												{% if orderitem.delivered %}
+													{{ orderitem.delivery_at }}
+												{% endif %}
+											</label>
 										</div>
 									</div>
 								{% endfor %}
 							</div>
-{#							<div class="destination col-2">#}
-{#								{% for orderitem in orderitem_list %}#}
-{#									<div class="destination__name row">#}
-{#										{{ orderitem.destination }}#}
-{#									</div>#}
-{#								{% endfor %}#}
-{#							</div>#}
-{#							<div class="col-2">#}
-{#								{% for orderitem in orderitem_list %}#}
-{#									<div class="row">#}
-{#										{% if orderitem.ordered %}#}
-{#											<i class="fas fa-check-circle checked"></i>#}
-{#											{{ orderitem.ordered_at }}#}
-{#										{% else %}#}
-{#											<input type="checkbox" id="ordered" class="check form-check-input" name="ordered">#}
-{#											<label for="ordered"></label>#}
-{#										{% endif %}#}
-{#									</div>#}
-{#								{% endfor %}#}
-{#							</div>#}
-{#							<div class="col-2">#}
-{#								{% for orderitem in orderitem_list %}#}
-{#									<div class="row">#}
-{#										{% if orderitem.arrived %}#}
-{#											<i class="fas fa-check-circle"></i>#}
-{#											{{ orderitem.arrived_at }}#}
-{#										{% else %}#}
-{#											<input type="checkbox" id="arrived" class="check form-check-input" name="arrived">#}
-{#											<label for="arrived"></label>#}
-{#										{% endif %}#}
-{#									</div>#}
-{#								{% endfor %}#}
-{#							</div>#}
-{#							<div class="col-2">#}
-{#								{% for orderitem in orderitem_list %}#}
-{#									<div class="row">#}
-{#										{% if orderitem.delivered %}#}
-{#											<i class="fas fa-check-circle"></i>#}
-{#											{{ orderitem.delivery_at }}#}
-{#										{% else %}#}
-{#											<input type="checkbox" id="delivered" class="check form-check-input" name="delivered">#}
-{#											<label for="delivered"></label>#}
-{#										{% endif %}#}
-{#									</div>#}
-{#								{% endfor %}#}
-{#							</div>#}
-{#							<div class="col-1">#}
-{#								<a href="#" class="btn btn-danger">PDF</a>#}
-{#							</div>#}
-
 						</div>
+						{% for orderitem in orderitem_list %}
+							<div class="post-orderitem" style="display: none">
+								<div class="destination">{{ orderitem.destination.pk }}</div>
+								<div class="quote_item">{{ quoteitem.pk }}</div>
+							</div>
+						{% endfor %}
 					{% endfor %}
-
 				</section>
 				<a href="{% url 'quote:mypage' %}">
 					<i class="fa-solid fa-arrow-circle-left"></i>
@@ -206,6 +169,16 @@
 			{% if key <= active_status %}
 				status{{ key }}.classList.add('active');
 			{% endif %}
+		{% endfor %}
+		{% for quoteitem, orderitem_list in orderitem_dict.items %}
+			{% for orderitem in orderitem_list %}
+				data = {
+					destination: {{ orderitem.destination.pk }},
+					quote_item: {{ quoteitem.pk }}
+				}
+				ordered_check(data, {{ orderitem.pk }});
+			{% endfor %}
+
 		{% endfor %}
 	</script>
 {% endblock javascript %}
