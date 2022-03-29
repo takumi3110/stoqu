@@ -13,7 +13,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = ('id', 'destination', 'quote_item', 'ordered', 'ordered_at', 'arrived', 'arrived_at', 'delivered',
-                  'delivered_at')
+                  'delivery_at')
 
 
 class OrderInfoSerializer(serializers.ModelSerializer):
