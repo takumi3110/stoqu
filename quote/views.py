@@ -11,8 +11,8 @@ from bootstrap_modal_forms.generic import BSModalCreateView
 
 from .models import Item, QuoteItem, Destination, QuoteRequester, OrderItem, Cart, OrderInfo
 from device.models import PC, PCDetail, Storage, CPU
-from .serializers import QuoteItemSerializer
-from .filters import QuoteItemFilter
+from .serializers import QuoteItemSerializer, OrderItemSerializer, OrderInfoSerializer
+from .filters import QuoteItemFilter, OrderItemFilter, OrderInfoFilter
 from .forms import DestinationCreateBSModalForm
 
 from reportlab.lib import colors
@@ -29,6 +29,18 @@ class QuoteItemViewSet(viewsets.ModelViewSet):
     queryset = QuoteItem.objects.all()
     serializer_class = QuoteItemSerializer
     filter_class = QuoteItemFilter
+
+
+class OrderItemViewSet(viewsets.ModelViewSet):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
+    filter_class = OrderItemFilter
+
+
+class OrderInfoViewSet(viewsets.ModelViewSet):
+    queryset = OrderInfo.objects.all()
+    serializer_class = OrderInfoSerializer
+    filter_backends = OrderInfoFilter
 
 
 def get_pc(category, maker, cpu, memory, storage):

@@ -7,6 +7,8 @@ app_name = 'quote'
 
 router = routers.DefaultRouter()
 router.register(r'quoteItem', views.QuoteItemViewSet)
+router.register(r'orderItem', views.OrderItemViewSet)
+router.register(r'orderInfo', views.OrderInfoViewSet)
 
 urlpatterns = [
     path('', views.genre_select, name='genre'),
