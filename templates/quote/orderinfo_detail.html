@@ -14,8 +14,8 @@
 				<h2 class="title-text">詳細ページ</h2>
 				<section class="status row mt-3">
 					<ul class="status__bar">
-						{% for k, v in status.items %}
-							<li class="status{{ k }}">{{ value }}</li>
+						{% for key, value in status.items %}
+							<li class="status{{ key }}">{{ value }}</li>
 						{% endfor %}
 					</ul>
 				</section>
