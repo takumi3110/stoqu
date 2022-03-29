@@ -306,14 +306,6 @@ class OrderInfo(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.registration_at = timezone.now()
-        else:
-            if self.finished is False:
-                finish = 0
-                for quote_item in self.cart.quote_item.all():
-                    if quote_item.delivered:
-                        finish += 1
-                if finish == len(self.cart.quote_item.all()):
-                    self.finished = True
         if self.finished:
             self.finished_at = timezone.now()
         self.updated_at = timezone.now()
