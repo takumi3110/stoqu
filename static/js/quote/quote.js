@@ -90,59 +90,166 @@ class clickAllow {
 
 class checkBoxObserver {
 	constructor() {
-		this.checkBox = document.querySelectorAll('.checkBox');
+		this._observers = [];
+		this._init();
+	}
+
+	set observers(val) {
+		this._observers.push(val);
+	}
+
+	get observers() {
+		return this._observers;
+	}
+
+
+	_init() {
+		const checkBox = document.querySelectorAll('.checkBox');
+		this._checkInit(checkBox);
+		this._observers_init();
+	}
+
+	_checkInit(els) {
+		els.forEach(el => {
+			el.addEventListener('change', () => {
+				this._checked(el);
+			});
+		});
+	}
+
+	_checked(el) {
+		if (el.checked) {
+			const value = el.value.split('-')
+			const quoteItem = value[0];
+			const orderItem = value[1];
+			const destination = value[2];
+			const url = 'http://127.0.0.1:8000/api/v1/quote/orderItem/' + orderItem + '/';
+			let label = ''
+			let data = {
+				destination: destination,
+				quote_item: quoteItem
+			}
+			if (el.name === 'ordered') {
+				label = document.querySelector('label.ordered' + orderItem);
+				data.ordered = true;
+			} else if (el.name === 'arrived') {
+				label = document.querySelector('label.arrived' + orderItem);
+				data.arrived = true;
+			} else if (el.name === 'delivered') {
+				label = document.querySelector('label.delivered' + orderItem);
+				data.delivered = true;
+			}
+			if (label.innerHTML.trim() === '') {
+				const init = makePutInit(data);
+				fetch(url, init)
+					.then(response => {
+						if (response.ok) {
+							changeLabel(el, label);
+							return response.json();
+						} else {
+							throw Error();
+						}
+					})
+					.then(data => {
+						console.log(data);
+					});
+			}
+		}
+	}
+
+	_observers_init() {
+		this.observers = new StatusCheck('#ordered', this._checked);
+		this.observers = new StatusCheck('#arrived', this._checked);
+		this.observers = new StatusCheck('#delivered', this._checked);
+		console.log(this.observers);
+	}
+}
+
+class StatusCheck {
+	constructor(els, callBack) {
+		this.els = document.querySelectorAll(els);
+		this.callBack = callBack;
 		this._init();
 	}
 
 	_init() {
-		const checkBox = this.checkBox;
-		this._checked(checkBox);
+		const els = this.els;
+		const callBack = this.callBack;
+		this._statusClick(els, callBack);
 	}
 
-	_checked(els) {
-		els.forEach(el => {
-			el.addEventListener('change', function () {
-				if (el.checked) {
-					const value = el.value.split('-')
-					const quoteItem = value[0];
-					const orderItem = value[1];
-					const destination = value[2];
-					const url = 'http://127.0.0.1:8000/api/v1/quote/orderItem/' + orderItem + '/';
-					let label = ''
-					let data = {
-						destination: destination,
-						quote_item: quoteItem
-					}
-					if (el.name === 'ordered') {
-						label = document.querySelector('label.ordered' + orderItem);
-						data.ordered = true;
-					} else if (el.name === 'arrived') {
-						label = document.querySelector('label.arrived' + orderItem);
-						data.arrived = true;
-					} else if (el.name === 'delivered') {
-						label = document.querySelector('label.delivered' + orderItem);
-						data.delivered = true;
-					}
-					const init = makePutInit(data);
-					fetch(url, init)
-						.then(response => {
-							if (response.ok) {
-								changeLabel(el, label);
-								return response.json();
-							} else {
-								throw Error();
-							}
-						})
-						.then(data => {
-							console.log(data);
-						})
+	_statusClick(els, callBack) {
+		const checked = callBack
+		const nowStatus = document.querySelector('.status-now').innerHTML;
+		for (let i = 1; i < 6; i++) {
+			const status = document.querySelector('.status' + i);
+			if (i <= Number(nowStatus)) {
+				status.classList.add('active');
+			}
+			status.addEventListener('click', () => {
+				if (i <= Number(status.id)) {
+					status.classList.add('active');
+					els.forEach(el => {
+						this._allCheck(el, status);
+						checked(el);
+					});
+					const data = this._data(status)
+					this._statusUpdate(data);
 				}
 			});
-		});
+		}
 	}
+
+	_allCheck(el, status) {
+		const id = Number(status.id);
+		if (id <= 3) {
+			if (el.id === 'ordered') {
+				el.checked = true;
+			}
+		} else if (id === 4) {
+			if (el.id === 'arrived') {
+				el.checked = true;
+			}
+		} else if (id === 5) {
+			if (el.id === 'delivered') {
+				el.checked = true;
+			}
+		}
+	}
+
+	_statusUpdate(data) {
+		const pk = document.querySelector('.pk').innerHTML.trim();
+		const url = 'http://127.0.0.1:8000/api/v1/quote/orderInfo/' + pk + '/';
+		const init = makePutInit(data);
+		fetch(url, init)
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw Error();
+				}
+			})
+			.then(data => {
+				console.log(data);
+			});
+	}
+
+	_data(status) {
+		const number = document.querySelector('.number').innerHTML;
+		const ticket = document.querySelector('.ticket').innerHTML;
+		const cart = document.querySelector('.cart').innerHTML;
+		return {
+			status: status.id,
+			number: number,
+			ticket: ticket,
+			cart: cart
+		}
+	}
+
 }
 
-function changeLabel(el, label){
+
+function changeLabel(el, label) {
 	el.disabled = true;
 	el.checked = true;
 	const date = new Date();
