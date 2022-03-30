@@ -15,9 +15,10 @@
 				<section class="status row mt-3">
 					<ul class="status__bar">
 						{% for key, value in status.items %}
-							<li class="status{{ key }}">{{ value }}</li>
+							<li class="status{{ key }}" id="{{ key }}">{{ value }}</li>
 						{% endfor %}
 					</ul>
+				<div class="status-now" style="display: none">{{ orderinfo.status }}</div>
 				</section>
 				<section class="main row mt-5">
 					<div class="col-6">
@@ -27,11 +28,11 @@
 						<table class="table">
 							<tr>
 								<th class="menu">受注番号</th>
-								<td>{{ orderinfo.number }}</td>
+								<td class="number">{{ orderinfo.number }}</td>
 							</tr>
 							<tr>
 								<th class="menu">チケット番号</th>
-								<td>{{ orderinfo.ticket }}</td>
+								<td class="ticket">{{ orderinfo.ticket }}</td>
 							</tr>
 							<tr>
 								<th class="menu">依頼者</th>
@@ -79,7 +80,10 @@
 										{{ orderinfo.finished_at }}
 									{% endif %}
 								</td>
+								<td class="cart" style="display: none">{{ orderinfo.cart.pk }}</td>
+								<td class="pk" style="display: none">{{ orderinfo.pk }}</td>
 							</tr>
+
 						</table>
 					</div>
 				</section>
@@ -108,7 +112,7 @@
 									<div class="row">
 										<div class="col-3">{{ orderitem.destination }}</div>
 										<div class="col-3 check">
-											<input type="checkbox" id="ordered" class="ordered{{ orderitem.pk }} checkBox form-check-input" name="ordered"
+											<input type="checkbox" id="ordered" class="ordered checkBox form-check-input" name="ordered"
 											{% if orderitem.ordered %}disabled checked{% endif %} value="{{ quoteitem.pk }}-{{ orderitem.pk }}-{{ orderitem.destination.pk }}">
 											<label for="ordered" class="ordered{{ orderitem.pk }}">
 												{% if orderitem.ordered %}
@@ -154,22 +158,5 @@
 	<script src="{% static 'js/quote/quote.js' %}"></script>
 	<script type="text/javascript">
 		new checkBoxObserver();
-		{% for key in status.keys %}
-			const status{{ key }} = document.querySelector('.status{{ key }}');
-			{% if key <= active_status %}
-				status{{ key }}.classList.add('active');
-			{% endif %}
-		{% endfor %}
-{#		{% for quoteitem, orderitem_list in orderitem_dict.items %}#}
-{#			{% for orderitem in orderitem_list %}#}
-{#				data = {#}
-{#					destination: {{ orderitem.destination.pk }},#}
-{#					quote_item: {{ quoteitem.pk }}#}
-{#				}#}
-{#				ordered_check(data, {{ orderitem.pk }});#}
-{#			{% endfor %}#}
-{##}
-{#		{% endfor %}#}
-
 	</script>
 {% endblock javascript %}
