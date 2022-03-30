@@ -12,8 +12,8 @@ class QuoteItemSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ('id', 'destination', 'quote_item', 'ordered', 'ordered_at', 'arrived', 'arrived_at', 'delivered',
-                  'delivery_at')
+        fields = ('id', 'destination', 'quote_item', 'worker', 'ordered', 'ordered_at', 'arrived', 'arrived_at',
+                  'delivered', 'delivery_at')
 
 
 class OrderInfoSerializer(serializers.ModelSerializer):

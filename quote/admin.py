@@ -32,9 +32,9 @@ class QuoteItemAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('destination', 'quote_item', 'ordered_at', 'arrived_at', 'delivery_at')
-    list_display_links = ('destination', 'quote_item', 'ordered_at', 'arrived_at', 'delivery_at')
-    list_filter = ('destination', 'delivered')
+    list_display = ('destination', 'quote_item', 'worker', 'ordered_at', 'arrived_at', 'delivery_at')
+    list_display_links = ('destination', 'quote_item', 'worker', 'ordered_at', 'arrived_at', 'delivery_at')
+    list_filter = ('destination', 'delivered', 'worker')
     search_fields = ('destination__name', 'quote_item_item__name')
     actions_on_bottom = True
 

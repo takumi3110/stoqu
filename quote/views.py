@@ -60,7 +60,7 @@ def get_pc(category, maker, cpu, memory, storage):
     return result
 
 
-def create_quote_item(genre, maker, name, quantity, worker, spec=None):
+def create_quote_item(genre, maker, name, quantity, worker, spec=''):
     item = Item.objects.get_or_create(
         genre=genre,
         maker=maker,
@@ -137,8 +137,8 @@ def quote_order(request, **kwargs):
                 genre = 'ミニPC'
                 name = 'ミニPC'
             if category == 'note':
-                spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\nテンキー:{}\n指紋認証:あり' \
-                    .format(cpu, memory, storage, ten_key)
+                spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\nテンキー:{}\n指紋認証:あり'.format(cpu,
+                                                                                       memory, storage, ten_key)
             else:
                 spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\n'.format(cpu, memory, storage)
             if lanscope == 'true':
@@ -146,7 +146,7 @@ def quote_order(request, **kwargs):
                 license_maker = 'Lanscope'
                 license_genre = 'License'
                 create_quote_item(license_genre, license_maker, license_name, quantity, worker)
-            elif office != 'none':
+            if office != 'none':
                 license_name = 'Office'
                 license_maker = 'Microsoft'
                 license_genre = 'License'
@@ -230,6 +230,7 @@ def register_destination(request):
                     OrderItem.objects.update_or_create(
                         destination_id=post_name,
                         quote_item=quote_item,
+                        worker=request.user,
                         ordered=False,
                         arrived=False,
                         delivered=False
@@ -292,7 +293,15 @@ def add_requester(request):
             ticket=ticket,
             cart=cart,
         )
-        context['orderinfo'] = order_info[0],
+        context['orderinfo'] = order_info[0]
+        for quote_item in quoteitem_list:
+            order_item = OrderItem.objects.get(
+                quote_item=quote_item,
+                ordered=False,
+                arrived=False,
+                delivered=False
+            )
+            
         
         return render(request, 'quote/confirm.html', context)
     

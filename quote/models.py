@@ -141,6 +141,13 @@ class OrderItem(models.Model):
         verbose_name='見積もりアイテム'
     )
     
+    worker = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    
     ordered = models.BooleanField(
         verbose_name='見積もり依頼済み',
         default=False,

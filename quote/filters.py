@@ -12,7 +12,7 @@ class QuoteItemFilter(filters.FilterSet):
 class OrderItemFilter(filters.FilterSet):
     class Meta:
         model = OrderItem
-        fields = ['destination', 'quote_item', 'ordered', 'arrived', 'delivered']
+        fields = ['destination', 'quote_item', 'worker', 'ordered', 'arrived', 'delivered']
 
 
 class OrderInfoFilter(filters.FilterSet):
