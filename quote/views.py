@@ -67,8 +67,8 @@ def create_quote_item(genre, maker, name, quantity, worker, spec=''):
         name=name,
         spec=spec
     )
-    item_filter = QuoteItem.objects.filter(item=item[0], worker=worker, ordered=False)
-    quote_item_filter = QuoteItem.objects.filter(worker=worker, ordered=False)
+    item_filter = QuoteItem.objects.filter(item=item[0], worker=worker, entered=False)
+    quote_item_filter = QuoteItem.objects.filter(worker=worker, entered=False)
     if quote_item_filter:
         last_item = quote_item_filter.last()
         if item_filter:
@@ -175,7 +175,7 @@ def quote_order(request, **kwargs):
             name = request.POST['name']
             spec_text = spec
         create_quote_item(genre, maker, name, quantity, worker, spec=spec_text)
-        new_quote_item = QuoteItem.objects.filter(worker=worker, ordered=False)
+        new_quote_item = QuoteItem.objects.filter(worker=worker, entered=False)
         for i, quote_item in enumerate(new_quote_item):
             quote_item.number = i + 1
             quote_item.save()
@@ -191,12 +191,12 @@ class QuoteItemList(LoginRequiredMixin, ListView):
     
     def get_queryset(self, *args, **kwargs):
         queryset = super(QuoteItemList, self).get_queryset()
-        qs = queryset.filter(worker=self.request.user, ordered=False)
+        qs = queryset.filter(worker=self.request.user, entered=False)
         return qs
     
     def get_context_data(self, *args, object_list=None, **kwargs):
         context = super(QuoteItemList, self).get_context_data(*args, **kwargs)
-        quote_item = QuoteItem.objects.filter(worker=self.request.user, ordered=False)
+        quote_item = QuoteItem.objects.filter(worker=self.request.user, entered=False)
         count = len(quote_item)
         context['count'] = count
         quantity = [i for i in range(100)]
@@ -208,7 +208,7 @@ class QuoteItemList(LoginRequiredMixin, ListView):
 def delete_quote_item(request, pk):
     quote_item = QuoteItem.objects.get(pk=pk)
     quote_item.delete()
-    quote_item_filter = QuoteItem.objects.filter(worker=request.user, ordered=False)
+    quote_item_filter = QuoteItem.objects.filter(worker=request.user, entered=False)
     for i, item in enumerate(quote_item_filter):
         item.number = i + 1
         item.save()
@@ -218,7 +218,7 @@ def delete_quote_item(request, pk):
 @login_required()
 def register_destination(request):
     destination_list = Destination.objects.all()
-    quoteitem_list = QuoteItem.objects.filter(worker=request.user, ordered=False)
+    quoteitem_list = QuoteItem.objects.filter(worker=request.user, entered=False)
     if request.method == 'POST':
         post_name_list = [destination.pk for destination in destination_list]
         cart = Cart.objects.get_or_create(worker=request.user, ordered=False)
@@ -255,7 +255,7 @@ class AddDestination(LoginRequiredMixin, BSModalCreateView):
 
 @login_required()
 def add_requester(request):
-    quoteitem_list = QuoteItem.objects.filter(worker=request.user, ordered=False)
+    quoteitem_list = QuoteItem.objects.filter(worker=request.user, entered=False)
     context = {
         'quoteitem_list': quoteitem_list,
         'count': len(quoteitem_list)
