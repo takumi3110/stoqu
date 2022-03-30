@@ -23,9 +23,9 @@ class QuoteRequesterAdmin(admin.ModelAdmin):
 
 @admin.register(QuoteItem)
 class QuoteItemAdmin(admin.ModelAdmin):
-    list_display = ('number', 'item', 'quantity', 'registration_at', 'ordered', 'worker')
-    list_display_links = ('number', 'item', 'quantity', 'registration_at', 'ordered', 'worker')
-    list_filter = ('number', 'item', 'quantity', 'ordered', 'worker')
+    list_display = ('number', 'item', 'quantity', 'registration_at', 'entered', 'worker')
+    list_display_links = ('number', 'item', 'quantity', 'registration_at', 'entered', 'worker')
+    list_filter = ('number', 'item', 'quantity', 'entered', 'worker')
     search_fields = ('number', 'item__name', 'worker__screenname')
     actions_on_bottom = True
 

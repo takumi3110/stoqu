@@ -6,7 +6,7 @@ from .models import QuoteItem, OrderItem, OrderInfo
 class QuoteItemFilter(filters.FilterSet):
     class Meta:
         model = QuoteItem
-        fields = ['number', 'item', 'worker', 'ordered']
+        fields = ['number', 'item', 'worker', 'entered']
 
 
 class OrderItemFilter(filters.FilterSet):

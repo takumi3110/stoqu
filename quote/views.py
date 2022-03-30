@@ -295,14 +295,16 @@ def add_requester(request):
         )
         context['orderinfo'] = order_info[0]
         for quote_item in quoteitem_list:
-            order_item = OrderItem.objects.get(
+            orderitem_list = OrderItem.objects.filter(
                 quote_item=quote_item,
+                worker=request.user,
                 ordered=False,
                 arrived=False,
                 delivered=False
             )
-            
-        
+            for order_item in orderitem_list:
+                order_item.ordered = True
+                order_item.save()
         return render(request, 'quote/confirm.html', context)
     
     return render(request, 'quote/requester.html', context)

@@ -104,8 +104,8 @@ class QuoteItem(models.Model):
         blank=True
     )
     
-    ordered = models.BooleanField(
-        verbose_name='見積もり依頼済み',
+    entered = models.BooleanField(
+        verbose_name='見積もり入力済み',
         default=False,
     )
     
@@ -184,6 +184,8 @@ class OrderItem(models.Model):
     def save(self, *args, **kwargs):
         if self.ordered:
             self.ordered_at = timezone.now()
+            self.quote_item.entered = True
+            self.quote_item.save()
         else:
             self.ordered_at = None
         if self.arrived:
