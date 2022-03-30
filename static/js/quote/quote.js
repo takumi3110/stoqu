@@ -238,14 +238,18 @@ class StatusCheck {
 		const number = document.querySelector('.number').innerHTML;
 		const ticket = document.querySelector('.ticket').innerHTML;
 		const cart = document.querySelector('.cart').innerHTML;
-		return {
+		const id = status.id;
+		let data = {
 			status: status.id,
 			number: number,
 			ticket: ticket,
 			cart: cart
 		}
+		if (Number(id) === 5) {
+			data.finished = true;
+		}
+		return data
 	}
-
 }
 
 
