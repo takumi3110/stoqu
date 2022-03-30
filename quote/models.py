@@ -248,7 +248,7 @@ class OrderInfo(models.Model):
     status_choice = (
         ('1', '新規作成'),
         ('2', '依頼済み'),
-        ('3', '作成依頼中'),
+        ('3', '見積もり依頼中'),
         ('4', '見積もり到着'),
         ('5', '提供完了')
     )
@@ -308,6 +308,11 @@ class OrderInfo(models.Model):
             self.registration_at = timezone.now()
         if self.finished:
             self.finished_at = timezone.now()
+        if int(self.status) >= 3:
+            for quoteItem in self.cart.quote_item.all():
+                quoteItem.ordered = True
+                quoteItem.save()
+            
         self.updated_at = timezone.now()
         super(OrderInfo, self).save(*args, **kwargs)
     
