@@ -184,8 +184,6 @@ class OrderItem(models.Model):
     def save(self, *args, **kwargs):
         if self.ordered:
             self.ordered_at = timezone.now()
-            self.quote_item.entered = True
-            self.quote_item.save()
         else:
             self.ordered_at = None
         if self.arrived:
