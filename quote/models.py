@@ -121,7 +121,7 @@ class QuoteItem(models.Model):
         super(QuoteItem, self).save(*args, **kwargs)
     
     def __str__(self):
-        return f'{self.item.maker} {self.item.name}:{self.quantity}'
+        return f'{self.item.maker} {self.item.name}×{self.quantity}'
     
     class Meta:
         verbose_name = '見積もりアイテム'
