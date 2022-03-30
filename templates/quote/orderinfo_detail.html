@@ -82,11 +82,6 @@
 							</tr>
 						</table>
 					</div>
-					<div class="post-orderinfo" style="display: none">
-						<div class="pk">{{ orderinfo.pk }}</div>
-						<div class="number">{{ orderinfo.number }}</div>
-						<div class="ticket">{{ orderinfo.ticket }}</div>
-					</div>
 				</section>
 				<section class="item row mt-5">
 					<span class="title">依頼の情報</span>
@@ -113,27 +108,27 @@
 									<div class="row">
 										<div class="col-3">{{ orderitem.destination }}</div>
 										<div class="col-3 check">
-											<input type="checkbox" id="ordered" class="ordered form-check-input" name="ordered"
-											{% if orderitem.ordered %}disabled checked{% endif %}>
-											<label for="ordered">
+											<input type="checkbox" id="ordered" class="ordered{{ orderitem.pk }} checkBox form-check-input" name="ordered"
+											{% if orderitem.ordered %}disabled checked{% endif %} value="{{ quoteitem.pk }}-{{ orderitem.pk }}-{{ orderitem.destination.pk }}">
+											<label for="ordered" class="ordered{{ orderitem.pk }}">
 												{% if orderitem.ordered %}
 													{{ orderitem.ordered_at }}
 												{% endif %}
 											</label>
 										</div>
 										<div class="col-3 check">
-											<input type="checkbox" id="arrived" class="arrived form-check-input" name="arrived"
-											{% if orderitem.arrived %}disabled checked{% endif %}>
-											<label for="arrived">
+											<input type="checkbox" id="arrived" class="arrived checkBox form-check-input" name="arrived"
+											{% if orderitem.arrived %}disabled checked{% endif %} value="{{ quoteitem.pk }}-{{ orderitem.pk }}-{{ orderitem.destination.pk }}">
+											<label for="arrived" class="arrived{{ orderitem.pk }}">
 												{% if orderitem.arrived %}
 													{{ orderitem.arrived_at }}
 												{% endif %}
 											</label>
 										</div>
 										<div class="col-3 check">
-											<input type="checkbox" id="delivered" class="delivered form-check-input" name="delivered"
-											{% if orderitem.delivered %}disabled checked{% endif %}>
-											<label for="delivered">
+											<input type="checkbox" id="delivered" class="delivered checkBox form-check-input" name="delivered"
+											{% if orderitem.delivered %}disabled checked{% endif %} value="{{ quoteitem.pk }}-{{ orderitem.pk }}-{{ orderitem.destination.pk }}">
+											<label for="delivered" class="delivered{{ orderitem.pk }}">
 												{% if orderitem.delivered %}
 													{{ orderitem.delivery_at }}
 												{% endif %}
@@ -143,12 +138,6 @@
 								{% endfor %}
 							</div>
 						</div>
-						{% for orderitem in orderitem_list %}
-							<div class="post-orderitem" style="display: none">
-								<div class="destination">{{ orderitem.destination.pk }}</div>
-								<div class="quote_item">{{ quoteitem.pk }}</div>
-							</div>
-						{% endfor %}
 					{% endfor %}
 				</section>
 				<a href="{% url 'quote:mypage' %}">
@@ -164,21 +153,23 @@
 {% block javascript %}
 	<script src="{% static 'js/quote/quote.js' %}"></script>
 	<script type="text/javascript">
+		new checkBoxObserver();
 		{% for key in status.keys %}
 			const status{{ key }} = document.querySelector('.status{{ key }}');
 			{% if key <= active_status %}
 				status{{ key }}.classList.add('active');
 			{% endif %}
 		{% endfor %}
-		{% for quoteitem, orderitem_list in orderitem_dict.items %}
-			{% for orderitem in orderitem_list %}
-				data = {
-					destination: {{ orderitem.destination.pk }},
-					quote_item: {{ quoteitem.pk }}
-				}
-				ordered_check(data, {{ orderitem.pk }});
-			{% endfor %}
+{#		{% for quoteitem, orderitem_list in orderitem_dict.items %}#}
+{#			{% for orderitem in orderitem_list %}#}
+{#				data = {#}
+{#					destination: {{ orderitem.destination.pk }},#}
+{#					quote_item: {{ quoteitem.pk }}#}
+{#				}#}
+{#				ordered_check(data, {{ orderitem.pk }});#}
+{#			{% endfor %}#}
+{##}
+{#		{% endfor %}#}
 
-		{% endfor %}
 	</script>
 {% endblock javascript %}
