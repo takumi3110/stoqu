@@ -199,7 +199,7 @@ class QuoteItemList(LoginRequiredMixin, ListView):
         quote_item = QuoteItem.objects.filter(worker=self.request.user, entered=False)
         count = len(quote_item)
         context['count'] = count
-        quantity = [i for i in range(100)]
+        quantity = [i for i in range(1, 100)]
         context['quantity'] = quantity
         return context
 
@@ -295,16 +295,8 @@ def add_requester(request):
         )
         context['orderinfo'] = order_info[0]
         for quote_item in quoteitem_list:
-            orderitem_list = OrderItem.objects.filter(
-                quote_item=quote_item,
-                worker=request.user,
-                ordered=False,
-                arrived=False,
-                delivered=False
-            )
-            for order_item in orderitem_list:
-                order_item.ordered = True
-                order_item.save()
+            quote_item.entered = True
+            quote_item.save()
         return render(request, 'quote/confirm.html', context)
     
     return render(request, 'quote/requester.html', context)
