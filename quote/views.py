@@ -254,9 +254,13 @@ class AddDestination(LoginRequiredMixin, BSModalCreateView):
 
 @login_required()
 def add_requester(request):
+    quoteitem_list = QuoteItem.objects.filter(worker=request.user, ordered=False)
+    context = {
+        'quoteitem_list': quoteitem_list,
+        'count': len(quoteitem_list)
+    }
     if request.method == 'POST':
         cart = Cart.objects.get(worker=request.user, ordered=False)
-        quoteitem_list = QuoteItem.objects.filter(worker=request.user, ordered=False)
         last_name = request.POST['lastName']
         first_name = request.POST['firstName']
         team = request.POST['team']
@@ -270,8 +274,8 @@ def add_requester(request):
             addressee=addressee
         )
         cart.requester = requester[0]
-        # cart.ordered = True
-        # cart.save()
+        cart.ordered = True
+        cart.save()
         order_info_all = OrderInfo.objects.all()
         order_info_last = order_info_all.last()
         branch = 1
@@ -288,16 +292,10 @@ def add_requester(request):
             ticket=ticket,
             cart=cart,
         )
-        context = {
-            'orderinfo': order_info[0],
-            'quoteitem_list': quoteitem_list
-        }
+        context['orderinfo'] = order_info[0],
+        
         return render(request, 'quote/confirm.html', context)
-    quoteitem_list = QuoteItem.objects.filter(worker=request.user, ordered=False)
-    context = {
-        'quoteitem_list': quoteitem_list,
-        'count': len(quoteitem_list)
-    }
+    
     return render(request, 'quote/requester.html', context)
 
 
