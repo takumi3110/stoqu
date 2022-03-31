@@ -47,3 +47,9 @@ class Main {
 		console.log(this.observers);
 	}
 }
+
+function modal_form(el, url) {
+	$(el).each(function () {
+		$(this).modalForm({formURL: url});
+	});
+}

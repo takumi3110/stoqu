@@ -300,10 +300,3 @@ function change_quantity(el, data, pk) {
 // 		}
 // 	});
 // }
-
-
-function modal_form(el, url) {
-	$(el).each(function () {
-		$(this).modalForm({formURL: url});
-	});
-}
