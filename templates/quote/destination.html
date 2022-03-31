@@ -19,10 +19,10 @@
 						<div class="card-body">
 							<div class="row bottom-border cart__header">
 								<span class="cart__title">選択中アイテム</span>
-								<div class="apply form-check form-check-inline">
-									<input type="checkbox" id="apply" class="form-check-input all-apply" name="apply" value="true">
-									<label for="apply">全てに適用する</label>
-								</div>
+{#								<div class="apply form-check form-check-inline">#}
+{#									<input type="checkbox" id="apply" class="form-check-input all-apply" name="apply" value="true">#}
+{#									<label for="apply">全てに適用する</label>#}
+{#								</div>#}
 								<a href="#" class="add-destination">依頼先を追加する</a>
 							</div>
 							{% for quoteitem in quoteitem_list %}
@@ -55,9 +55,15 @@
 								</span>
 							</div>
 							<div class="row my-3">
-								<button type="submit" class="btn btn-sm btn-warning">
-									次に進む
-								</button>
+								{% if count > 0 %}
+									<button type="submit" class="btn btn-sm btn-warning">
+										次に進む
+									</button>
+								{% else %}
+									<button type="button" class="btn btn-sm btn-secondary disabled">
+										次に進めません
+									</button>
+								{% endif %}
 							</div>
 						</div>
 					</div>

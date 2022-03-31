@@ -94,9 +94,15 @@
 								</span>
 							</div>
 							<div class="row my-3">
-								<button type="submit" class="btn btn-sm btn-warning">
-									確定する
-								</button>
+								{% if count > 0 %}
+									<button type="submit" class="btn btn-sm btn-warning">
+										確定する
+									</button>
+								{% else %}
+									<button type="button" class="btn btn-sm btn-secondary disabled">
+										次に進めません
+									</button>
+								{% endif %}
 							</div>
 						</div>
 					</div>

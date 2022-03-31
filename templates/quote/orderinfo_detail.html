@@ -83,12 +83,14 @@
 								<td class="cart" style="display: none">{{ orderinfo.cart.pk }}</td>
 								<td class="pk" style="display: none">{{ orderinfo.pk }}</td>
 							</tr>
-
 						</table>
 					</div>
 				</section>
 				<section class="item row mt-5">
 					<span class="title">依頼の情報</span>
+					<div class="col-2">
+						<a href="{% url 'quote:create_pdf' orderinfo.pk %}" class="btn btn-danger">見積もりPDF作成</a>
+					</div>
 					<div class="item__header row mt-3">
 						<div class="col-3">商品</div>
 						<div class="col-9">
