@@ -36,7 +36,7 @@
             <td>{{ storageitem.total_price | intcomma }}</td>
             <td id="base{{ storageitem.pk }}">{{ storageitem.base }}</td>
             <td>
-                <a href="{% url 'stock:storage_detail'  storageitem.pk %}">詳細</a>
+                <a href="{% url 'stock:storage_detail_admin'  storageitem.pk %}">詳細</a>
             </td>
         </tr>
     {% empty %}
