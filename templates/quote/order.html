@@ -4,8 +4,23 @@
 
 {% block content %}
 
-	<div class="container my-5">
-		<div class="row mb-3">
+	<div class="container">
+		<div class="row mt-3">
+            <nav>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'stock:top' %}">ホーム</a>
+                    </li>
+                    <li class="breadcrumb-item">
+	                    <a href="{% url 'quote:genre' %}">カテゴリ選択</a>
+                    </li>
+	                <li class="breadcrumb-item active">
+		                見積もり情報入力
+	                </li>
+                </ul>
+            </nav>
+        </div>
+		<div class="row my-5">
 			<h2 class="title-text">情報入力</h2>
 		</div>
 		<section class="order">

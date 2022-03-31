@@ -6,7 +6,24 @@
 
 {% block content %}
 
-	<div class="container detail my-5">
+	<div class="container detail">
+		<div class="row my-3">
+	        <nav>
+	            <ul class="breadcrumb">
+	                <li class="breadcrumb-item">
+	                    <a href="{% url 'stock:top' %}">ホーム</a>
+	                </li>
+	                <li class="breadcrumb-item active">
+		                <a href="{% url 'stock:storage_list_admin' %}">
+			                貯蔵品一覧
+		                </a>
+	                </li>
+		            <li class="breadcrumb-item active">
+			            <span>貯蔵品詳細</span>
+		            </li>
+	            </ul>
+	        </nav>
+	    </div>
 		<a href="{% url 'stock:storage_list_admin' %}">
 			<i class="fa-solid fa-arrow-circle-left"></i>一覧に戻る
 		</a>

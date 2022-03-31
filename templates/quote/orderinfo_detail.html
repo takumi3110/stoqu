@@ -15,7 +15,7 @@
 				<section class="status row mt-3">
 					<ul class="status__bar">
 						{% for key, value in status.items %}
-							<li class="status{{ key }}" id="{{ key }}">{{ value }}</li>
+							<li class="status" id="{{ key }}">{{ value }}</li>
 						{% endfor %}
 					</ul>
 				<div class="status-now" style="display: none">{{ orderinfo.status }}</div>
