@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+	<div class="container my-5">
+		<div class="row page-title">
+			<h2 class="title-text">見積もり作成予定</h2>
+		</div>
+		<div class="row mt-5">
+			<a href="{% url 'quote:genre' %}">
+				<i class="fa-solid fa-arrow-circle-left"></i>カテゴリー選択に戻る
+			</a>
+			<div class="col-9">
+				<div class="card">
+					<div class="card-body cart">
+						<div class="row bottom-border cart__header">
+							<span class="cart__title">選択中アイテム</span>
+						</div>
+						{% for quoteitem in quoteitem_list %}
+							<div class="row bottom-border mt-3 cart__item">
+								<p class="cart__item__name">{{ quoteitem.number }}：{{ quoteitem.item.maker }} {{ quoteitem.item.name }}</p>
+								<div class="col-7">
+									<span>{{ quoteitem.item.spec }}</span>
+								</div>
+								<div class="col-3 cart__item__menu">
+									<label for="quantity{{ quoteitem.pk }}">数量：</label>
+									<select name="quantity" id="quantity{{ quoteitem.pk }}">
+										{% for q in quantity %}
+											<option value="{{ q }}" class="cart__item__quantity"
+											        {% if q == quoteitem.quantity %}selected{% endif %}>{{ q }}</option>
+										{% endfor %}
+									</select>
+									<a href="{% url 'quote:delete_item' quoteitem.pk %}">
+										削除
+									</a>
+								</div>
+							</div>
+						{% endfor %}
+						<div class="row cart__footer">
+							<span class="cart__total__title">{{ count }}個のアイテム</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-3">
+				<div class="card cart__total">
+					<div class="card-body">
+						<div class="row">
+							<span class="cart__total__title">
+								{{ count }}個のアイテム
+							</span>
+						</div>
+						<div class="row my-3">
+							{% if count > 0 %}
+								<a href="{% url 'quote:register_destination' %}" class="btn btn-sm btn-warning">
+									次に進む
+								</a>
+							{% else %}
+								<button type="button" class="btn btn-sm btn-secondary disabled">
+									次に進めません
+								</button>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+{% block javascript %}
+	<script src="{% static 'js/quote/quote.js' %}"></script>
+	<script type="text/javascript">
+
+		{% for quoteitem in quoteitem_list %}
+			const quantity_el{{ quoteitem.pk }} = document.querySelector('#quantity{{ quoteitem.pk }}');
+			data = {
+				number: {{ quoteitem.number }},
+				item: {{ quoteitem.item.pk }},
+				worker: {{ quoteitem.worker.pk }}
+			}
+			change_quantity(quantity_el{{ quoteitem.pk }}, data, {{ quoteitem.pk }});
+		{% endfor %}
+
+
+	</script>
+{% endblock javascript %}

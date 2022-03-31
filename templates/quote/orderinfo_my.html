@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+
+	<div class="row my-5 mx-3 myOrder">
+		<a href="{% url 'stock:top' %}">
+			<i class="fa-solid fa-arrow-circle-left"></i>
+			TOPに戻る
+		</a>
+		<a href="{% url 'quote:orderinfo' %}">
+			<i class="fa-solid fa-backward"></i>
+			全体表示へ
+		</a>
+		{% include 'quote/modules/orderinfo_list.html' %}
+	</div>
+{% endblock content %}

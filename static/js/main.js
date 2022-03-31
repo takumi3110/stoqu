@@ -18,7 +18,6 @@ class Main {
 
 	_init() {
 		this.hero = new HeroSlider('.swiper');
-		this.selectImg = new SelectImg();
 		this._paceDone();
 	}
 
@@ -47,4 +46,10 @@ class Main {
 		this.observers = new ScrollObserver('.appear', this._inviewAnimation);
 		console.log(this.observers);
 	}
+}
+
+function modal_form(el, url) {
+	$(el).each(function () {
+		$(this).modalForm({formURL: url});
+	});
 }

@@ -90,6 +90,12 @@ a {
   text-decoration: none;
 }
 
+img.construction {
+  width: 80%;
+  height: 70%;
+  margin: 5rem;
+}
+
 .content-width, .select {
   width: 90%;
   margin: 0 auto;
@@ -101,9 +107,10 @@ a {
   flex-direction: column;
 }
 
-.border-bottom, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__info .sub-title, .detail__info, .detail__content .base, .detail__content .option, .detail__content .title, .detail__main {
+.border-bottom, .info-detail .item__content .row, .info-detail .item__content, .info-detail .item__header, .info-detail .item .title, .info-detail .main .sub-title, .info-detail, .confirm__content .main .bottom-border, .confirm__content .header, .confirm__address, .approve-card .bottom-border, .approve-menu, .cart .bottom-border, .detail__info .sub-title, .detail__info, .detail__content .base, .detail__content .option, .detail__content .title, .detail__main {
   border-bottom: thin solid #dfdfdf;
   margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
 }
 
 .navigation {
@@ -137,7 +144,14 @@ a {
   font-size: 10px;
 }
 .navigation__search {
-  width: 600px;
+  width: 45vw;
+}
+.navigation__search input {
+  height: 3rem;
+}
+.navigation__search button {
+  font-size: 20px;
+  color: grey;
 }
 
 .select__card {
@@ -291,7 +305,7 @@ a {
 }
 .cart__title {
   font-size: 30px;
-  font-width: bold;
+  font-weight: bold;
 }
 .cart__image {
   width: 100%;
@@ -411,9 +425,6 @@ a {
   color: orangered;
 }
 
-.confirm {
-  background-color: lightslategrey;
-}
 .confirm__title {
   color: teal;
 }
@@ -431,9 +442,145 @@ a {
 .confirm__kitting_btn {
   width: 100%;
 }
+.confirm__content .header .title {
+  font-size: 20px;
+  margin-right: 2rem;
+}
+.confirm__content .header .open:hover {
+  cursor: pointer;
+}
+.confirm__content .header .open .allow.selected {
+  transform: rotate(180deg);
+}
+.confirm__content .main {
+  max-height: 100vh;
+  transition: all 1s;
+}
+.confirm__content .main .bottom-border:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.confirm__content .main.toggle {
+  max-height: 0;
+  opacity: 0;
+}
 
 .order-detail__icon.selected {
   transform: rotate(180deg);
+}
+
+.genre__select {
+  margin-top: 1.5rem;
+  color: grey;
+}
+.genre__select:hover {
+  background-color: orange;
+  color: black;
+  cursor: pointer;
+}
+
+.order__input {
+  margin-top: 1.5rem;
+}
+.order__input .default-select {
+  color: lightgrey;
+}
+.order .spec-detail {
+  display: none;
+}
+
+.apply {
+  text-align: right;
+  font-size: 20px;
+}
+.apply .form-check,
+.apply .form-check-input {
+  float: none;
+}
+.apply__destination > label {
+  margin-right: 1rem;
+}
+
+.add-destination {
+  text-align: right;
+}
+
+.requester .menu {
+  font-size: 20px;
+  font-weight: bold;
+}
+.requester__input {
+  margin-top: 1.5rem;
+}
+.requester__title {
+  font-size: 30px;
+  font-weight: bold;
+}
+.requester__item__name {
+  font-size: 25px;
+  font-weight: bold;
+}
+.requester__footer {
+  text-align: right;
+}
+.requester__total__title {
+  font-size: 20px;
+}
+
+.result .card {
+  position: sticky;
+  top: 100px;
+}
+
+.info-detail {
+  font-size: 20px;
+}
+.info-detail .main .sub-title {
+  font-size: 25px;
+}
+.info-detail .main table {
+  padding: 0 2rem;
+}
+.info-detail .main table th {
+  font-weight: normal;
+  background-color: #f3f3f3;
+  width: 50%;
+}
+.info-detail .main table td {
+  padding-left: 10px;
+}
+.info-detail .main table .menu {
+  color: grey;
+}
+.info-detail .item .title {
+  font-weight: bold;
+  color: orange;
+}
+.info-detail .item__header {
+  background-color: #f3f3f3;
+  font-weight: bold;
+  height: 3rem;
+  align-items: center;
+  text-align: center;
+}
+.info-detail .item__content .name {
+  align-items: center;
+}
+.info-detail .item__content .row {
+  height: 50%;
+}
+.info-detail .item__content .row:last-child {
+  border: none;
+}
+.info-detail .item__content .destination {
+  border-left: thin solid #dfdfdf;
+}
+.info-detail .item__content .check {
+  text-align: center;
+}
+.info-detail .item__content .check .checked {
+  color: green;
+  text-align: left;
 }
 
 .footer {
@@ -463,4 +610,4 @@ a {
   color: grey;
 }
 
-/*# sourceMappingURL=stock.css.map */
+/*# sourceMappingURL=stoqu.css.map */

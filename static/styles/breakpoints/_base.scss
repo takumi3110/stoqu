@@ -1,11 +1,17 @@
-@import '../../modules/mixin';
-@import '../../modules/variables';
-@import '../../modules/statusbar';
-@import '../../modules/hero-slider';
+@import '../modules/mixin';
+@import '../modules/variables';
 @import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
 
 a {
   text-decoration: none;
+}
+
+img {
+  &.construction {
+    width: 80%;
+    height: 70%;
+    margin: 5rem;
+  }
 }
 
 .content-width {
@@ -22,8 +28,8 @@ a {
 .border-bottom {
   border-bottom: thin solid $cBorder;
   margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
 }
-
 
 .navigation {
   text-align: center;
@@ -63,7 +69,16 @@ a {
   }
 
   &__search {
-    width: 600px;
+    width: 45vw;
+
+    & input {
+      height: 3rem;
+    }
+
+    & button {
+      font-size: 20px;
+      color: grey;
+    }
   }
 }
 
@@ -269,7 +284,7 @@ a {
 
   &__title {
     font-size: 30px;
-    font-width: bold;
+    font-weight: bold;
   }
 
   &__image {
@@ -433,7 +448,7 @@ a {
 }
 
 .confirm {
-  background-color: lightslategrey;
+  //background-color: lightslategrey;
 
   &__title {
     color: teal;
@@ -460,12 +475,209 @@ a {
   &__kitting_btn {
     width: 100%;
   }
+
+  &__content {
+    & .header {
+      @extend .border-bottom;
+      & .title {
+        font-size: 20px;
+        margin-right: 2rem;
+      }
+
+      & .open {
+        &:hover {
+          cursor: pointer;
+        }
+        & .allow {
+          &.selected {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+
+    & .main {
+      max-height: 100vh;
+      transition: all 1s;
+      & .bottom-border {
+        @extend .border-bottom;
+        &:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+      }
+
+      &.toggle {
+        max-height: 0;
+        opacity: 0;
+      }
+    }
+  }
 }
 
 .order-detail {
   &__icon {
     &.selected {
       transform: rotate(180deg);
+    }
+  }
+}
+
+.genre {
+  &__select {
+    margin-top: 1.5rem;
+    color: grey;
+    &:hover {
+      background-color: orange;
+      color: black;
+      cursor: pointer;
+    }
+  }
+}
+
+.order {
+  &__input {
+    margin-top: 1.5rem;
+
+    & .default-select {
+      color: lightgrey;
+    }
+  }
+
+  & .spec-detail {
+    display: none;
+  }
+}
+
+.apply {
+  text-align: right;
+  font-size: 20px;
+
+  & .form-check,
+  .form-check-input {
+    float: none;
+  }
+
+  &__destination {
+    & > label {
+      margin-right: 1rem;
+    }
+  }
+}
+
+.add-destination {
+  text-align: right;
+}
+
+.requester {
+  & .menu {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  &__input {
+    margin-top: 1.5rem;
+  }
+
+  &__title {
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  &__item {
+    &__name {
+      font-size: 25px;
+      font-weight: bold;
+    }
+  }
+
+  &__footer {
+    text-align: right;
+  }
+
+  &__total {
+    &__title {
+      font-size: 20px;
+    }
+  }
+}
+
+.result {
+  & .card{
+    position: sticky;
+    top: 100px;
+  }
+}
+
+.info-detail {
+  font-size: 20px;
+  @extend .border-bottom;
+  & .main {
+    & .sub-title {
+      font-size: 25px;
+      @extend .border-bottom;
+    }
+
+    & table {
+      padding: 0 2rem;
+
+      & th {
+        font-weight: normal;
+        background-color: #f3f3f3;
+        width: 50%;
+      }
+
+      & td {
+        padding-left: 10px;
+      }
+
+      & .menu {
+        color: grey;
+      }
+    }
+  }
+
+  & .item {
+    & .title {
+      font-weight: bold;
+      color: orange;
+      @extend .border-bottom;
+    }
+    &__header {
+      background-color: #f3f3f3;
+      font-weight: bold;
+      height: 3rem;
+      align-items: center;
+      text-align: center;
+      @extend .border-bottom;
+    }
+
+    &__content {
+      @extend .border-bottom;
+
+      & .name {
+        align-items: center;
+
+      }
+
+      & .row {
+        @extend .border-bottom;
+        height: 50%;
+        &:last-child {
+          border: none;
+        }
+      }
+
+      & .destination {
+        border-left: thin solid $cBorder;
+      }
+
+      & .check {
+        text-align: center;
+        & .checked {
+          color: green;
+          text-align: left;
+        }
+      }
     }
   }
 }

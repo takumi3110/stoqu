@@ -1,0 +1,55 @@
+<div class="row display-maker order__input">
+	<label for="displayMaker" class="col-2">メーカー：</label>
+	<div class="col-9">
+		<select name="maker" id="displayMaker" class="form-select"
+		        aria-label="maker select" required>
+			<option class="default-select" selected disabled value="">---メーカーを選択してください---</option>
+			<option value="none">こだわりなし</option>
+			<option value="DELL">DELL</option>
+			<option value="アイ・オー・データ">アイ・オー・データ</option>
+			<option value="LG">LG</option>
+			<option value="Prinston">プリンストン</option>
+		</select>
+	</div>
+</div>
+<div class="row display-spec order__input">
+	<label for="displaySpec" class="col-2">スペック：</label>
+	<div class="col-9">
+		<select name="spec" id="displaySpec" class="form-select"
+		        aria-label="spec select" required>
+			<option class="default-select" selected disabled value="">---スペックを選択してください---</option>
+			<option value="FHD">FHD（標準）</option>
+			<option value="WQHD">WQHD（高画質）</option>
+			<option value="4k">4K</option>
+		</select>
+	</div>
+</div>
+<div class="row display-spec__detail order__input">
+	<div class="col-5 offset-2">
+		<div class="form-check form-check-inline">
+			<input type="checkbox" class="form-check-input" id="hdmi" value="HDMI" name="hdmi" checked>
+			<label for="hdmi">HDMI</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input type="checkbox" class="form-check-input" id="vga" value="VGA" name="vga" checked>
+			<label for="vga">VGA</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input type="checkbox" class="form-check-input" id="displayport" value="ディスプレイポート" name="dp" checked>
+			<label for="displayport">ディスプレイポート</label>
+		</div>
+	</div>
+	<label for="" class="col-2"></label>
+</div>
+<div class="row display-size order__input">
+	<label for="displaySize" class="col-2">サイズ：</label>
+	<div class="col-9">
+		<select name="size" id="displaySize" class="form-select"
+		        aria-label="size select" required>
+			<option class="default-select" selected disabled value="">---サイズを選択してください---</option>
+			<option value="21">21インチ</option>
+			<option value="23">23インチ</option>
+			<option value="27">27インチ</option>
+		</select>
+	</div>
+</div>

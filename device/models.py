@@ -2,14 +2,14 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 type_choice = (
-	('1', 'SSD'),
-	('2', 'HDD')
+	(1, 'SSD'),
+	(2, 'HDD')
 )
 
 category_choice = (
-	('1', 'ノートPC'),
-	('2', 'デスクトップPC'),
-	('3', 'ミニPC')
+	('note', 'ノートPC'),
+	('desktop', 'デスクトップPC'),
+	('mini', 'ミニPC')
 )
 
 
@@ -30,6 +30,11 @@ class CPU(models.Model):
 			MaxValueValidator(99)
 		]
 	)
+	
+	latest = models.BooleanField(
+		verbose_name='最新',
+		default=False
+	)
 
 	def __str__(self):
 		return f'{self.maker} {self.name} 第{self.gen}世代'
@@ -44,7 +49,7 @@ class Storage(models.Model):
 		verbose_name='タイプ',
 		max_length=6,
 		choices=type_choice,
-		default='1'
+		default=1
 	)
 
 	size = models.PositiveSmallIntegerField(
@@ -62,7 +67,7 @@ class Storage(models.Model):
 class PC(models.Model):
 	category = models.CharField(
 		verbose_name='カテゴリー',
-		max_length=6,
+		max_length=8,
 		choices=category_choice,
 	)
 
@@ -115,6 +120,11 @@ class PC(models.Model):
 	
 	sub_img5 = models.ImageField(
 		upload_to='images/pc/',
+		null=True,
+		blank=True
+	)
+	
+	url = models.URLField(
 		null=True,
 		blank=True
 	)
@@ -223,10 +233,10 @@ class PCDetail(models.Model):
 				self.memory = 16
 			else:
 				self.memory = 8
-		if self.pc.category == '1':
+		if self.pc.category == 'note':
 			self.camera = True
 			self.fingerprint = True
-			if self.size > 15:
+			if self.size < 15:
 				self.numpad = False
 			else:
 				self.numpad = True

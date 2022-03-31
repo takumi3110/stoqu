@@ -1,6 +1,7 @@
 from django_filters import rest_framework as filters
 
-from .models import *
+from .models import Option, StorageItem, KittingPlan, OrderItem,\
+	StorageCart, Approve, OrderInfo
 
 
 class MyOrderingFilter(filters.OrderingFilter):

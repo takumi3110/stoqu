@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+
+	<a href="{% url 'quote:mypage' %}">
+		<i class="fa-solid fa-arrow-circle-left"></i>
+		<span>一覧に戻る</span>
+	</a>
+	<div class="container info-detail my-5">
+		<div class="row">
+			<div class="col-12">
+				<h2 class="title-text">詳細ページ</h2>
+				<section class="status row mt-3">
+					<ul class="status__bar">
+						{% for key, value in status.items %}
+							<li class="status{{ key }}" id="{{ key }}">{{ value }}</li>
+						{% endfor %}
+					</ul>
+				<div class="status-now" style="display: none">{{ orderinfo.status }}</div>
+				</section>
+				<section class="main row mt-5">
+					<div class="col-6">
+						<div class="sub-title">
+							<span>詳細情報</span>
+						</div>
+						<table class="table">
+							<tr>
+								<th class="menu">受注番号</th>
+								<td class="number">{{ orderinfo.number }}</td>
+							</tr>
+							<tr>
+								<th class="menu">チケット番号</th>
+								<td class="ticket">{{ orderinfo.ticket }}</td>
+							</tr>
+							<tr>
+								<th class="menu">依頼者</th>
+								<td>{{ orderinfo.cart.requester }}</td>
+							</tr>
+							<tr>
+								<th class="menu">宛名</th>
+								<td>{{ orderinfo.cart.requester.addressee }}</td>
+							</tr>
+							<tr>
+								<th class="menu">作成者</th>
+								<td>{{ orderinfo.cart.worker }}</td>
+							</tr>
+						</table>
+					</div>
+					<div class="col-5 offset-1">
+						<div class="sub-title">
+							<span>登録情報</span>
+						</div>
+						<table class="table">
+							<tr>
+								<th class="menu">入力日</th>
+								<td>{{ orderinfo.cart.input_at }}</td>
+							</tr>
+							<tr>
+								<th class="menu">依頼日</th>
+								<td>
+									{% if orderinfo.registration_at is not None %}
+										{{ orderinfo.registration_at }}
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								<th class="menu">更新日</th>
+								<td>
+									{% if orderinfo.updated_at is not None %}
+										{{ orderinfo.updated_at }}
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								<th class="menu">完了日</th>
+								<td class="finish-date">
+									{% if orderinfo.finished %}
+										{{ orderinfo.finished_at }}
+									{% endif %}
+								</td>
+								<td class="cart" style="display: none">{{ orderinfo.cart.pk }}</td>
+								<td class="pk" style="display: none">{{ orderinfo.pk }}</td>
+							</tr>
+						</table>
+					</div>
+				</section>
+				<section class="item row mt-5">
+					<span class="title">依頼の情報</span>
+					<div class="col-2">
+						<a href="{% url 'quote:create_pdf' orderinfo.pk %}" class="btn btn-danger">見積もりPDF作成</a>
+					</div>
+					<div class="item__header row mt-3">
+						<div class="col-3">商品</div>
+						<div class="col-9">
+							<div class="row">
+								<div class="col-3">依頼先</div>
+								<div class="col-3">依頼済み</div>
+								<div class="col-3">到着済み</div>
+								<div class="col-3">提供済み</div>
+							</div>
+						</div>
+
+					</div>
+					{% for quoteitem, orderitem_list in orderitem_dict.items %}
+						<div class="item__content row">
+							<div class="name col-3">
+								<p>{{ quoteitem.item.maker }}：{{ quoteitem.item.name }}</p>
+								<p>数量：{{ quoteitem.quantity }}</p>
+							</div>
+							<div class="destination col-9">
+								{% for orderitem in orderitem_list %}
+									<div class="row">
+										<div class="col-3">{{ orderitem.destination }}</div>
+										<div class="col-3 check">
+											<input type="checkbox" id="ordered" class="ordered checkBox form-check-input" name="ordered"
+											{% if orderitem.ordered %}disabled checked{% endif %} value="{{ quoteitem.pk }}-{{ orderitem.pk }}-{{ orderitem.destination.pk }}">
+											<label for="ordered" class="ordered{{ orderitem.pk }}">
+												{% if orderitem.ordered %}
+													{{ orderitem.ordered_at }}
+												{% endif %}
+											</label>
+										</div>
+										<div class="col-3 check">
+											<input type="checkbox" id="arrived" class="arrived checkBox form-check-input" name="arrived"
+											{% if orderitem.arrived %}disabled checked{% endif %} value="{{ quoteitem.pk }}-{{ orderitem.pk }}-{{ orderitem.destination.pk }}">
+											<label for="arrived" class="arrived{{ orderitem.pk }}">
+												{% if orderitem.arrived %}
+													{{ orderitem.arrived_at }}
+												{% endif %}
+											</label>
+										</div>
+										<div class="col-3 check">
+											<input type="checkbox" id="delivered" class="delivered checkBox form-check-input" name="delivered"
+											{% if orderitem.delivered %}disabled checked{% endif %} value="{{ quoteitem.pk }}-{{ orderitem.pk }}-{{ orderitem.destination.pk }}">
+											<label for="delivered" class="delivered{{ orderitem.pk }}">
+												{% if orderitem.delivered %}
+													{{ orderitem.delivery_at }}
+												{% endif %}
+											</label>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					{% endfor %}
+				</section>
+				<a href="{% url 'quote:mypage' %}">
+					<i class="fa-solid fa-arrow-circle-left"></i>
+					<span>一覧に戻る</span>
+				</a>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+{% block javascript %}
+	<script src="{% static 'js/quote/quote.js' %}"></script>
+	<script type="text/javascript">
+		new checkBoxObserver();
+	</script>
+{% endblock javascript %}
