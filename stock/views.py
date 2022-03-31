@@ -9,13 +9,13 @@ from rest_framework import viewsets
 import openpyxl as px
 import datetime
 
-from .models import Option, StorageItem, KittingPlan, OrderItem,\
-	StorageCart, Approve, OrderInfo
+from .models import Option, StorageItem, KittingPlan, OrderItem, \
+    StorageCart, Approve, OrderInfo
 from device.models import CPU, Storage, PC, PCDetail
 from user.models import User, Base, Requester, Room, Member, Group
 from .serializers import OptionSerializer, StorageItemSerializer, StorageCartSerializer, KittingPlanSerializer, \
     OrderItemSerializer, ApproveSerializer, OrderInfoSerializer
-from .forms import StorageItemBSModalForm, StorageItemUpdateBSModalForm, OptionCreateBSModalForm, ApproveBSModalForm,\
+from .forms import StorageItemBSModalForm, StorageItemUpdateBSModalForm, OptionCreateBSModalForm, ApproveBSModalForm, \
     OrderInfoBSModalForm
 from .filters import OptionFilter, StorageItemFilter, KittingPlanFilter, OrderItemFilter, StorageCartFilter, \
     ApproveFilter, OrderInfoFilter
@@ -97,8 +97,8 @@ class StorageItemAdminListView(LoginRequiredMixin, ListView):
 class StorageItemDetailView(LoginRequiredMixin, DetailView):
     model = StorageItem
     template_name = 'stock/storage_item/detail.html'
-    
-    
+
+
 class StorageItemDetailAdminView(LoginRequiredMixin, DetailView):
     model = StorageItem
     template_name = 'stock/storage_item/admin/detail.html'
@@ -464,7 +464,7 @@ def order_info_status_view(request, pk):
         'status_choices': status_choices,
     }
     return render(request, 'stock/order_info/status.html', context)
-    
+
 
 class ChangeQuantity(LoginRequiredMixin, TemplateView):
     def get(self, request, **kwargs):
