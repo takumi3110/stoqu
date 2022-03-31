@@ -423,7 +423,9 @@ class CreatePdf(PDFBaseView):
         data = [header]
         order_item = OrderItem.objects.get(pk=pk)
         order_info = OrderInfo.objects.get(cart__order_item=order_item)
-        pdf_data = create_pdf_data(order_item, order_info)
+        ticket = order_info.ticket
+        addressee = order_info.cart.requester.addressee
+        pdf_data = create_pdf_data(order_item, ticket, addressee)
         order = pdf_data['order']
         length = pdf_data['length']
         data.append(order)
