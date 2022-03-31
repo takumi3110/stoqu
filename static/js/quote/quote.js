@@ -220,6 +220,7 @@ class StatusCheck {
 	_statusUpdate(data) {
 		const pk = document.querySelector('.pk').innerHTML.trim();
 		const url = 'http://127.0.0.1:8000/api/v1/quote/orderInfo/' + pk + '/';
+		const finishDate = document.querySelector('.finish-date');
 		const init = makePutInit(data);
 		fetch(url, init)
 			.then(response => {
@@ -230,7 +231,11 @@ class StatusCheck {
 				}
 			})
 			.then(data => {
-				console.log(data);
+				if (data.finished) {
+					const date = new Date(data.finished_at);
+					finishDate.innerHTML = getDate(date);
+				}
+
 			});
 	}
 
@@ -253,16 +258,20 @@ class StatusCheck {
 }
 
 
-function changeLabel(el, label) {
-	el.disabled = true;
-	el.checked = true;
+function changeLabel(checkEl, el) {
+	checkEl.disabled = true;
+	checkEl.checked = true;
 	const date = new Date();
+	el.innerHTML = getDate(date);
+}
+
+function getDate(date) {
 	const year = date.getFullYear();
 	const month = date.getMonth() + 1;
 	const day = date.getDate();
 	const hour = date.getHours();
 	const minutes = date.getMinutes();
-	label.innerHTML = year + '年' + month + '月' + day + '日' + hour + ':' + minutes;
+	return year + '年' + month + '月' + day + '日' + hour + ':' + minutes;
 }
 
 
