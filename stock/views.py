@@ -68,6 +68,10 @@ def top_page(request):
     return render(request, 'top.html')
 
 
+def construction(request):
+    return render(request, 'construction.html')
+
+
 class StorageItemListView(LoginRequiredMixin, ListView):
     model = StorageItem
     template_name = 'stock/storage_item/list.html'

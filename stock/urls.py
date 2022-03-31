@@ -16,6 +16,7 @@ router.register(r'orderInfo', views.OrderInfoViewSet)
 
 urlpatterns = [
 	path('', views.top_page, name='top'),
+	path('construction', views.construction, name='construction'),
 	path('item_list', views.StorageItemListView.as_view(), name='storage_list'),
 	path('item_list_admin', views.StorageItemAdminListView.as_view(), name='storage_list_admin'),
 	path('detail/<int:pk>', views.StorageItemDetailView.as_view(), name='storage_detail'),

@@ -95,7 +95,7 @@
 {#								<p class="navigation__cancel">キャンセルもこちら</p>#}
 {#								<p class="navigation__text">注文履歴</p>#}
 {#							</a>#}
-							<a class="nav-link" href="{% url 'quote:mypage' %}">
+							<a class="nav-link" href="{% url 'quote:orderinfo' %}">
 								<p class="navigation__cancel">全体の履歴はこちら</p>
 								<p class="navigation__text">見積履歴</p>
 							</a>
@@ -129,10 +129,10 @@
 						<a href="{% url 'quote:mypage' %}">マイページ</a>
 					</li>
 					<li class="footer__li item">
-						<a href="construction.html">FAQ</a>
+						<a href="{% url 'stock:construction' %}">FAQ</a>
 					</li>
 					<li class="footer__li item">
-						<a href="construction.html">お問い合わせ</a>
+						<a href="{% url 'stock:construction' %}">お問い合わせ</a>
 					</li>
 					<li class="footer__li item">
 						<a href="{% url 'admin:logout' %}">ログアウト</a>
