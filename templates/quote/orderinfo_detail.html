@@ -4,12 +4,23 @@
 
 {% block content %}
 
-	<a href="{% url 'quote:mypage' %}">
-		<i class="fa-solid fa-arrow-circle-left"></i>
-		<span>一覧に戻る</span>
-	</a>
-	<div class="container info-detail my-5">
-		<div class="row">
+	<div class="container info-detail">
+		<div class="row my-3">
+	        <nav>
+	            <ul class="breadcrumb">
+	                <li class="breadcrumb-item">
+	                    <a href="{% url 'stock:top' %}">ホーム</a>
+	                </li>
+	                <li class="breadcrumb-item active">
+		                <a href="{% url 'quote:orderinfo' %}">履歴一覧</a>
+	                </li>
+		            <li class="breadcrumb-item active">
+			            <span>詳細</span>
+		            </li>
+	            </ul>
+	        </nav>
+	    </div>
+		<div class="row my-5">
 			<div class="col-12">
 				<h2 class="title-text">詳細ページ</h2>
 				<section class="status row mt-3">
