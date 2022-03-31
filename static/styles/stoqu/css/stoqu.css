@@ -353,7 +353,14 @@ body {
   font-size: 10px;
 }
 .navigation__search {
-  width: 600px;
+  width: 45vw;
+}
+.navigation__search input {
+  height: 3rem;
+}
+.navigation__search button {
+  font-size: 20px;
+  color: grey;
 }
 
 .select__card {
@@ -657,6 +664,12 @@ a {
   border-bottom: thin solid #dfdfdf;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
+}
+
+img.construction {
+  width: 80%;
+  height: 70%;
+  margin: 5rem;
 }
 
 .footer {
