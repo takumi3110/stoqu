@@ -171,7 +171,7 @@ def quote_order(request, **kwargs):
             name = request.POST['name']
             spec_text = spec
         elif genre == 'license':
-            genre = 'License'
+            genre = 'ライセンス'
             name = request.POST['name']
             spec_text = spec
         create_quote_item(genre, maker, name, quantity, worker, spec=spec_text)
@@ -305,6 +305,7 @@ def add_requester(request):
 class OrderInfoView(LoginRequiredMixin, ListView):
     model = OrderInfo
     template_name = 'quote/orderinfo.html'
+    ordering = '-pk'
 
 
 class OrderInfoMyView(LoginRequiredMixin, ListView):
@@ -341,26 +342,43 @@ class OrderInfoDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-def create_pdf_data(quote_item, order_info):
+def create_pdf_data(quote_item, ticket, addressee):
     number = quote_item.number
-    ticket = str(order_info.ticket) + '-' + str(number)
+    ticket = str(ticket) + '-' + str(number)
     genre = quote_item.item.genre
     maker = quote_item.item.maker
     name = quote_item.item.name
     quantity = quote_item.quantity
     spec = quote_item.item.spec
-    addressee = order_info.cart.requester
     order = [ticket, genre, maker, name, quantity, spec, addressee]
     pdf_data = {
         'order': order,
-        'length': len(spec)
+        'length': spec.count('\n') + 1
     }
     return pdf_data
+    
+    
+def create_pdf_style(self, doc, data, row_heights):
+    top = 5 * mm
+    left = 20 * mm
+    heights = tuple(row_heights)
+    widths = (30 * mm, 25 * mm, 40 * mm, 50 * mm, 15 * mm, 50 * mm, 80 * mm)
+    table = Table(data, colWidths=widths, rowHeights=heights)
+    table.setStyle(TableStyle([
+        ('FONT', (0, 0), (-1, -1), self.font_name, 10),
+        ('BOX', (0, 0), (-1, -1), 1, colors.black),
+        ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, -1), (-1, -1), colors.lightblue),
+        ('BACKGROUND', (0, 0), (0, -2), colors.lightyellow)
+    ]))
+    table.wrapOn(doc, top, left)
+    table.drawOn(doc, top, left)
 
 
 def create_row_heights(length):
     heights = []
-    if length == 0:
+    if length == 1:
         heights.append(20 * mm)
     else:
         size = length * 6
@@ -372,25 +390,26 @@ def create_col_width(length):
     # (30 * mm, 25 * mm, 25 * mm, 50 * mm, 15 * mm, 50 * mm, 80 * mm)
     width = []
     return width
-    
+
 
 class PDFBaseView(View):
+    title = '■プレミアビジネステクノロジー　見積依頼'
+    font_name = 'HeiseiKakuGo-W5'
+    is_bottomup = False
+    
     def get(self, request, *args, **kwargs):
-        title = '■プレステージ・インターナショナル　秋田BPOキャンパス　見積依頼'
-        font_name = 'HeiseiKakuGo-W5'
-        is_bottomup = False
         response = HttpResponse(status=200, content_type='application/pdf')
         # 日本語が使えるゴシック体のフォントを設定
-        pdfmetrics.registerFont(UnicodeCIDFont(font_name))
+        pdfmetrics.registerFont(UnicodeCIDFont(self.font_name))
         size = landscape(A4)
         # pdfを描く場所を作成。位置を決める原点は左上にする。(bottomup)デフォルトは左下
-        doc = canvas.Canvas(response, pagesize=size, bottomup=is_bottomup)
+        doc = canvas.Canvas(response, pagesize=size, bottomup=self.is_bottomup)
         # pdfのタイトルを設定
-        doc.setTitle(title)
+        doc.setTitle(self.title)
         # フォントを設定
-        doc.setFont(font_name, 10)
+        doc.setFont(self.font_name, 10)
         # pdf上にもタイトルとしてしようしたクラス名を表示する
-        doc.drawString(10 * mm, 15 * mm, title)
+        doc.drawString(10 * mm, 15 * mm, self.title)
         # 即ダウンロードしたいときはattachmentをつける
         # response['Content-Disposition'] = 'filename="{}"'.format(filename)
         header = ['管理番号', '機器', 'メーカー', '型式', '数量', '仕様/構成', '宛名']
@@ -400,23 +419,6 @@ class PDFBaseView(View):
 
 
 class CreatePdf(PDFBaseView):
-    def create_pdf_style(self, doc, data, row_heights):
-        top = 5 * mm
-        left = 20 * mm
-        heights = tuple(row_heights)
-        widths = (30 * mm, 25 * mm, 25 * mm, 50 * mm, 15 * mm, 50 * mm, 80 * mm)
-        table = Table(data, colWidths=widths, rowHeights=heights)
-        table.setStyle(TableStyle([
-            ('FONT', (0, 0), (-1, -1), self.font_name, 10),
-            ('BOX', (0, 0), (-1, -1), 1, colors.black),
-            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('BACKGROUND', (0, -1), (-1, -1), colors.lightblue),
-            ('BACKGROUND', (0, 0), (0, -2), colors.lightyellow)
-        ]))
-        table.wrapOn(doc, top, left)
-        table.drawOn(doc, top, left)
-    
     def pdf_draw(self, doc, pk, header):
         data = [header]
         order_item = OrderItem.objects.get(pk=pk)
@@ -430,42 +432,22 @@ class CreatePdf(PDFBaseView):
         for h in create_row_heights(length):
             row_heights.append(h)
         row_heights.reverse()
-        create_pdf_style(self, doc, data, row_heights)
+        self.create_pdf_style(doc, data, row_heights)
         filename = order[0] + '_見積作成依頼書.pdf'
         doc.save()
         return filename
 
 
 class AllCreatePdf(PDFBaseView):
-    def create_pdf_style(self, doc, data, row_heights):
-        top = 5 * mm
-        left = 20 * mm
-        heights = tuple(row_heights)
-        widths = (30 * mm, 25 * mm, 25 * mm, 50 * mm, 15 * mm, 50 * mm, 80 * mm)
-        table = Table(data, colWidths=widths, rowHeights=heights)
-        table.setStyle(TableStyle([
-            ('FONT', (0, 0), (-1, -1), self.font_name, 10),
-            ('BOX', (0, 0), (-1, -1), 1, colors.black),
-            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('BACKGROUND', (0, -1), (-1, -1), colors.lightblue),
-            ('BACKGROUND', (0, 0), (0, -2), colors.lightyellow)
-        ]))
-        table.wrapOn(doc, top, left)
-        table.drawOn(doc, top, left)
-    
     def pdf_draw(self, doc, pk, header):
         data = []
         row_heights = [10 * mm]
         order_info = OrderInfo.objects.get(pk=pk)
         quote_item_list = order_info.cart.quote_item.all()
-        order_info.cart.ordered = True
-        order_info.cart.save()
+        ticket = order_info.ticket
+        addressee = order_info.cart.requester.addressee
         for quote_item in quote_item_list:
-            order_item = OrderItem.objects.get(quote_item=quote_item)
-            order_item.ordered = True
-            order_item.save()
-            pdf_data = create_pdf_data(quote_item, order_info)
+            pdf_data = create_pdf_data(quote_item, ticket, addressee)
             order = pdf_data['order']
             length = pdf_data['length']
             data.append(order)
