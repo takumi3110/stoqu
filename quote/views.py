@@ -76,20 +76,37 @@ def create_quote_item(genre, maker, name, quantity, worker, spec=''):
                 item.quantity += int(quantity)
                 item.save()
         else:
-            QuoteItem.objects.create(
+            quote_item = QuoteItem.objects.create(
                 number=last_item.number + 1,
                 item=item[0],
                 quantity=quantity,
                 worker=worker
             )
     else:
-        QuoteItem.objects.create(
+        quote_item = QuoteItem.objects.create(
             number=1,
             item=item[0],
             quantity=quantity,
             worker=worker
         )
+    return quote_item
 
+
+def create_order_item(request, quote_item, name):
+    destination_filter = Destination.objects.filter(name=name)
+    order_item = None
+    if destination_filter:
+        for destination in destination_filter:
+            order_item = OrderItem.objects.update_or_create(
+                quote_item=quote_item,
+                destination=destination,
+                worker=request.user,
+                ordered=False,
+                arrived=False,
+                delivered=False
+            )
+    return order_item
+    
 
 @login_required()
 def genre_select(request):
@@ -146,11 +163,15 @@ def quote_order(request, **kwargs):
                 license_maker = 'Lanscope'
                 license_genre = 'License'
                 create_quote_item(license_genre, license_maker, license_name, quantity, worker)
+                # create_order_item(request, quote_item, 'ソフトクリエイト')
             if office != 'none':
                 license_name = 'Office'
                 license_maker = 'Microsoft'
                 license_genre = 'License'
                 create_quote_item(license_genre, license_maker, license_name, quantity, worker)
+                # destination_names = ['コニカ', 'リコー']
+                # for destination in destination_names:
+                #     create_order_item(request, quote_item, destination)
         elif genre == 'display':
             genre = 'モニター'
             size = request.POST['size']
@@ -175,6 +196,9 @@ def quote_order(request, **kwargs):
             name = request.POST['name']
             spec_text = spec
         create_quote_item(genre, maker, name, quantity, worker, spec=spec_text)
+        # destination_names = ['コニカ', 'リコー']
+        # for name in destination_names:
+        #     create_order_item(request, quote_item, name)
         new_quote_item = QuoteItem.objects.filter(worker=worker, entered=False)
         for i, quote_item in enumerate(new_quote_item):
             quote_item.number = i + 1
@@ -238,9 +262,16 @@ def register_destination(request):
                     cart[0].quote_item.add(quote_item)
         cart[0].save()
         return redirect('quote:add_requester')
+    orderitem_list = OrderItem.objects.filter(
+        worker=request.user,
+        ordered=False,
+        arrived=False,
+        delivered=False
+    )
     context = {
         'destination_list': destination_list,
         'quoteitem_list': quoteitem_list,
+        'orderitem_list': orderitem_list,
         'count': len(quoteitem_list)
     }
     return render(request, 'quote/destination.html', context)
