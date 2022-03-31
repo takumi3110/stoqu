@@ -7,15 +7,17 @@
 {% block content %}
 
 	<div class="container detail my-5">
+		<a href="{% url 'stock:storage_list_admin' %}">
+			<i class="fa-solid fa-arrow-circle-left"></i>一覧に戻る
+		</a>
 		{% include 'stock/modules/item_detail.html' %}
+		<a href="{% url 'stock:storage_list_admin' %}">
+			<i class="fa-solid fa-arrow-circle-left"></i>一覧に戻る
+		</a>
 	</div>
 
 {% endblock content %}
 
 {% block javascript %}
 	<script src="{% static 'js/libs/select-img.js' %}"></script>
-    <script type="text/javascript">
-
-    </script>
-
 {% endblock javascript %}
