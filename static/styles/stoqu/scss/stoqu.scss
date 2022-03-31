@@ -1,59 +1,7 @@
-@import '../../modules/mixin';
-@import '../../modules/variables';
 @import '../../modules/statusbar';
 @import '../../modules/hero-slider';
-@import '../../modules/quote';
-@import '../../modules/stock';
-@import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
+@import '../../breakpoints/base';
 
-a {
-  text-decoration: none;
-}
-
-.border-bottom {
-  border-bottom: thin solid $cBorder;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-}
-
-img {
-  &.construction {
-    width: 80%;
-    height: 70%;
-    margin: 5rem;
-  }
-}
-
-
-.footer {
-  margin-top: 10em;
-  padding: 60px 0;
-  background-color: #212529;
-  font-size: 20px;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-
-  &__nav {
-    @extend .flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-  }
-
-  &__ul {
-    @extend .flex;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-
-  &__li {
-    padding: 0;
-    margin: 10px;
-
-    & > a {
-      color: grey;
-    }
-  }
+@media (min-width: 1280px) {
+  @import '../../breakpoints/1280up';
 }
