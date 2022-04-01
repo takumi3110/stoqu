@@ -191,12 +191,18 @@ class StatusCheck {
 					status.classList.add('active');
 					const data = this._data(status)
 					this._statusUpdate(data);
-					for (let i = 1; i < Number(status.id); i++) {
-						els.forEach(el => {
+					els.forEach(el => {
 							this._allCheck(el, status);
 							checked(el);
 						});
-					}
+					statusAll.forEach(e => {
+						if (Number(status.id) > Number(e.id)) {
+							if (!('active' in e.classList)) {
+								e.classList.add('active');
+							}
+						}
+					});
+
 				}
 			});
 		})
