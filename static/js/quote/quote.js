@@ -181,23 +181,48 @@ class StatusCheck {
 	_statusClick(els, callBack) {
 		const checked = callBack
 		const nowStatus = document.querySelector('.status-now').innerHTML;
-		for (let i = 1; i < 6; i++) {
-			const status = document.querySelector('.status' + i);
-			if (i <= Number(nowStatus)) {
+		const statusAll = document.querySelectorAll('.status');
+		statusAll.forEach(status => {
+			if (status.id <= Number(nowStatus)) {
 				status.classList.add('active');
 			}
 			status.addEventListener('click', () => {
-				if (i <= Number(status.id)) {
+				if (Number(status.id) >= Number(nowStatus)) {
 					status.classList.add('active');
-					els.forEach(el => {
-						this._allCheck(el, status);
-						checked(el);
-					});
 					const data = this._data(status)
 					this._statusUpdate(data);
+					els.forEach(el => {
+							this._allCheck(el, status);
+							checked(el);
+						});
+					statusAll.forEach(e => {
+						if (Number(status.id) > Number(e.id)) {
+							if (!('active' in e.classList)) {
+								e.classList.add('active');
+							}
+						}
+					});
+
 				}
 			});
-		}
+		})
+		// for (let i = 1; i < 6; i++) {
+		// 	const status = document.querySelector('.status' + i);
+		// 	if (i <= Number(nowStatus)) {
+		// 		status.classList.add('active');
+		// 	}
+		// 	status.addEventListener('click', () => {
+		// 		if (i <= Number(status.id)) {
+		// 			status.classList.add('active');
+		// 			els.forEach(el => {
+		// 				this._allCheck(el, status);
+		// 				checked(el);
+		// 			});
+		// 			const data = this._data(status)
+		// 			this._statusUpdate(data);
+		// 		}
+		// 	});
+		// }
 	}
 
 	_allCheck(el, status) {
@@ -207,13 +232,11 @@ class StatusCheck {
 				el.checked = true;
 			}
 		} else if (id === 4) {
-			if (el.id === 'arrived') {
+			if (el.id === 'arrived' || el.id === 'ordered') {
 				el.checked = true;
 			}
-		} else if (id === 5) {
-			if (el.id === 'delivered') {
-				el.checked = true;
-			}
+		} else {
+			el.checked = true;
 		}
 	}
 
@@ -294,18 +317,3 @@ function change_quantity(el, data, pk) {
 	});
 }
 
-// function all_apply(pk) {
-// 	const allApply = document.querySelector('.all-apply');
-// 	const destinationInput = document.querySelectorAll('.destination');
-// 	const destinationId = 'destination' + pk;
-// 	allApply.addEventListener('change', function () {
-// 		if (allApply.checked) {
-// 			console.log('checked');
-// 			// for(let input of destinationInput) {
-// 			// 	input.id = destinationId;
-// 			// }
-// 		} else {
-// 			console.log('none');
-// 		}
-// 	});
-// }

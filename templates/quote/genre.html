@@ -4,20 +4,20 @@
 {% block content %}
 
 	<div class="container">
-        <div class="row">
+        <div class="row mt-3">
             <nav>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="{% url 'stock:top' %}">ホーム</a>
                     </li>
                     <li class="breadcrumb-item">
-                        カテゴリ選択
+                        <span>カテゴリ選択</span>
                     </li>
                 </ul>
             </nav>
         </div>
     </div>
-    <div class="container mt-3">
+    <div class="container my-5">
         <div class="row page-title">
             <h2 class="title-text">カテゴリ選択</h2>
         </div>
@@ -32,7 +32,3 @@
     </div>
 
 {% endblock content %}
-
-{% block javascript %}
-
-{% endblock javascript %}

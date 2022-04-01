@@ -2,18 +2,6 @@
 @import '../modules/variables';
 @import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
 
-a {
-  text-decoration: none;
-}
-
-img {
-  &.construction {
-    width: 80%;
-    height: 70%;
-    margin: 5rem;
-  }
-}
-
 .content-width {
   width: 90%;
   margin: 0 auto;
@@ -31,6 +19,18 @@ img {
   padding-bottom: 1.5rem;
 }
 
+a {
+  text-decoration: none;
+}
+
+img {
+  &.construction {
+    width: 80%;
+    height: 70%;
+    margin: 5rem;
+  }
+}
+
 .navigation {
   text-align: center;
 
@@ -42,6 +42,25 @@ img {
 
   &__text {
     margin-bottom: 1px;
+
+    &.cart-icon {
+
+      & .shopping-cart {
+        position: relative;
+        font-size: 40px;
+        margin-top: 1rem;
+        z-index: 1;
+
+      }
+
+      & .badge {
+        position: absolute;
+        font-size: 15px;
+        top: 55px;
+        right: 35px;
+        z-index: 1000;
+      }
+    }
   }
 
   &__item {
@@ -80,6 +99,7 @@ img {
       color: grey;
     }
   }
+
 }
 
 .select {

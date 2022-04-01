@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 {% load django_bootstrap5 %}
 {% load static %}
-
 <head>
 	{% block meta %}
 
@@ -26,6 +24,7 @@
 	      crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 <body>
+{% load quote_extras %}
 	<div class="global-container">
 		<div class="modal fade" tabindex="-1" role="dialog" id="modal" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
@@ -107,7 +106,13 @@
 {#							</a>#}
 							<a class="nav-link" href="{% url 'quote:item_list' %}">
 								<p class="navigation__text">見積もりカート</p>
-								<span class="navigation__text cart-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+								<span class="navigation__text cart-icon">
+									<i class="fa-solid fa-cart-shopping shopping-cart"></i>
+									{% item_count request.user as item_count%}
+									{% if item_count > 0 %}
+										<span class="badge rounded-pill bg-danger">{% item_count request.user %}</span>
+									{% endif %}
+								</span>
 							</a>
 						</li>
 					</ul>

@@ -86,16 +86,6 @@ body {
   transform: none;
 }
 
-a {
-  text-decoration: none;
-}
-
-img.construction {
-  width: 80%;
-  height: 70%;
-  margin: 5rem;
-}
-
 .content-width, .select {
   width: 90%;
   margin: 0 auto;
@@ -113,6 +103,16 @@ img.construction {
   padding-bottom: 1.5rem;
 }
 
+a {
+  text-decoration: none;
+}
+
+img.construction {
+  width: 80%;
+  height: 70%;
+  margin: 5rem;
+}
+
 .navigation {
   text-align: center;
 }
@@ -123,6 +123,19 @@ img.construction {
 }
 .navigation__text {
   margin-bottom: 1px;
+}
+.navigation__text.cart-icon .shopping-cart {
+  position: relative;
+  font-size: 40px;
+  margin-top: 1rem;
+  z-index: 1;
+}
+.navigation__text.cart-icon .badge {
+  position: absolute;
+  font-size: 15px;
+  top: 55px;
+  right: 35px;
+  z-index: 1000;
 }
 .navigation__item {
   font-weight: bold;

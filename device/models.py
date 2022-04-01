@@ -2,8 +2,8 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 type_choice = (
-	(1, 'SSD'),
-	(2, 'HDD')
+	('1', 'SSD'),
+	('2', 'HDD')
 )
 
 category_choice = (

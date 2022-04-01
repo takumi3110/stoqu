@@ -7,8 +7,20 @@
 
 {% block content %}
 
-    <div class="container my-5">
-        <div class="row mb-3">
+    <div class="container">
+        <div class="row my-3">
+	        <nav>
+	            <ul class="breadcrumb">
+	                <li class="breadcrumb-item">
+	                    <a href="{% url 'stock:top' %}">ホーム</a>
+	                </li>
+	                <li class="breadcrumb-item active">
+		                貯蔵品一覧
+	                </li>
+	            </ul>
+	        </nav>
+	    </div>
+        <div class="row my-3">
             <h2 class="title-text">在庫リスト</h2>
         </div>
         <section class="row mt-5">
@@ -39,6 +51,9 @@
         <div class="row mt-5">
 	        {% include 'pagination.html' %}
         </div>
+        <a href="{% url 'stock:top' %}">
+			<i class="fa-solid fa-arrow-circle-left"></i>TOPに戻る
+	    </a>
     </div>
 
 

@@ -79,9 +79,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 	def get_short_name(self):
 		return self.last_name
 
-	def save(self, *args, **kwargs):
-		Requester.objects.update_or_create(user_id=self.pk)
-		super(User, self).save(*args, **kwargs)
+	# def save(self, *args, **kwargs):
+	# 	Requester.objects.update_or_create(user_id=self.pk)
+	# 	super(User, self).save(*args, **kwargs)
 
 	class Meta:
 		verbose_name = _('user')

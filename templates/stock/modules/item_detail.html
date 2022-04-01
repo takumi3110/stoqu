@@ -1,6 +1,6 @@
 {% load humanize %}
 
-<section class="row detail__main">
+<section class="row detail__main mt-3">
 	<div class="detail__img  col-1">
 		{% for key, img in img_url.items %}
 			<img src="{{ img.url }}" alt="{{ img.name }}" class="sub-img {{ key }}">

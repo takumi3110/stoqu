@@ -4,16 +4,27 @@
 
 {% block content %}
 
+	<div class="row mt-3 mx-3">
+        <nav>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'stock:top' %}">ホーム</a>
+                </li>
+                <li class="breadcrumb-item active">
+	                <span>履歴一覧</span>
+                </li>
+            </ul>
+        </nav>
+    </div>
 	<div class="row my-5 mx-3 myOrder">
 		<a href="{% url 'stock:top' %}">
 			<i class="fa-solid fa-arrow-circle-left"></i>
 			TOPに戻る
 		</a>
-		<a href="{% url 'quote:mypage' %}">
+		<a href="{% url 'quote:mypage' %}" class="my-3">
 			個人表示へ
 			<i class="fa-solid fa-forward"></i>
 		</a>
-
 		{% include 'quote/modules/orderinfo_list.html' %}
 	</div>
 {% endblock content %}
