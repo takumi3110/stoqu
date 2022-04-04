@@ -8,12 +8,17 @@ class category {
 		this.cpu = document.querySelector('#detailCpu');
 		this.memory = document.querySelector('#detailMemory');
 		this.storage = document.querySelector('#detailStorage');
+		this.nameTrue = document.querySelector('#nameTrue');
+		this.nameFalse = document.querySelector('#nameFalse');
+		this.name = document.querySelector('.name');
+		this.serial = document.querySelector('.serial');
 		this._init();
 	}
 
 	_init() {
 		this._changeCategory();
 		this._changeSpec();
+		this._fixedPc();
 	}
 
 
@@ -51,6 +56,33 @@ class category {
 				cpu.value = 'i7';
 				memory.value = 16;
 				storage.value = 256;
+			}
+		});
+	}
+
+	_fixedPc() {
+		const name = this.name;
+		const serial = this.serial;
+		const nameTrue = this.nameTrue;
+		const nameFalse = this.nameFalse;
+		name.style.display = 'none';
+		serial.style.display = 'none';
+		nameTrue.addEventListener('click', function() {
+			if (this.checked) {
+				name.style.display = '';
+				serial.style.display = '';
+			} else {
+				name.style.display = 'none';
+				serial.style.display = 'none';
+			}
+		});
+		nameFalse.addEventListener('click', function() {
+			if (this.checked) {
+				name.style.display = 'none';
+				serial.style.display = 'none';
+			} else {
+				name.style.display = '';
+				serial.style.display = '';
 			}
 		});
 	}
