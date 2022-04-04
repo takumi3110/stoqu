@@ -75,6 +75,7 @@ def create_quote_item(genre, maker, name, quantity, worker, spec=''):
             for item in item_filter:
                 item.quantity += int(quantity)
                 item.save()
+                return item
         else:
             quote_item = QuoteItem.objects.create(
                 number=last_item.number + 1,
@@ -146,18 +147,36 @@ def quote_order(request, **kwargs):
                 return render(request, 'quote/order.html', context)
             if category == 'note':
                 genre = 'ノートPC'
-                name = 'ノートPC'
             elif category == 'desktop':
                 genre = 'デスクトップPC'
-                name = 'デスクトップPC'
             elif category == 'mini':
                 genre = 'ミニPC'
-                name = 'ミニPC'
-            if category == 'note':
-                spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\nテンキー:{}\n指紋認証:あり'.format(cpu,
-                                                                                       memory, storage, ten_key)
+            if 'name' in request.POST.keys():
+                name = request.POST['name']
             else:
-                spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\n'.format(cpu, memory, storage)
+                name = genre
+            if 'serial' in request.POST.keys():
+                serial = request.POST['serial']
+                if category == 'note':
+                    spec_text = '{}\ncpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\nテンキー:{}\n指紋認証:あり'.format(
+                        serial,
+                        cpu,
+                        memory,
+                        storage,
+                        ten_key
+                    )
+                else:
+                    spec_text = '{}\ncpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\n'.format(serial, cpu, memory, storage)
+            else:
+                if category == 'note':
+                    spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\nテンキー:{}\n指紋認証:あり'.format(
+                        cpu,
+                        memory,
+                        storage,
+                        ten_key
+                    )
+                else:
+                    spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\n'.format(cpu, memory, storage)
             if lanscope == 'true':
                 license_name = 'Lanscope Cat'
                 license_maker = 'Lanscope'
