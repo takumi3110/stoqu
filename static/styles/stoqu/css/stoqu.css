@@ -15,6 +15,7 @@
   text-align: center;
   text-transform: uppercase;
   color: #aaa;
+  cursor: pointer;
 }
 .status__bar li::before {
   width: 30px;
