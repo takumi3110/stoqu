@@ -155,10 +155,10 @@ def quote_order(request, **kwargs):
                 name = request.POST['name']
             else:
                 name = genre
-            if 'serial' in request.POST.keys():
+            if 'serial' in request.POST.keys() and request.POST['serial']:
                 serial = request.POST['serial']
                 if category == 'note':
-                    spec_text = '{}\ncpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\nテンキー:{}\n指紋認証:あり'.format(
+                    spec_text = '{}\ncpu：{}\nメモリ：{}GB\nストレージ：SSD{}GB\nテンキー：{}\nwebカメラ：あり\n指紋認証：あり'.format(
                         serial,
                         cpu,
                         memory,
@@ -166,17 +166,17 @@ def quote_order(request, **kwargs):
                         ten_key
                     )
                 else:
-                    spec_text = '{}\ncpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\n'.format(serial, cpu, memory, storage)
+                    spec_text = '{}\ncpu：{}\nメモリ：{}GB\nストレージ：SSD{}GB\n'.format(serial, cpu, memory, storage)
             else:
                 if category == 'note':
-                    spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\nテンキー:{}\n指紋認証:あり'.format(
+                    spec_text = 'cpu：{}\nメモリ：{}GB\nストレージ：SSD{}GB\nテンキー：{}\nwebカメラ：あり\n指紋認証：あり'.format(
                         cpu,
                         memory,
                         storage,
                         ten_key
                     )
                 else:
-                    spec_text = 'cpu:{}\nメモリ:{}GB\nストレージ:SSD{}GB\n'.format(cpu, memory, storage)
+                    spec_text = 'cpu：{}\nメモリ：{}GB\nストレージ：SSD{}GB\n'.format(cpu, memory, storage)
             if lanscope == 'true':
                 license_name = 'Lanscope Cat'
                 license_maker = 'Lanscope'
@@ -399,7 +399,9 @@ def create_pdf_data(quote_item, ticket, addressee):
     maker = quote_item.item.maker
     name = quote_item.item.name
     quantity = quote_item.quantity
-    spec = quote_item.item.spec
+    spec_list = quote_item.item.spec.split('\n')
+    spec_list.reverse()
+    spec = '\n'.join(spec_list)
     order = [ticket, genre, maker, name, quantity, spec, addressee]
     pdf_data = {
         'order': order,
@@ -431,13 +433,14 @@ def create_row_heights(length):
     if length == 1:
         heights.append(20 * mm)
     else:
-        size = length * 6
+        size = length * 7
         heights.append(size * mm)
     return heights
 
 
 def create_col_width(length):
     # (30 * mm, 25 * mm, 25 * mm, 50 * mm, 15 * mm, 50 * mm, 80 * mm)
+    # TODO:15より下にならないように
     width = []
     return width
 
@@ -462,7 +465,7 @@ class PDFBaseView(View):
         doc.drawString(10 * mm, 15 * mm, self.title)
         # 即ダウンロードしたいときはattachmentをつける
         # response['Content-Disposition'] = 'filename="{}"'.format(filename)
-        header = ['管理番号', '機器', 'メーカー', '型式', '数量', '仕様/構成', '宛名']
+        header = ['管理番号', '機器', 'メーカー', '名称/型式', '数量', '仕様/構成', '宛名']
         filename = self.pdf_draw(doc, kwargs['pk'], header)
         response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
         return response
